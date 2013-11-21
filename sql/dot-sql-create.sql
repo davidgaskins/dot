@@ -9,18 +9,29 @@ DROP TABLE commits;
 DROP TABLE projects;
 
 
+--the following three tables create our enumerated data types
+CREATE TABLE type(
+	name ENUM('BUG', 'IMPROVEMENT', 'LONG-TERM')
+);
+CREATE TABLE status{
+	name ENUM('OPEN', 'CLOSED', 'NOFIX', 'ASSIGNED', 'DUPLICATE', 'POSTPONED')
+}
+CREATE TABLE priority{
+	name ENUM('CRITICAL', 'MEDIUM', 'LOW')
+} 
 
 CREATE TABLE projects(
 	title VARCHAR(20) (NOT NULL),
-	dateToEnd DATE,
+	dateToEnd TIMESTAMP,
 	description TEXT,
-	startDate DATE (NOT NULL),
-	id INT (NOT NULL),
+	dateStarted DATE (NOT NULL),
+	id INT (NOT NULL) AUTO_INCREMENT,
 	CONSTRAINT projects_pk PRIMARY KEY (id),
-	CONSTRAINT projects_ck1 UNIQUE (title, startDate)
+	CONSTRAINT projects_ck1 UNIQUE (title, startDate),
+	CONSTRAINT valid_data_range CHECK (dateToEnd >= dateStarted)
 );
 CREATE TABLE contributors(
-	id INT (NOT NULL),
+	id INT (NOT NULL) AUTO_INCREMENT,
 	fName VARCHAR(15),
 	lName VARCHAR(15),
 	email VARCHAR(30) (NOT NULL),
@@ -32,7 +43,7 @@ CREATE TABLE managementAssignments(
 	dateToEnd DATE,
 	finished BOOLEAN,
 	projectID INT (NOT NULL),
-	contributorID INT (NOT NULL,
+	contributorID INT (NOT NULL) ,
 	CONSTRAINT managementAssignments_pk PRIMARY KEY (projectID, contributorID, dateStarted),
 	CONSTRAINT managementAssignments_fk FOREIGN KEY (projectID) REFERENCES projects (id) ON DELETE CASCADE,
 	CONSTRAINT managementAssignments_fk2 FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
@@ -40,12 +51,12 @@ CREATE TABLE managementAssignments(
 CREATE TABLE phoneNumbers(
 	contributorID INT (NOT NULL),
 	phoneNumber VARCHAR(11) (NOT NULL),
-	phoneType VARCHAR(10) (NOT NULL),
+	phoneType VARCHAR(10)
 	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber, phoneType),
 	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
 );
 CREATE TABLE goals(
-	id INT (NOT NULL),
+	id INT (NOT NULL) AUTO_INCREMENT,
 	title VARCHAR(20) (NOT NULL),
 	description TEXT (NOT NULL),
 	priority PRIORITY,
@@ -79,14 +90,14 @@ CREATE TABLE workAssignments(
 );
 CREATE TABLE commits(
 	contributorID INT, --should this be not null? update the relational scheme
-	projectID INT, 	--should this be not null? 
+	goalID INT, 	--should this be not null? 
 	commitDate DATE,
-	time TIME, 
+	time TIMESTAMP, 
 	description TEXT,
-	id INT (NOT NULL), 
+	id INT (NOT NULL) AUTO_INCREMENT, 
 	CONSTRAINT changes_pk PRIMARY KEY(id),
 	CONSTRAINT changes_fk FOREIGN KEY(contributorID) REFERENCES contributors(id) ON DELETE CASCADE,
-	CONSTRAINT changes_fk FOREIGN KEY(projectID) REFERENCES projects(id) ON DELETE CASCADE, 
+	CONSTRAINT changes_fk FOREIGN KEY(goalID) REFERENCES goalss(id) ON DELETE CASCADE, 
 	CONSTRAINT changes_ck UNIQUE (commitDate, time, description)
 );
 CREATE TABLE changes(
