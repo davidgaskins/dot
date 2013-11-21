@@ -1,27 +1,18 @@
-DROP TABLE managementAssignments;
-DROP TABLE posts;
-DROP TABLE goals;
-DROP TABLE workAssignments;
-DROP TABLE phoneNumbers;
-DROP TABLE contributors;
-DROP TABLE changes;
-DROP TABLE commits;
-DROP TABLE projects;
-DROP TABLE type;
-DROP TABLE status;
-DROP TABLE priority
+--DROP TABLE managementAssignments;
+--DROP TABLE posts;
+--DROP TABLE goals;
+--DROP TABLE workAssignments;
+--DROP TABLE phoneNumbers;
+--DROP TABLE contributors;
+--DROP TABLE changes;
+--DROP TABLE commits;
+--DROP TABLE projects;
+
+--runs up to goals
+--droping tables order needs to be changed
 
 
---the following three tables create our enumerated data types
-CREATE TABLE type(
-	name ENUM('BUG', 'IMPROVEMENT', 'LONG-TERM')
-);
-CREATE TABLE status(
-	name ENUM('OPEN', 'CLOSED', 'NOFIX', 'ASSIGNED', 'DUPLICATE', 'POSTPONED')
-);
-CREATE TABLE priority(
-	name ENUM('CRITICAL', 'MEDIUM', 'LOW')
-);
+
 --the following 9 tables are for our data
 CREATE TABLE projects(
 	title VARCHAR(20) NOT NULL,
@@ -30,7 +21,7 @@ CREATE TABLE projects(
 	dateStarted DATE NOT NULL,
 	id INT NOT NULL AUTO_INCREMENT,
 	CONSTRAINT projects_pk PRIMARY KEY (id),
-	CONSTRAINT projects_ck1 UNIQUE (title, startDate),
+	CONSTRAINT projects_ck1 UNIQUE (title, dateStarted),
 	CONSTRAINT valid_data_range CHECK (dateToEnd >= dateStarted)
 );
 CREATE TABLE contributors(
@@ -54,7 +45,7 @@ CREATE TABLE managementAssignments(
 CREATE TABLE phoneNumbers(
 	contributorID INT NOT NULL,
 	phoneNumber VARCHAR(11) NOT NULL,
-	phoneType VARCHAR(10)
+	phoneType ENUM('CELL', 'HOME', 'WORK'),
 	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber, phoneType),
 	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
 );
@@ -62,14 +53,15 @@ CREATE TABLE goals(
 	id INT NOT NULL AUTO_INCREMENT,
 	title VARCHAR(20) NOT NULL,
 	description TEXT NOT NULL,
-	priority PRIORITY,
-	type TYPE,
-	status STATUS,
+	priority ENUM('CRITICAL', 'MEDIUM', 'LOW'),
+	type ENUM('BUG', 'IMPROVEMENT', 'LONG-TERM'),
+	status ENUM('OPEN', 'CLOSED', 'NOFIX', 'ASSIGNED', 'DUPLICATE', 'POSTPONED'),
 	dateCreated TIMESTAMPNOT NULL,
 	dateUpdated TIMESTAMP,
 	dateToEnd TIMESTAMP,
 	projectID INT,
-	parentGoalID INT, -- can be null
+	parentGoalID INT, -- can be null because it doesn't have to have a parent
+	--do we need do have this be a foreign key that references itself?
 	CONSTRAINT goals_pk PRIMARY KEY(id),
 	CONSTRAINT goals_ck UNIQUE (dateCreated, title, description),
 	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) REFERENCES goals (id) ON DELETE CASCADE
