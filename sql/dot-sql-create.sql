@@ -1,27 +1,18 @@
-DROP TABLE managementAssignments;
-DROP TABLE posts;
-DROP TABLE goals;
-DROP TABLE workAssignments;
-DROP TABLE phoneNumbers;
-DROP TABLE contributors;
-DROP TABLE changes;
-DROP TABLE commits;
-DROP TABLE projects;
+--DROP TABLE managementAssignments;
+--DROP TABLE posts;
+--DROP TABLE goals;
+--DROP TABLE workAssignments;
+--DROP TABLE phoneNumbers;
+--DROP TABLE contributors;
+--DROP TABLE changes;
+--DROP TABLE commits;
+--DROP TABLE projects;
+
+--runs up to goals
+--droping tables order needs to be changed
 
 
---the following four tables create our enumerated data types
-CREATE TABLE type(
-	name ENUM('BUG', 'IMPROVEMENT', 'LONG-TERM')
-);
-CREATE TABLE status(
-	name ENUM('OPEN', 'CLOSED', 'NOFIX', 'ASSIGNED', 'DUPLICATE', 'POSTPONED')
-);
-CREATE TABLE priority(
-	name ENUM('CRITICAL', 'MEDIUM', 'LOW')
-);
-CREATE TABLE phType(
-	name ENUM('CELL', 'HOME', 'WORK')
-)
+
 --the following 9 tables are for our data
 CREATE TABLE projects(
 	title VARCHAR(20) NOT NULL,
@@ -30,7 +21,7 @@ CREATE TABLE projects(
 	dateStarted DATE NOT NULL,
 	id INT NOT NULL AUTO_INCREMENT,
 	CONSTRAINT projects_pk PRIMARY KEY (id),
-	CONSTRAINT projects_ck1 UNIQUE (title, startDate),
+	CONSTRAINT projects_ck1 UNIQUE (title, dateStarted),
 	CONSTRAINT valid_data_range CHECK (dateToEnd >= dateStarted)
 );
 CREATE TABLE contributors(
@@ -54,7 +45,7 @@ CREATE TABLE managementAssignments(
 CREATE TABLE phoneNumbers(
 	contributorID INT NOT NULL,
 	phoneNumber VARCHAR(11) NOT NULL,
-	phoneType phType,
+	phoneType ENUM('CELL', 'HOME', 'WORK'),
 	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber, phoneType),
 	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
 );
@@ -62,9 +53,9 @@ CREATE TABLE goals(
 	id INT NOT NULL AUTO_INCREMENT,
 	title VARCHAR(20) NOT NULL,
 	description TEXT NOT NULL,
-	priority PRIORITY,
-	type TYPE,
-	status STATUS,
+	priority ENUM('CRITICAL', 'MEDIUM', 'LOW'),
+	type ENUM('BUG', 'IMPROVEMENT', 'LONG-TERM'),
+	status ENUM('OPEN', 'CLOSED', 'NOFIX', 'ASSIGNED', 'DUPLICATE', 'POSTPONED'),
 	dateCreated TIMESTAMP NOT NULL,
 	dateUpdated TIMESTAMP,
 	dateToEnd TIMESTAMP,
