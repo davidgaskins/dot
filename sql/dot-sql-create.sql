@@ -55,7 +55,8 @@ CREATE TABLE goals(
 	dateUpdated DATE,
 	dateToEnd DATE,
 	projectID INT,
-	parentGoalID INT, -- can be null
+	parentGoalID INT, -- can be null because it doesn't have to have a parent
+	--do we need do have this be a foreign key that references itself?
 	CONSTRAINT goals_pk PRIMARY KEY(id),
 	CONSTRAINT goals_ck UNIQUE (dateCreated, title, description),
 	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) REFERENCES goals (id) ON DELETE CASCADE
