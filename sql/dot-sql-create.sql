@@ -2,7 +2,7 @@ DROP TABLE managementAssignments;
 DROP TABLE posts;
 DROP TABLE goals;
 DROP TABLE workAssignments;
-DROP TABLE contactInfo;
+DROP TABLE phoneNumbers;
 DROP TABLE contributors;
 DROP TABLE changes;
 DROP TABLE commits;
@@ -11,11 +11,11 @@ DROP TABLE projects;
 
 
 CREATE TABLE projects(
-	id INT (NOT NULL),
-	projectedEndDate DATE,
+	title VARCHAR(20) (NOT NULL),
+	dateToEnd DATE,
 	description TEXT,
-	startDate DATE,
-	title VARCHAR(20),
+	startDate DATE (NOT NULL),
+	id INT (NOT NULL),
 	CONSTRAINT projects_pk PRIMARY KEY (id),
 	CONSTRAINT projects_ck1 UNIQUE (title, startDate)
 );
@@ -29,70 +29,71 @@ CREATE TABLE contributors(
 );
 CREATE TABLE managementAssignments(
 	dateStarted DATE (NOT NULL),
-	projectedEndDate DATE,
+	dateToEnd DATE,
 	finished BOOLEAN,
 	projectID INT (NOT NULL),
-	workerID INT (NOT NULL,
-	CONSTRAINT managementAssignments_pk PRIMARY KEY (projectID, workerID, dateStarted),
-	CONSTRAINT managementAssignments_fk FOREIGN KEY (projectID) REFERENCES projects (id),
-	CONSTRAINT managementAssignments_fk2 FOREIGN KEY (workerID) REFERENCES workers (id)
+	contributorID INT (NOT NULL,
+	CONSTRAINT managementAssignments_pk PRIMARY KEY (projectID, contributorID, dateStarted),
+	CONSTRAINT managementAssignments_fk FOREIGN KEY (projectID) REFERENCES projects (id) ON DELETE CASCADE,
+	CONSTRAINT managementAssignments_fk2 FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
 );
-CREATE TABLE contactInfo(
+CREATE TABLE phoneNumbers(
 	contributorID INT (NOT NULL),
 	phoneNumber VARCHAR(11) (NOT NULL),
 	phoneType VARCHAR(10) (NOT NULL),
-	CONSTRAINT contactInfo_pk PRIMARY KEY (contributorID, phoneNumber, phoneType),
-	CONSTRAINT contactInfo_fk FOREIGN KEY (contributorID) REFERENCES contributors (id)
+	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber, phoneType),
+	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
 );
 CREATE TABLE goals(
+	id INT (NOT NULL),
+	title VARCHAR(20) (NOT NULL),
+	description TEXT (NOT NULL),
 	priority PRIORITY,
 	type TYPE,
 	status STATUS,
 	dateCreated DATE (NOT NULL),
-	dateUpdate DATE,
-	title VARCHAR(20) (NOT NULL),
-	description TEXT (NOT NULL),
-	projectedEndDate DATE,
+	dateUpdated DATE,
+	dateToEnd DATE,
 	projectID INT,
-	id INT (NOT NULL),
-	parentGoalID INT,
+	parentGoalID INT, -- can be null
 	CONSTRAINT goals_pk PRIMARY KEY(id),
 	CONSTRAINT goals_ck UNIQUE (dateCreated, title, description),
-	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) REFERENCES goals (id)
+	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) REFERENCES goals (id) ON DELETE CASCADE
 );
 CREATE TABLE posts (
-	datePosted DATE (NOT NULL),
 	body TEXT,
+	datePosted DATE (NOT NULL),
 	time TIME (NOT NULL),
-	workerID INT (NOT NULL),
+	contributorID INT (NOT NULL), --need to change the relational scheme
 	goalID INT,
 	CONSTRAINT posts_pk PRIMARY KEY (datePosted, time, goalID),
-	CONSTRAINT posts_fk FOREIGN KEY (goalID) REFERENCES goals(id)
+	CONSTRAINT posts_fk FOREIGN KEY (goalID) REFERENCES goals(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
 	dateStarted DATE (NOT NULL),
-	projectedEndDate DATE,
+	dateToEnd DATE,
 	finished BOOLEAN,
 	goalID (NOT NULL),
-	workerID (NOT NULL),
-	CONSTRAINT workAssignments PRIMARY KEY(dateStarted, goalID, workerID)
+	contributorID (NOT NULL),
+	CONSTRAINT workAssignments PRIMARY KEY(dateStarted, goalID, contributorID)
 );
 CREATE TABLE commits(
-	id INT (NOT NULL), 
-	description TEXT,
-	time TIME,  	
+	contributorID INT, --should this be not null? update the relational scheme
+	projectID INT, 	--should this be not null? 
 	commitDate DATE,
-	contributorID INT,
-	projectID INT
+	time TIME, 
+	description TEXT,
+	id INT (NOT NULL), 
 	CONSTRAINT changes_pk PRIMARY KEY(id),
-	CONSTRAINT changes_fk FOREIGN KEY(contributorID) REFERENCES contributors(id),
-	CONSTRAINT changes_fk FOREIGN KEY(projectID) REFERENCES projects(id)
+	CONSTRAINT changes_fk FOREIGN KEY(contributorID) REFERENCES contributors(id) ON DELETE CASCADE,
+	CONSTRAINT changes_fk FOREIGN KEY(projectID) REFERENCES projects(id) ON DELETE CASCADE, 
+	CONSTRAINT changes_ck UNIQUE (commitDate, time, description)
 );
 CREATE TABLE changes(
 	fileAdjusted VARCHAR(20) (NOT NULL),
-	body TEXT,
+	bodyOfDiff TEXT,
 	checkSum CHAR(10),
 	commitID INT (NOT NULL),
 	CONSTRAINT changes_pk PRIMARY KEY(commitID, fileAdjusted), 
-	CONSTRAINT changes_fk FOREIGN KEY(commitID) REFERENCES commits(id)
+	CONSTRAINT changes_fk FOREIGN KEY(commitID) REFERENCES commits(id) ON DELETE CASCADE
 );
