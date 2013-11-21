@@ -1,6 +1,25 @@
+-- 4. what posts are attached to this goal
+	--Do we also want to join with the contributors table?
+SELECT body, datePosted, time, ContributorID
+FROM posts
+WHERE goalID = --GoalID from java
+
+-- 5. what files were changed in this commit
+SELECT fileAdjusted
+FROM changes
+WHERE commitID = --ID from java
+	AND bodyOfDiff IS NULL
+
+-- 6. List all commits that touched a specific file
+SELECT id
+FROM commits INNER JOIN changes ON commits.id = changes.commitID
+WHERE changes.fileAdjusted = --file from java
+	AND changes.bodyOfDiff IS NOT NULL
+
 -- 7. Get the name of each file for a commit
 SELECT fileAdjusted
 FROM Commits INNER JOIN Changes ON Commits.ID = Changes.commitID;
+
 
 -- 8a. Get the body of a file from scratch
 SELECT Changes.body
