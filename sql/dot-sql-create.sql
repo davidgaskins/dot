@@ -9,16 +9,19 @@ DROP TABLE commits;
 DROP TABLE projects;
 
 
---the following three tables create our enumerated data types
+--the following four tables create our enumerated data types
 CREATE TABLE type(
 	name ENUM('BUG', 'IMPROVEMENT', 'LONG-TERM')
 );
-CREATE TABLE status{
+CREATE TABLE status(
 	name ENUM('OPEN', 'CLOSED', 'NOFIX', 'ASSIGNED', 'DUPLICATE', 'POSTPONED')
-}
-CREATE TABLE priority{
+);
+CREATE TABLE priority(
 	name ENUM('CRITICAL', 'MEDIUM', 'LOW')
-} 
+);
+CREATE TABLE phType(
+	name ENUM('CELL', 'HOME', 'WORK')
+)
 --the following 9 tables are for our data
 CREATE TABLE projects(
 	title VARCHAR(20) (NOT NULL),
@@ -51,7 +54,7 @@ CREATE TABLE managementAssignments(
 CREATE TABLE phoneNumbers(
 	contributorID INT (NOT NULL),
 	phoneNumber VARCHAR(11) (NOT NULL),
-	phoneType VARCHAR(10)
+	phoneType phType,
 	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber, phoneType),
 	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
 );
