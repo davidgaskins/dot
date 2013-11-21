@@ -19,7 +19,7 @@ CREATE TABLE status{
 CREATE TABLE priority{
 	name ENUM('CRITICAL', 'MEDIUM', 'LOW')
 } 
-
+--the following 9 tables are for our data
 CREATE TABLE projects(
 	title VARCHAR(20) (NOT NULL),
 	dateToEnd TIMESTAMP,
@@ -39,8 +39,8 @@ CREATE TABLE contributors(
 	CONSTRAINT contributors_ck UNIQUE (email)
 );
 CREATE TABLE managementAssignments(
-	dateStarted DATE (NOT NULL),
-	dateToEnd DATE,
+	dateStarted TIMESTAMP (NOT NULL),
+	dateToEnd TIMESTAMP,
 	finished BOOLEAN,
 	projectID INT (NOT NULL),
 	contributorID INT (NOT NULL) ,
@@ -62,9 +62,9 @@ CREATE TABLE goals(
 	priority PRIORITY,
 	type TYPE,
 	status STATUS,
-	dateCreated DATE (NOT NULL),
-	dateUpdated DATE,
-	dateToEnd DATE,
+	dateCreated TIMESTAMP(NOT NULL),
+	dateUpdated TIMESTAMP,
+	dateToEnd TIMESTAMP,
 	projectID INT,
 	parentGoalID INT, -- can be null
 	CONSTRAINT goals_pk PRIMARY KEY(id),
@@ -73,16 +73,15 @@ CREATE TABLE goals(
 );
 CREATE TABLE posts (
 	body TEXT,
-	datePosted DATE (NOT NULL),
-	time TIME (NOT NULL),
+	dateAndTime TIMESTAMP(NOT NULL),
 	contributorID INT (NOT NULL), --need to change the relational scheme
 	goalID INT,
 	CONSTRAINT posts_pk PRIMARY KEY (datePosted, time, goalID),
 	CONSTRAINT posts_fk FOREIGN KEY (goalID) REFERENCES goals(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
-	dateStarted DATE (NOT NULL),
-	dateToEnd DATE,
+	dateStarted TIMESTAMP (NOT NULL),
+	dateToEnd TIMESTAMP,
 	finished BOOLEAN,
 	goalID (NOT NULL),
 	contributorID (NOT NULL),
@@ -91,8 +90,7 @@ CREATE TABLE workAssignments(
 CREATE TABLE commits(
 	contributorID INT, --should this be not null? update the relational scheme
 	goalID INT, 	--should this be not null? 
-	commitDate DATE,
-	time TIMESTAMP, 
+	commitDate TIMESTAMP,
 	description TEXT,
 	id INT (NOT NULL) AUTO_INCREMENT, 
 	CONSTRAINT changes_pk PRIMARY KEY(id),
