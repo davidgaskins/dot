@@ -57,8 +57,13 @@ CREATE TABLE managementAssignments(
 	
 	-- A Contributor may Manage a Project in many time periods
 	CONSTRAINT managementAssignments_pk PRIMARY KEY (projectID, contributorID, dateStarted),
+	
+	-- Deleting a Project is a serious action, but it means the client
+	-- wants to delete all of its history, including this managementAssignment
 	CONSTRAINT managementAssignments_fk FOREIGN KEY (projectID) 
 		REFERENCES projects (id) ON DELETE CASCADE,
+		
+	-- Same for contributor: delete all of a contributor's history with the project
 	CONSTRAINT managementAssignments_fk2 FOREIGN KEY (contributorID) 
 		REFERENCES contributors (id) ON DELETE CASCADE
 );
@@ -71,6 +76,11 @@ CREATE TABLE phoneNumbers(
 	
 	-- Each Contributor has many phone numbers
 	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber),
+	
+	-- If a Contributor is deleted, the Project and its Contributors
+	-- do not need to contact him anymore. This implies that client
+	-- only deletes Contributor for a serious reason, such as banning
+	-- or an accidentally created Contributor
 	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) 
 		REFERENCES contributors (id) ON DELETE CASCADE
 );
@@ -92,6 +102,9 @@ CREATE TABLE goals(
 	
 	-- A Goal may be created, not completed, then raised again later
 	CONSTRAINT goals_ck UNIQUE (dateCreated, title),
+	
+	-- If a Goal is deleted, all of the subGoals that contribute to its
+	-- completion do not matter either
 	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) 
 		REFERENCES goals (id) ON DELETE CASCADE
 );
@@ -104,6 +117,9 @@ CREATE TABLE posts (
 	-- Two Posts may be posted by different Contributors at the same time on the same goal
 	CONSTRAINT posts_pk PRIMARY KEY (datePosted, time, goalID, contributorID),
 	
+	-- If a Goal is deleted, no discussion needs to be made about how to solve it. 
+	-- This implies that client only deletes Goal for a serious reason, such as
+	-- the fact that it is now completely irrelevant
 	CONSTRAINT posts_fk FOREIGN KEY (goalID) 
 		REFERENCES goals(id) ON DELETE CASCADE
 );
@@ -130,10 +146,13 @@ CREATE TABLE commits(
 	-- One Contributor may reference many Commits, so reduce memory usage using surrogate key ID
 	CONSTRAINT changes_pk PRIMARY KEY(id),
 	
+	-- Do not delete a Contributor if he has made Commits
 	CONSTRAINT changes_fk FOREIGN KEY(contributorID) 
-		REFERENCES contributors(id) ON DELETE CASCADE,
+		REFERENCES contributors(id) ON DELETE NO ACTION,
+		
+	-- Do not delete a Goal if Commits have been made to it
 	CONSTRAINT changes_fk FOREIGN KEY(goalID) 
-		REFERENCES goalss(id) ON DELETE CASCADE, 
+		REFERENCES goalss(id) ON DELETE NO ACTION, 
 
 	-- Two Contributors may make Commits at the same date+time, but their commits
 	-- will have different descriptions
@@ -147,6 +166,9 @@ CREATE TABLE changes(
 	
 	-- One Commit makes Changes to many files
 	CONSTRAINT changes_pk PRIMARY KEY(commitID, fileAdjusted), 
+	
+	-- Commit can only be deleted if it is the latest Commit.
+	-- In that case, delete its changes too.
 	CONSTRAINT changes_fk FOREIGN KEY(commitID) 
 		REFERENCES commits(id) ON DELETE CASCADE
 );
