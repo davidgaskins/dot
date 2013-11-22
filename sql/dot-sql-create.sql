@@ -21,6 +21,8 @@ CREATE TABLE projects(
 	dateStarted DATE NOT NULL,
 	id INT NOT NULL AUTO_INCREMENT,
 	CONSTRAINT projects_pk PRIMARY KEY (id),
+	
+	-- The client may start a Project, not complete it, and start a new one later
 	CONSTRAINT projects_ck1 UNIQUE (title, dateStarted),
 	CONSTRAINT valid_data_range CHECK (dateToEnd >= dateStarted)
 );
@@ -30,6 +32,8 @@ CREATE TABLE contributors(
 	lName VARCHAR(15),
 	email VARCHAR(30) NOT NULL,
 	CONSTRAINT contributors_pk PRIMARY KEY(id),
+	
+	-- Assume no Contributors share email
 	CONSTRAINT contributors_ck UNIQUE (email)
 );
 CREATE TABLE managementAssignments(
@@ -63,7 +67,9 @@ CREATE TABLE goals(
 	parentGoalID INT, -- can be null because it doesn't have to have a parent
 	--do we need do have this be a foreign key that references itself?
 	CONSTRAINT goals_pk PRIMARY KEY(id),
-	CONSTRAINT goals_ck UNIQUE (dateCreated, title, description),
+	
+	-- A Goal may be created, not completed, then raised again later
+	CONSTRAINT goals_ck UNIQUE (dateCreated, title),
 	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) REFERENCES goals (id) ON DELETE CASCADE
 );
 CREATE TABLE posts (
@@ -91,6 +97,9 @@ CREATE TABLE commits(
 	CONSTRAINT changes_pk PRIMARY KEY(id),
 	CONSTRAINT changes_fk FOREIGN KEY(contributorID) REFERENCES contributors(id) ON DELETE CASCADE,
 	CONSTRAINT changes_fk FOREIGN KEY(goalID) REFERENCES goalss(id) ON DELETE CASCADE, 
+
+	-- Two Contributors may make Commits at the same date+time, but their commits
+	-- will have different descriptions
 	CONSTRAINT changes_ck UNIQUE (commitDate, time, description)
 );
 CREATE TABLE changes(
