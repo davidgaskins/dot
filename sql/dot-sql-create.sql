@@ -20,6 +20,10 @@ CREATE TABLE projects(
 	description TEXT,
 	dateStarted DATE NOT NULL,
 	id INT NOT NULL AUTO_INCREMENT,
+	
+	-- ManagementAssignment and Goal both reference Project.
+	-- Use surrogate key "id" to reduce memory usage, and
+	-- because part of Project's title may change
 	CONSTRAINT projects_pk PRIMARY KEY (id),
 	
 	-- The client may start a Project, not complete it, and start a new one later
@@ -31,6 +35,10 @@ CREATE TABLE contributors(
 	fName VARCHAR(15),
 	lName VARCHAR(15),
 	email VARCHAR(30) NOT NULL, -- Contributors must be able to be contacted thru email
+	
+	-- Commit, Post, ManagementAssignment, and WorkAssignment
+	-- all reference Contributor. Use surrogate key "id" to 
+	-- reduce memory usage, and becaue CK email may change
 	CONSTRAINT contributors_pk PRIMARY KEY(id),
 	
 	-- Assume no Contributors share email
@@ -46,6 +54,8 @@ CREATE TABLE managementAssignments(
 	
 	projectID INT NOT NULL,
 	contributorID INT NOT NULL ,
+	
+	-- A Contributor may Manage a Project in many time periods
 	CONSTRAINT managementAssignments_pk PRIMARY KEY (projectID, contributorID, dateStarted),
 	CONSTRAINT managementAssignments_fk FOREIGN KEY (projectID) REFERENCES projects (id) ON DELETE CASCADE,
 	CONSTRAINT managementAssignments_fk2 FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
@@ -57,7 +67,8 @@ CREATE TABLE phoneNumbers(
 	phoneNumber CHAR(18) NOT NULL,
 	phoneType ENUM('CELL', 'HOME', 'WORK'),
 	
-	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber, phoneType),
+	-- Each Contributor has many phone numbers
+	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber),
 	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
 );
 CREATE TABLE goals(
@@ -71,8 +82,9 @@ CREATE TABLE goals(
 	dateUpdated TIMESTAMP,
 	dateToEnd TIMESTAMP,
 	projectID INT,
-	parentGoalID INT, -- can be null because it doesn't have to have a parent
-	--do we need do have this be a foreign key that references itself?
+	parentGoalID INT, -- can be null because top level Goals don't need have to have a parent
+	
+	-- Goal can reference many parent Goals, so reduce memory usage by using ID
 	CONSTRAINT goals_pk PRIMARY KEY(id),
 	
 	-- A Goal may be created, not completed, then raised again later
@@ -84,7 +96,10 @@ CREATE TABLE posts (
 	dateAndTime TIMESTAMP NOT NULL,
 	contributorID INT NOT NULL, --need to change the relational scheme
 	goalID INT,
-	CONSTRAINT posts_pk PRIMARY KEY (datePosted, time, goalID),
+	
+	-- Two Posts may be posted by different Contributors at the same time on the same goal
+	CONSTRAINT posts_pk PRIMARY KEY (datePosted, time, goalID, contributorID),
+	
 	CONSTRAINT posts_fk FOREIGN KEY (goalID) REFERENCES goals(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
@@ -96,7 +111,9 @@ CREATE TABLE workAssignments(
 	
 	goalID NOT NULL,
 	contributorID NOT NULL,
-	CONSTRAINT workAssignments PRIMARY KEY(dateStarted, goalID, contributorID)
+	
+	-- A Contributor may work on a Goal in many time periods
+	CONSTRAINT workAssignments_pk PRIMARY KEY(dateStarted, goalID, contributorID)
 );
 CREATE TABLE commits(
 	contributorID INT, --should this be not null? update the relational scheme
@@ -104,7 +121,10 @@ CREATE TABLE commits(
 	commitDate TIMESTAMP,
 	description TEXT,
 	id INT NOT NULL AUTO_INCREMENT, 
+	
+	-- One Contributor may reference many Commits, so reduce memory usage using surrogate key ID
 	CONSTRAINT changes_pk PRIMARY KEY(id),
+	
 	CONSTRAINT changes_fk FOREIGN KEY(contributorID) REFERENCES contributors(id) ON DELETE CASCADE,
 	CONSTRAINT changes_fk FOREIGN KEY(goalID) REFERENCES goalss(id) ON DELETE CASCADE, 
 
@@ -117,6 +137,8 @@ CREATE TABLE changes(
 	bodyOfDiff TEXT,
 	checkSum CHAR(10),
 	commitID INT NOT NULL,
+	
+	-- One Commit makes Changes to many files
 	CONSTRAINT changes_pk PRIMARY KEY(commitID, fileAdjusted), 
 	CONSTRAINT changes_fk FOREIGN KEY(commitID) REFERENCES commits(id) ON DELETE CASCADE
 );
