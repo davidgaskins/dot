@@ -154,7 +154,14 @@ CREATE TABLE commits(
 	CONSTRAINT changes_fk2 FOREIGN KEY(goalID) 
 		REFERENCES goals(id) ON DELETE NO ACTION, 
 
+<<<<<<< HEAD
 	--it is impossible for the same contributor to make a commit at precisely the same ime
+=======
+	-- Two Contributors may make Commits at the same date+time, but their commits
+	-- will have different descriptions
+            --But they will also have different people commiting them
+            --Changed descrption to contributorID
+>>>>>>> 1385460d1573441551d38f7a90f4d1c9712b07cf
 	CONSTRAINT changes_ck UNIQUE (commitDate, contributorID)
 );
 CREATE TABLE changes(
