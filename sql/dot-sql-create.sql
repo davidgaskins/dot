@@ -24,7 +24,11 @@ CREATE TABLE projects(
 	
 	-- The client may start a Project, not complete it, and start a new one later
 	CONSTRAINT projects_ck1 UNIQUE (title, dateStarted),
-	CONSTRAINT valid_data_range CHECK (dateToEnd >= dateStarted)
+	
+	-- To prevent unwanted changes when they are too late,
+	-- this constraint forces the client to update a Project's
+	-- due date when it is overdue.
+	CONSTRAINT valid_date_range CHECK (dateToEnd >= dateStarted)
 );
 CREATE TABLE contributors(
 	id INT NOT NULL AUTO_INCREMENT,
