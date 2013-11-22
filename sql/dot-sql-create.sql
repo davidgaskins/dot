@@ -1,16 +1,12 @@
---DROP TABLE managementAssignments;
---DROP TABLE posts;
---DROP TABLE goals;
---DROP TABLE workAssignments;
---DROP TABLE phoneNumbers;
---DROP TABLE contributors;
---DROP TABLE changes;
---DROP TABLE commits;
---DROP TABLE projects;
-
---runs up to goals
---droping tables order needs to be changed
-
+DROP TABLE posts;
+DROP TABLE changes;
+DROP TABLE commits;
+DROP TABLE managementAssignments;
+DROP TABLE workAssignments;
+DROP TABLE goals;
+DROP TABLE projects;
+DROP TABLE phoneNumbers;
+DROP TABLE contributors;
 
 
 --the following 9 tables are for our data
