@@ -57,8 +57,10 @@ CREATE TABLE managementAssignments(
 	
 	-- A Contributor may Manage a Project in many time periods
 	CONSTRAINT managementAssignments_pk PRIMARY KEY (projectID, contributorID, dateStarted),
-	CONSTRAINT managementAssignments_fk FOREIGN KEY (projectID) REFERENCES projects (id) ON DELETE CASCADE,
-	CONSTRAINT managementAssignments_fk2 FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
+	CONSTRAINT managementAssignments_fk FOREIGN KEY (projectID) 
+		REFERENCES projects (id) ON DELETE CASCADE,
+	CONSTRAINT managementAssignments_fk2 FOREIGN KEY (contributorID) 
+		REFERENCES contributors (id) ON DELETE CASCADE
 );
 CREATE TABLE phoneNumbers(
 	contributorID INT NOT NULL,
@@ -69,7 +71,8 @@ CREATE TABLE phoneNumbers(
 	
 	-- Each Contributor has many phone numbers
 	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber),
-	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
+	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) 
+		REFERENCES contributors (id) ON DELETE CASCADE
 );
 CREATE TABLE goals(
 	id INT NOT NULL AUTO_INCREMENT,
@@ -89,7 +92,8 @@ CREATE TABLE goals(
 	
 	-- A Goal may be created, not completed, then raised again later
 	CONSTRAINT goals_ck UNIQUE (dateCreated, title),
-	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) REFERENCES goals (id) ON DELETE CASCADE
+	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) 
+		REFERENCES goals (id) ON DELETE CASCADE
 );
 CREATE TABLE posts (
 	body TEXT,
@@ -100,7 +104,8 @@ CREATE TABLE posts (
 	-- Two Posts may be posted by different Contributors at the same time on the same goal
 	CONSTRAINT posts_pk PRIMARY KEY (datePosted, time, goalID, contributorID),
 	
-	CONSTRAINT posts_fk FOREIGN KEY (goalID) REFERENCES goals(id) ON DELETE CASCADE
+	CONSTRAINT posts_fk FOREIGN KEY (goalID) 
+		REFERENCES goals(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
 	dateStarted TIMESTAMP NOT NULL,
@@ -125,8 +130,10 @@ CREATE TABLE commits(
 	-- One Contributor may reference many Commits, so reduce memory usage using surrogate key ID
 	CONSTRAINT changes_pk PRIMARY KEY(id),
 	
-	CONSTRAINT changes_fk FOREIGN KEY(contributorID) REFERENCES contributors(id) ON DELETE CASCADE,
-	CONSTRAINT changes_fk FOREIGN KEY(goalID) REFERENCES goalss(id) ON DELETE CASCADE, 
+	CONSTRAINT changes_fk FOREIGN KEY(contributorID) 
+		REFERENCES contributors(id) ON DELETE CASCADE,
+	CONSTRAINT changes_fk FOREIGN KEY(goalID) 
+		REFERENCES goalss(id) ON DELETE CASCADE, 
 
 	-- Two Contributors may make Commits at the same date+time, but their commits
 	-- will have different descriptions
@@ -140,5 +147,6 @@ CREATE TABLE changes(
 	
 	-- One Commit makes Changes to many files
 	CONSTRAINT changes_pk PRIMARY KEY(commitID, fileAdjusted), 
-	CONSTRAINT changes_fk FOREIGN KEY(commitID) REFERENCES commits(id) ON DELETE CASCADE
+	CONSTRAINT changes_fk FOREIGN KEY(commitID) 
+		REFERENCES commits(id) ON DELETE CASCADE
 );
