@@ -30,7 +30,7 @@ CREATE TABLE contributors(
 	id INT NOT NULL AUTO_INCREMENT,
 	fName VARCHAR(15),
 	lName VARCHAR(15),
-	email VARCHAR(30) NOT NULL,
+	email VARCHAR(30) NOT NULL, -- Contributors must be able to be contacted thru email
 	CONSTRAINT contributors_pk PRIMARY KEY(id),
 	
 	-- Assume no Contributors share email
@@ -39,7 +39,11 @@ CREATE TABLE contributors(
 CREATE TABLE managementAssignments(
 	dateStarted TIMESTAMP NOT NULL,
 	dateToEnd TIMESTAMP,
-	finished BOOLEAN,
+	
+	-- If a Project is still being worked on past its dateFinished,
+	-- its managers (the Contributors in this ManagementAssignment) are not finished
+	finished BOOLEAN, 
+	
 	projectID INT NOT NULL,
 	contributorID INT NOT NULL ,
 	CONSTRAINT managementAssignments_pk PRIMARY KEY (projectID, contributorID, dateStarted),
@@ -48,8 +52,11 @@ CREATE TABLE managementAssignments(
 );
 CREATE TABLE phoneNumbers(
 	contributorID INT NOT NULL,
-	phoneNumber VARCHAR(11) NOT NULL,
+	
+	-- Assume format "(123) 456-7890 x1234"
+	phoneNumber CHAR(18) NOT NULL,
 	phoneType ENUM('CELL', 'HOME', 'WORK'),
+	
 	CONSTRAINT phoneNumbers_pk PRIMARY KEY (contributorID, phoneNumber, phoneType),
 	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) REFERENCES contributors (id) ON DELETE CASCADE
 );
@@ -83,7 +90,10 @@ CREATE TABLE posts (
 CREATE TABLE workAssignments(
 	dateStarted TIMESTAMP NOT NULL,
 	dateToEnd TIMESTAMP,
+	
+	-- A work assignment may be past its dateToEnd, but still not finished
 	finished BOOLEAN,
+	
 	goalID NOT NULL,
 	contributorID NOT NULL,
 	CONSTRAINT workAssignments PRIMARY KEY(dateStarted, goalID, contributorID)
