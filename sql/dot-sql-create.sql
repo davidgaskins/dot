@@ -115,7 +115,7 @@ CREATE TABLE posts (
 	goalID INT,
 	
 	-- Two Posts may be posted by different Contributors at the same time on the same goal
-	CONSTRAINT posts_pk PRIMARY KEY (datePosted, time, goalID, contributorID),
+	CONSTRAINT posts_pk PRIMARY KEY (dateAndTime, goalID, contributorID),
 	
 	-- If a Goal is deleted, no discussion needs to be made about how to solve it. 
 	-- This implies that client only deletes Goal for a serious reason, such as
@@ -130,8 +130,8 @@ CREATE TABLE workAssignments(
 	-- A work assignment may be past its dateToEnd, but still not finished
 	finished BOOLEAN,
 	
-	goalID NOT NULL,
-	contributorID NOT NULL,
+	goalID INT NOT NULL,
+	contributorID INT NOT NULL,
 	
 	-- A Contributor may work on a Goal in many time periods
 	CONSTRAINT workAssignments_pk PRIMARY KEY(dateStarted, goalID, contributorID)
@@ -147,16 +147,16 @@ CREATE TABLE commits(
 	CONSTRAINT changes_pk PRIMARY KEY(id),
 	
 	-- Do not delete a Contributor if he has made Commits
-	CONSTRAINT changes_fk FOREIGN KEY(contributorID) 
+	CONSTRAINT changes_fk1 FOREIGN KEY(contributorID) 
 		REFERENCES contributors(id) ON DELETE NO ACTION,
 		
 	-- Do not delete a Goal if Commits have been made to it
-	CONSTRAINT changes_fk FOREIGN KEY(goalID) 
-		REFERENCES goalss(id) ON DELETE NO ACTION, 
+	CONSTRAINT changes_fk2 FOREIGN KEY(goalID) 
+		REFERENCES goals(id) ON DELETE NO ACTION, 
 
 	-- Two Contributors may make Commits at the same date+time, but their commits
 	-- will have different descriptions
-	CONSTRAINT changes_ck UNIQUE (commitDate, time, description)
+	CONSTRAINT changes_ck UNIQUE (commitDate, description)
 );
 CREATE TABLE changes(
 	fileAdjusted VARCHAR(20) NOT NULL,
