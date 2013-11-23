@@ -111,7 +111,7 @@ CREATE TABLE goals(
 CREATE TABLE posts (
 	body TEXT,
 	dateAndTime TIMESTAMP NOT NULL,
-	contributorID INT NOT NULL, --need to change the relational scheme
+	contributorID INT NOT NULL, 
 	goalID INT,
 	
 	-- Two Posts may be posted by different Contributors at the same time on the same goal
@@ -137,8 +137,8 @@ CREATE TABLE workAssignments(
 	CONSTRAINT workAssignments_pk PRIMARY KEY(dateStarted, goalID, contributorID)
 );
 CREATE TABLE commits(
-	contributorID INT, --should this be not null? update the relational scheme
-	goalID INT, 	--should this be not null? 
+	contributorID INT NOT NULL,
+	goalID INT NOT NULL, 
 	commitDate TIMESTAMP,
 	description TEXT,
 	id INT NOT NULL AUTO_INCREMENT, 
@@ -154,10 +154,8 @@ CREATE TABLE commits(
 	CONSTRAINT changes_fk2 FOREIGN KEY(goalID) 
 		REFERENCES goals(id) ON DELETE NO ACTION, 
 
-	-- Two Contributors may make Commits at the same date+time, but their commits
-	-- will have different descriptions
-            --But they will also have different people commiting them
-            --Changed descrption to contributorID
+	--it is impossible for the same contributor to make a commit at precisely the same time
+
 	CONSTRAINT changes_ck UNIQUE (commitDate, contributorID)
 );
 CREATE TABLE changes(
