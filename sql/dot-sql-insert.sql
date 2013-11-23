@@ -30,10 +30,10 @@ INSERT INTO goals (title, description, priority, type, status, dateCreated, date
 	('goal5', 'text for goal5', 'CRITICAL', 'IMPROVEMENT', 'OPEN', '2013-11-14 12:23:55', '2013-11-14 12:23:55', '2013-11-15 12:23:55', 1, NULL);
 INSERT INTO posts VALUES
 	('text for post1', '2013-11-14 12:23:55', 1, 1),
-	('text for post2', '2013-11-14 12:23:55', 1, 1),
-	('text for post3', '2013-11-14 12:23:55', 1, 1),
-	('text for post4', '2013-11-14 12:23:55', 1, 1),
-	('text for post5', '2013-11-14 12:23:55', 1, 1);
+	('text for post2', '2013-11-14 12:24:55', 1, 1),
+	('text for post3', '2013-11-14 12:25:55', 1, 1),
+	('text for post4', '2013-11-14 12:26:55', 1, 1),
+	('text for post5', '2013-11-14 12:27:55', 1, 1);
 INSERT INTO workAssignments VALUES
 	('2013-11-18 12:23:55', '2013-11-19 12:23:55', 'FALSE', 1, 1),
 	('2013-11-17 12:23:55', '2013-11-18 12:23:55', 'FALSE', 1, 1),
