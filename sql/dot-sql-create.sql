@@ -156,7 +156,9 @@ CREATE TABLE commits(
 
 	-- Two Contributors may make Commits at the same date+time, but their commits
 	-- will have different descriptions
-	CONSTRAINT changes_ck UNIQUE (commitDate, description)
+            --But they will also have different people commiting them
+            --Changed descrption to contributorID
+	CONSTRAINT changes_ck UNIQUE (commitDate, contributorID)
 );
 CREATE TABLE changes(
 	fileAdjusted VARCHAR(20) NOT NULL,
