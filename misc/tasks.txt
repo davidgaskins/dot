@@ -1,0 +1,61 @@
+main menu
+1. commits of code
+2. posts
+3. goals
+4. contributors
+5. commit changes to database
+6. abort changes since last commit
+7. quit
+
+commits menu
+1. make a commit
+2. delete the latest commit
+3. back to main menu
+
+posts menu
+- prompts you for the goal you want to post/view posts on-
+1. view posts
+2. make post
+3. back to main menu
+
+goals menu
+1. add a goal
+	-prompts you the project you want to a goal to-
+	-prompts for attributes-
+	-back to goals menu-
+2. edit a goal
+	-prompts you the project you want edit a goal of-
+	-prompts for attributes to 
+3. view a goal
+4. back to main menu.
+
+contributors
+- list all conributors-
+2. delete a contributor
+3. view a contributor's contact
+4. back to main menu
+
+commit changes
+abort changes
+quit
+
+Responsibilities
+David Gaskins
+--------------------------
+posts menu/ queries
+contributors menu/queries
+commit changes (TRANSACTIONS)
+abort changes (EMPTY QUEUE)
+quit menu
+
+David Martel
+--------------------------
+commits menu/ queries
+
+Tan Tran
+--------------------------
+Goals menu/queries
+Main Menu
+Sample Query Organization
+
+
