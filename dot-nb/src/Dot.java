@@ -1,5 +1,3 @@
-
-
 public class Dot {
 	static User guy;
 	static String workingDirectory
