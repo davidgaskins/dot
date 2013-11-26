@@ -1,16 +1,31 @@
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class Dot {
+    
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
-        private final static String DB_DRIVER = "org.apache.derby.jdbc.ClientDriver";
+        private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
+        
         private Scanner userInput = new Scanner(System.in);
         private Connection connection = null;
+
+        public Dot()
+        {
+            try {
+                Class.forName(DB_DRIVER);
+            } catch (ClassNotFoundException cnfe) {
+                LOGGER.log(Level.SEVERE, "Unable to load JDBC driver, due to error: {0}", cnfe);
+                System.exit(1);
+            }
+            
+            System.out.println("DB_DRIVER inited");
+        }
 
 	//static User guy;
 	//static String workingDirectory
@@ -33,17 +48,21 @@ public class Dot {
         private void connectToGaskinsDB()
         {
             try {
-                String url = "jdbc:mysql://davidgaskins.com:688/
-                String username = "server";
-                String password = "#FeqkTlnZ#";
+//                String url = "jdbc:mysql://davidgaskins.com:3306/dot";
+                String url = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
+                String username = "cecs323m16";
+                String password = "aigoiY";
+//                String username = "root";
+//                String password = "#FeqkTlnZ#";
 
                 connection = DriverManager.getConnection(url, username, password);
                 connection.setAutoCommit(false);
             } catch (SQLException sqe)
             {
                 LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
+                sqe.printStackTrace();
                 connection = null;
-            }
+            }            
         }
         
 //        private void connectToDB()
