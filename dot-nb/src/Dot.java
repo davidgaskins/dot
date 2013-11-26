@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 public class Dot {
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "org.apache.derby.jdbc.ClientDriver";
-        private final static String DB_URL = " __TO GET IN MAIN ";
+        private final static String DB_URL = "jdbc:mysql://davidgaskins.com";
         
 
     
@@ -26,14 +26,20 @@ public class Dot {
         {
             LOGGER.setLevel(Level.INFO);
             
-            
-            
-            
-            
-            mainMenu();
+            Dot dot = new Dot();
+            dot.mainMenu();
 	}
         
-        private static void mainMenu()
+        private void getConnectionData()
+        {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter the username.");
+            String username = scanner.nextLine();
+            System.out.println("Enter the password.");
+            String password = scanner.nextLine();
+        }
+        
+        private void mainMenu()
         {
             Scanner scanner = new Scanner(System.in);
             int option;
@@ -84,37 +90,37 @@ public class Dot {
         }
         
         
-        private static void commitsMenu()
+        private void commitsMenu()
         {
                 
         }
 
-        private static void postsMenu()
+        private void postsMenu()
         {
                 
         }
         
-        private static void goalsMenu()
+        private void goalsMenu()
         {
                 
         }
         
-        private static void contributorsMenu()
+        private void contributorsMenu()
         {
                 
         }
         
-        private static void commitMenu()
+        private void commitMenu()
         {
                 
         }
         
-        private static void rollbackMenu()
+        private void rollbackMenu()
         {
                 
         }
         
-        private static void quitMenu()
+        private void quitMenu()
         {
                 
         }
