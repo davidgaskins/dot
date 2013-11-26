@@ -7,7 +7,17 @@ public class Dot {
     
         // @TODO
         // turn off autocommit: set autocommit = 0; as a sql statement
+    
+        // @TODO
+        // set session transaction isolation level serializable:
+        // which locks access to DB whiel other transactions waiting
+        // but as soon as you commit or rollback the waiting transactions can start
 	public static void main(String args[]) 
+        {
+            mainMenu();
+	}
+        
+        private static void mainMenu()
         {
             Scanner scanner = new Scanner(System.in);
             int option;
@@ -55,8 +65,8 @@ public class Dot {
                         break;
                 }
             }
-            
-	}
+        }
+        
         
         private static void commitsMenu()
         {
