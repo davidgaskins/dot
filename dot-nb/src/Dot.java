@@ -1,6 +1,16 @@
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class Dot {
+        private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
+        private final static String DB_DRIVER = "org.apache.derby.jdbc.ClientDriver";
+        private final static String DB_URL = " __TO GET IN MAIN ";
+        
+
+    
+    
 	//static User guy;
 	//static String workingDirectory
 
@@ -14,6 +24,12 @@ public class Dot {
         // but as soon as you commit or rollback the waiting transactions can start
 	public static void main(String args[]) 
         {
+            LOGGER.setLevel(Level.INFO);
+            
+            
+            
+            
+            
             mainMenu();
 	}
         
