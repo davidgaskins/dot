@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -6,42 +9,55 @@ import java.util.logging.Logger;
 public class Dot {
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "org.apache.derby.jdbc.ClientDriver";
-        private final static String DB_URL = "jdbc:mysql://davidgaskins.com";
-        
+        private Scanner userInput = new Scanner(System.in);
+        private Connection connection = null;
 
-    
-    
 	//static User guy;
 	//static String workingDirectory
 
-    
-        // @TODO
-        // turn off autocommit: set autocommit = 0; as a sql statement
-    
         // @TODO
         // set session transaction isolation level serializable:
         // which locks access to DB whiel other transactions waiting
         // but as soon as you commit or rollback the waiting transactions can start
+        
 	public static void main(String args[]) 
         {
             LOGGER.setLevel(Level.INFO);
             
             Dot dot = new Dot();
+            dot.connectToGaskinsDB();
             dot.mainMenu();
 	}
         
-        private void getConnectionData()
+        
+        private void connectToGaskinsDB()
         {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter the username.");
-            String username = scanner.nextLine();
-            System.out.println("Enter the password.");
-            String password = scanner.nextLine();
+            try {
+                String url = "jdbc:mysql://davidgaskins.com:688/
+                String username = "server";
+                String password = "#FeqkTlnZ#";
+
+                connection = DriverManager.getConnection(url, username, password);
+                connection.setAutoCommit(false);
+            } catch (SQLException sqe)
+            {
+                LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
+                connection = null;
+            }
         }
+        
+//        private void connectToDB()
+//        {
+//            System.out.println("Enter the username.");
+//            String username = userInput.nextLine();
+//            System.out.println("Enter the password.");
+//            String password = userInput.nextLine();
+//            
+//            connection = DriverManager.getConnection(, username, password)
+//        }
         
         private void mainMenu()
         {
-            Scanner scanner = new Scanner(System.in);
             int option;
             
             boolean wantToQuit = false;
@@ -56,7 +72,7 @@ public class Dot {
                 System.out.println("5. COMMIT changes to the database.");
                 System.out.println("6. ROLLBACK changes since the last commit.");
                 System.out.println("7. QUIT.");
-                option = scanner.nextInt();
+                option = userInput.nextInt();
                 
                 // since there isn't an array of statements to execute,
                 // all this menu code doesn't need to be in the same place.
@@ -102,7 +118,28 @@ public class Dot {
         
         private void goalsMenu()
         {
+            boolean wantToQuit = false;
+            while (!wantToQuit)
+            {
+                System.out.println("This is the GOALS menu.");
+                System.out.println("1. ADD a goal.");
+                System.out.println("2. EDIT a goal.");
+                System.out.println("3. VIEW a goal.");
+                System.out.println("4. BACK to main menu.");
+                int option = userInput.nextInt();
                 
+                switch (option)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                }
+            }
         }
         
         private void contributorsMenu()
