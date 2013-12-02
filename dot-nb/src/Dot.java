@@ -1,3 +1,8 @@
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,7 +29,7 @@ public class Dot {
                 System.exit(1);
             }
             
-            System.out.println("DB_DRIVER inited");
+            System.out.println("DB_DRIVER init succesful.");
         }
 
 	//static User guy;
@@ -35,25 +40,42 @@ public class Dot {
         // which locks access to DB whiel other transactions waiting
         // but as soon as you commit or rollback the waiting transactions can start
         
-	public static void main(String args[]) 
+	public static void main(String args[]) throws IOException 
         {
             LOGGER.setLevel(Level.INFO);
             
             Dot dot = new Dot();
-            dot.connectToGaskinsDB();
+            dot.connectToMartelDB();
+            // dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
+            // permission to do that on infoserver. waiting on David Gaskins to set up server
+            // where we have permission to create db
+            
             dot.mainMenu();
 	}
         
-        
-        private void connectToGaskinsDB()
+        private void initializeMartelDB() throws IOException
+        {
+            String query = readFile("dot-sql-create.sql");
+                        
+            System.err.println("About to execute query:\n" + query); // DEBUG
+            try
+            {
+                Statement statement = connection.createStatement();
+                statement.executeUpdate("CREATE DATABASE dot2");
+                statement.executeQuery(query);
+            }
+            catch (SQLException sqe)
+            {
+                LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}", sqe.getMessage());
+                sqe.printStackTrace();
+            }
+        }
+        private void connectToMartelDB()
         {
             try {
-//                String url = "jdbc:mysql://davidgaskins.com:3306/dot";
-                String url = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
+                String url = "jdbc:mysql://127.0.0.1:3306"; //"jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
                 String username = "cecs323m16";
                 String password = "aigoiY";
-//                String username = "root";
-//                String password = "#FeqkTlnZ#";
 
                 connection = DriverManager.getConnection(url, username, password);
                 connection.setAutoCommit(false);
@@ -79,8 +101,9 @@ public class Dot {
         {
             int option;
             
+            System.out.println("This is the management console of the DOT issue tracker and source control program.");
+            
             boolean wantToQuit = false;
-            System.out.println("Welcome to the management console of the DOT issue tracker and source control program.");
             while (!wantToQuit)
             {
                 System.out.println("This is the main menu of what you can do on your project.");
@@ -137,6 +160,10 @@ public class Dot {
         
         private void goalsMenu()
         {
+            int option;
+
+            System.out.println();
+            
             boolean wantToQuit = false;
             while (!wantToQuit)
             {
@@ -145,19 +172,71 @@ public class Dot {
                 System.out.println("2. EDIT a goal.");
                 System.out.println("3. VIEW a goal.");
                 System.out.println("4. BACK to main menu.");
-                int option = userInput.nextInt();
+                option = userInput.nextInt();
                 
                 switch (option)
                 {
-                    case 1:
+                    case 1: // add a goal
+                        goalsMenuAdd();
                         break;
-                    case 2:
+                    case 2: // edit a goal
                         break;
-                    case 3:
+                    case 3: // view a goal
                         break;
                     case 4:
+                        wantToQuit = true;
                         break;
+                    default:
+                        System.out.println("Invalid menu option.");
                 }
+            }
+        }
+        
+        private void goalsMenuAdd()
+        {
+            userInput.nextLine();
+            
+            System.out.println("Enter the TITLE of the goal.");
+            String title = userInput.nextLine();
+            
+            System.out.println("Enter the DESCRIPTION of the goal.");
+            String description = userInput.nextLine();
+            
+            System.out.println("Enter the PRIORITY of the goal.");
+            String priority = userInput.nextLine();
+            
+            System.out.println("Enter the TYPE of the goal.");
+            String type = userInput.nextLine();
+            
+            System.out.println("Enter the STATUS of the goal.");
+            String status = userInput.nextLine();
+            
+            String dateCreated = "January 1 2000";
+            
+            String dateUpdated = "January 2 2001";
+            
+            System.out.println("Enter the END DATE of the goal.");
+            String dateToEnd = userInput.nextLine();
+            
+            String projectID = "SampleProject";
+            
+            String parentGoalID = "1";
+            
+            String query = String.format(
+                    "INSERT INTO Goals(title, description, priority, type, status, dateCreated, "
+                        + "dateUpdated, dateToEnd, projectID, parentGoalID"
+                    + "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                    
+                    title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID);
+            System.err.println("About to execute query:\n" + query); // DEBUG
+            try
+            {
+                Statement statement = connection.createStatement();
+                statement.executeQuery(query);
+            }
+            catch (SQLException e)
+            {
+                System.out.println("There was an error in adding the goal. Check that your input is correct.");
             }
         }
         
@@ -180,4 +259,16 @@ public class Dot {
         {
                 
         }
+        
+        // http://stackoverflow.com/questions/326390/how-to-create-a-java-string-from-the-contents-of-a-file
+        private static String readFile(String path) 
+        throws IOException 
+        {
+            byte[] encoded = Files.readAllBytes(Paths.get(path));
+            Charset encoding = Charset.defaultCharset();
+            return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+        }
+
+        
+        
 }

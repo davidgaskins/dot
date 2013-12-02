@@ -57,5 +57,3 @@ Tan Tran
 Goals menu/queries
 Main Menu
 Sample Query Organization
-
-
