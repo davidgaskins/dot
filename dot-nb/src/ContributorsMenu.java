@@ -13,16 +13,17 @@ public class ContributorsMenu
 {
     Connection connection;
     private static Logger LOGGER;
-    private final Scanner userInput = new Scanner(System.in);
+    private final Scanner userInput;
     private String queryOrStatement;
     
     public ContributorsMenu(Logger LOGGER, Connection connection)
     {
+        this.userInput = new Scanner(System.in);
         this.LOGGER = LOGGER;
         this.connection = connection;
     }
     
-    private void contributorsMenu()
+    public void contributorsMenu()
     {
         int option;
 

@@ -25,7 +25,7 @@ public class PostsMenu
         this.connection = connection;
     }
     
-    private void postsMenu()
+    public void postsMenu()
     {
         int option;
 

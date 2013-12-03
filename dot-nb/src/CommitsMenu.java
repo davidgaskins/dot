@@ -16,18 +16,18 @@ public class CommitsMenu
 {
     Connection connection;
     private static Logger LOGGER;
-    private final Scanner userInput = new Scanner(System.in);
+    private final Scanner userInput;
     private String queryOrStatement;
     
     public CommitsMenu(Logger LOGGER, Connection connection)
     {
+        this.userInput = new Scanner(System.in);
         this.LOGGER = LOGGER;
         this.connection = connection;
     }
     
-    private void commitMenu()
+    public void commitsMenu()
     {
-        System.out.println("The transaction has been commited.");
-        //need to add the commit code       
+        
     }
 }

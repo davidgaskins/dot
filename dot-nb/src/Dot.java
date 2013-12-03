@@ -62,7 +62,8 @@ public class Dot {
             // permission to do that on infoserver. waiting on David Gaskins to set up server
             // where we have permission to create db
             
-            dot.mainMenu();
+            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
+            mainMenu.mainMenu();
 	   }
         
         private void initializeMartelDB() throws IOException
@@ -136,102 +137,7 @@ public class Dot {
 //            connection = DriverManager.getConnection(, username, password)
 //        }
         
-        private void mainMenu()
-        {
-            GoalsMenu goalsMenu = new GoalsMenu(LOGGER, connection);
-            ContributorsMenu contributorsMenu = new ContributorsMenu(LOGGER, connection);
-            CommitsMenu commitsMenu = new CommitsMenu(LOGGER, connection);
-            PostsMenu postsMenu = new PostsMenu(LOGGER, connection);
-            
-            int option;
-            
-            System.out.println("This is the management console of the DOT issue tracker and source control program.");
-            
-            boolean wantToQuit = false;
-            while (!wantToQuit)
-            {
-                System.out.println("This is the main menu of what you can do on your project.");
-                System.out.println("1. Manage COMMITS of source code.");
-                System.out.println("2. Manage POSTS on issues.");
-                System.out.println("3. Manage GOALS.");
-                System.out.println("4. Manage CONTRIBUTORS.");
-                System.out.println("5. COMMIT changes to the database.");
-                System.out.println("6. ROLLBACK changes since the last commit.");
-                System.out.println("7. QUIT.");
-                option = userInput.nextInt();
-                
-                // since there isn't an array of statements to execute,
-                // all this menu code doesn't need to be in the same place.
-                // let's just call static methods for each of the submenus
-                // so the main method isn't cluttered with all of them.
-                switch (option)
-                {
-                    case 1: // COMMITS
-                        commitsMenu();
-                        break;
-                    case 2:
-                        postsMenu();
-                        break;
-                    case 3:
-                        goalsMenu.goalsMenu();
-                        break;
-                    case 4:
-                        contributorsMenu.contributorsMenu();
-                        break;
-                    case 5:
-                        commitMenu();
-                        break;
-                    case 6:
-                        rollbackMenu();
-                        break;
-                    case 7:
-                        quitMenu();
-                        break;
-                }
-            }
-        }
-        
-        
-        private void commitsMenu()
-        {
-                
-        }
 
-        
-        private void rollbackMenu()
-        {
-            System.out.println("The transaction has been rolled back.");
-            //need to add the rollback code.
-        }
-        
-        private void quitMenu()
-        {
-            int option;
-
-            System.out.println();
-            
-            boolean wantToQuit = false;
-            while (!wantToQuit)
-            {
-                System.out.println("This is the quit menu.");
-                System.out.println("1. Commit Changes.");
-                System.out.println("2. Abort Changes.");
-                option = userInput.nextInt();
-                
-                switch (option)
-                {
-                    case 1: // commit the Transaction
-                        commitMenu();
-                        break;
-                    case 2: // rollback the Transaction
-                        rollbackMenu();
-                        break;
-                    default:
-                        System.out.println("Invalid menu option.");
-                }
-            }  
-        }
-        
         // http://stackoverflow.com/questions/326390/how-to-create-a-java-string-from-the-contents-of-a-file
         private static String readFile(String path) 
         throws IOException 

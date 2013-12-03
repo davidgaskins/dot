@@ -1,3 +1,10 @@
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,8 +19,16 @@
  */
 public class FileUtil {
     
-    public static String diff(String oldFile, String newFile) {
+    public static String diff(String oldFile, String newFile) 
+    {
         return null;
     }
     
+    private static String readFile(String path) 
+    throws IOException 
+    {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        Charset encoding = Charset.defaultCharset();
+        return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+    } 
 }
