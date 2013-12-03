@@ -483,7 +483,7 @@ public class Dot {
             //they would like to see their contact info.
             System.out.println("Enter the id of the contributor that you would like to see the contact information.");
             contributorsMenuView();
-            String toView = in.nextLine();
+            String toView = userInput.nextLine();
             int id = Integer.parseInt(toView);
             String statementString = "SELECT * FROM phoneNumbers " +
                                         "WHERE id = " + id;
@@ -496,7 +496,9 @@ public class Dot {
                     String line = rs.getMessage();
                     System.out.println(line);
                 }
-
+            } catch (SQLException sqe) // @TODO
+            {
+                ;
             }
         }
         private void contributorsMenuDelete(){
@@ -544,7 +546,7 @@ public class Dot {
                     System.out.println(contributorRow);
                 }
             }
-            catch (SQLException e)
+            catch (SQLException sqe)
             {
                 System.out.println("There was an error in retrieving the contributors.");
             }
@@ -572,7 +574,7 @@ public class Dot {
             while (!wantToQuit)
             {
                 System.out.println("This is the quit menu.");
-                System.out.println("1. CommitChanges.");
+                System.out.println("1. Commit Changes.");
                 System.out.println("2. Abort Changes.");
                 option = userInput.nextInt();
                 
@@ -597,6 +599,5 @@ public class Dot {
             byte[] encoded = Files.readAllBytes(Paths.get(path));
             Charset encoding = Charset.defaultCharset();
             return encoding.decode(ByteBuffer.wrap(encoded)).toString();
-
         } 
 }
