@@ -103,6 +103,7 @@ public class Dot {
                 System.exit(1);
             }            
         }
+        
         private void connectToGaskinsDB()
         {
             try {
@@ -248,7 +249,7 @@ public class Dot {
                         goalsMenuEdit();
                         break;
                     case 3: // view a goal
-                        // goalsMenuView();
+                        goalsMenuView();
                         break;
                     case 4:
                         wantToQuit = true;
@@ -309,46 +310,13 @@ public class Dot {
         
         private void goalsMenuEdit()
         {
+            ResultSet rs;
             userInput.nextLine();
             
             // 1. supposed to prompt for project here. but assuming default project right now.            
             
-            // 2. get the list of goals            
-            ResultSet rs;
-            try
-            {
-                Statement statement = connection.createStatement();
-                rs = statement.executeQuery("SELECT * FROM GOALS ORDER BY ID desc");
-            }
-            catch (SQLException sqe)
-            {
-                LOGGER.log(Level.SEVERE, "Error processing result set. Error: {0}", sqe.getMessage());
-                System.out.println("There was an error in retrieving the goals.");
-                return;
-            }
-
-            String columnNames = "ID\t Name\t description\t DateCreated\t DateUpdated\t";
-            System.out.println(columnNames);
-            try
-            {
-                while (rs.next())
-                {
-                    int id = rs.getInt("id");
-                    String title = rs.getString("title");
-                    String description = rs.getString("description");
-                    String dateCreated = rs.getDate("dateCreated").toString();
-                    String dateUpdated = rs.getDate("dateUpdated").toString();
-                    String goalRow = String.format("%d\t %s\t %s\t %s\t% s\t",
-                            id, title, description, dateCreated, dateUpdated);
-                    System.out.println(goalRow);
-                }
-            }
-            catch (SQLException sqe)
-            {
-                LOGGER.log(Level.SEVERE, "Error processing result set. Error: {0}", sqe.getMessage());
-                System.out.println("There was an error in processing the result set.");
-                return;
-            }
+            // 2. get the list of goals         
+            goalsMenuView();
             
             // 3. Prompt for a goal by its ID
             System.out.println("Enter the ID of the goal you want to edit.");
@@ -463,6 +431,46 @@ public class Dot {
             }
 	}
 		
+        private void goalsMenuView()
+        {
+            ResultSet rs;
+            // 1. get the goals
+            try
+            {
+                Statement statement = connection.createStatement();
+                rs = statement.executeQuery("SELECT * FROM GOALS ORDER BY ID desc");
+            }
+            catch (SQLException sqe)
+            {
+                LOGGER.log(Level.SEVERE, "Error processing result set. Error: {0}", sqe.getMessage());
+                System.out.println("There was an error in retrieving the goals.");
+                return;
+            }            
+            
+            // 2. print out the goals
+            String columnNames = "ID\t Name\t description\t DateCreated\t DateUpdated\t";
+            System.out.println(columnNames);
+            try
+            {
+                while (rs.next())
+                {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    String dateCreated = rs.getDate("dateCreated").toString();
+                    String dateUpdated = rs.getDate("dateUpdated").toString();
+                    String goalRow = String.format("%d\t %s\t %s\t %s\t% s\t",
+                            id, title, description, dateCreated, dateUpdated);
+                    System.out.println(goalRow);
+                }
+            }
+            catch (SQLException sqe)
+            {
+                LOGGER.log(Level.SEVERE, "Error processing result set. Error: {0}", sqe.getMessage());
+                System.out.println("There was an error in processing the result set.");
+                return;
+            }
+        }
         private void contributorsMenu()
         {
             int option;
