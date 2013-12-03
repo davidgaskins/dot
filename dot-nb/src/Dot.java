@@ -384,14 +384,35 @@ public class Dot {
             }
                 
         }
-        private void contributorsMenuDelete{
+        private void contributorsCIMenuView(){
+            //show the user all of the contributors and ask which for one
+            //they would like to see their contact info.
+            System.out.println("Enter the id of the contributor that you would like to see the contact information.");
+            contributorsMenuView();
+            String toView = in.nextLine();
+            int id = Integer.parseInt(toView);
+            String statementString = "SELECT * FROM phoneNumbers " +
+                                        "WHERE id = " + id;
+            try{
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(statementString);
+                //simply print the resulting phoneNumbers
+                while (rs.next())
+                {
+                    String line = rs.getMessage();
+                    System.out.println(line);
+                }
+
+            }
+        }
+        private void contributorsMenuDelete(){
             //show the user all of the contributors, and ask which one 
             //that they would like to delete
-            System.out.println("Enter the email of the contributor that you would like to delete.");
+            System.out.println("Enter the id of the contributor that you would like to delete.");
             contributorsMenuView();
-            String toDelete = in.nextLine();
+            String toDelete = in.nextLine();`                       
             String statementString = "DELETE FROM contributors"+
-                                "WHERE contributors.email = " + toDelete;
+                                "WHERE id = " + toDelete;
             try // @TODO: make hierarchy of try catches for easier debugging
             {
                 Statement statement = connection.createStatement();
@@ -408,9 +429,6 @@ public class Dot {
             {
                 System.out.println("There was an error in retrieving the contributors.");
             }
-
-
-
         }
         private void contributorsMenuView(){
             String statementString = "SELECT * FROM contributors";
@@ -475,9 +493,7 @@ public class Dot {
                     default:
                         System.out.println("Invalid menu option.");
                 }
-            }
-
-                
+            }  
         }
         
         // http://stackoverflow.com/questions/326390/how-to-create-a-java-string-from-the-contents-of-a-file
@@ -487,8 +503,5 @@ public class Dot {
             byte[] encoded = Files.readAllBytes(Paths.get(path));
             Charset encoding = Charset.defaultCharset();
             return encoding.decode(ByteBuffer.wrap(encoded)).toString();
-        }
-
-        
-        
+        } 
 }
