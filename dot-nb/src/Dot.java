@@ -140,6 +140,9 @@ public class Dot {
         {
             GoalsMenu goalsMenu = new GoalsMenu(LOGGER, connection);
             ContributorsMenu contributorsMenu = new ContributorsMenu(LOGGER, connection);
+            CommitsMenu commitsMenu = new CommitsMenu(LOGGER, connection);
+            PostsMenu postsMenu = new PostsMenu(LOGGER, connection);
+            
             int option;
             
             System.out.println("This is the management console of the DOT issue tracker and source control program.");
