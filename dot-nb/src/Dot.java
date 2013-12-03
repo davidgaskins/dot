@@ -57,7 +57,7 @@ public class Dot {
             LOGGER.setLevel(Level.INFO);
             
             Dot dot = new Dot();
-            dot.connectToMartelDB();
+            dot.connectToGaskinsDB();
             // dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
             // permission to do that on infoserver. waiting on David Gaskins to set up server
             // where we have permission to create db
@@ -85,9 +85,30 @@ public class Dot {
         private void connectToMartelDB()
         {
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306"; //"jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
+                String url = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
                 String username = "cecs323m16";
                 String password = "aigoiY";
+
+                connection = DriverManager.getConnection(url, username, password);
+                connection.setAutoCommit(false);
+            } catch (SQLException sqe)
+            {
+                // this is for LOGGING purposes
+                LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
+                sqe.printStackTrace();
+                connection = null;
+                
+                // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
+                System.out.println("Unable to connect to database. Exiting.");
+                System.exit(1);
+            }            
+        }
+        private void connectToGaskinsDB()
+        {
+            try {
+                String url = "jdbc:mysql://davidgaskins.com:3306/dot";
+                String username = "root";
+                String password = "#FeqkTlnZ#";
 
                 connection = DriverManager.getConnection(url, username, password);
                 connection.setAutoCommit(false);
@@ -440,7 +461,7 @@ public class Dot {
                 LOGGER.log(Level.SEVERE, "Error getting attributes from result set. Error: {0}", sqe.getMessage());
                 sqe.printStackTrace();
             }
-		}
+	}
 		
         private void contributorsMenu()
         {
