@@ -53,7 +53,7 @@ public class Dot {
             // where we have permission to create db
             
             dot.mainMenu();
-	}
+	   }
         
         private void initializeMartelDB() throws IOException
         {
@@ -166,7 +166,7 @@ public class Dot {
             {
                 System.out.println("This is the post menu.");
                 System.out.println("1. ADD a post.");
-                System.out.println("2. View a post.");
+                System.out.println("2. VIEW a post.");
                 System.out.println("3. BACK to main menu.");
                 option = userInput.nextInt();
                 
@@ -348,7 +348,6 @@ public class Dot {
             
             
         }
-        
         private void contributorsMenu()
         {
             int option;
@@ -359,8 +358,8 @@ public class Dot {
             while (!wantToQuit)
             {
                 System.out.println("This is the contributor menu.");
-                System.out.println("1. View all contributors.");
-                System.out.println("2. Delete a contributor.");
+                System.out.println("1. VIEW all contributors.");
+                System.out.println("2. DELETE a contributor.");
                 System.out.println("3. VIEW a contributor's contact information.");
                 System.out.println("4. BACK to main menu.");
                 option = userInput.nextInt();
@@ -385,7 +384,60 @@ public class Dot {
             }
                 
         }
-        
+        private void contributorsMenuDelete{
+            //show the user all of the contributors, and ask which one 
+            //that they would like to delete
+            System.out.println("Enter the email of the contributor that you would like to delete.");
+            contributorsMenuView();
+            String toDelete = in.nextLine();
+            String statementString = "DELETE FROM contributors"+
+                                "WHERE contributors.email = " + toDelete;
+            try // @TODO: make hierarchy of try catches for easier debugging
+            {
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(statementString);
+                
+                //simply print out the result, which should show that the row was deleted
+                while (rs.next())
+                {
+                    String line = rs.getMessage();
+                    System.out.println(line);
+                }
+            }
+            catch (SQLException e)
+            {
+                System.out.println("There was an error in retrieving the contributors.");
+            }
+
+
+
+        }
+        private void contributorsMenuView(){
+            String statementString = "SELECT * FROM contributors";
+            try // @TODO: make hierarchy of try catches for easier debugging
+            {
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(statementString);
+                
+                String columnNames = "ID\t fName\t lName\t email";
+                System.out.println(columnNames);
+                while (rs.next())
+                {
+                    int id = rs.getInt("id");
+                    String fName = rs.getString("fName");
+                    String lName = rs.getString("lName");
+                    String email = rs.getDate("email");
+                    String contributorRow = String.format("%d\t %s\t %s\t %s\t",
+                            id, fName, lName, email,);
+                    System.out.println(contributorRow);
+                }
+            }
+            catch (SQLException e)
+            {
+                System.out.println("There was an error in retrieving the contributors.");
+            }
+            
+        }
         private void commitMenu()
         {
             System.out.println("The transaction has been commited.");
