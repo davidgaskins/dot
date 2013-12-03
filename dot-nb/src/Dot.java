@@ -199,6 +199,7 @@ public class Dot {
                     default:
                         System.out.println("Invalid menu option.");
                 }
+            }
         }
         
         private void goalsMenu()
@@ -279,7 +280,7 @@ public class Dot {
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(queryOrStatement);
             }
-            catch (SQLException e)
+            catch (SQLException sqe)
             {
                 System.out.println("There was an error in adding the goal. Check that your input is correct.");
             }
@@ -503,7 +504,7 @@ public class Dot {
             //that they would like to delete
             System.out.println("Enter the id of the contributor that you would like to delete.");
             contributorsMenuView();
-            String toDelete = in.nextLine();`                       
+            String toDelete = userInput.nextLine();                      
             String statementString = "DELETE FROM contributors"+
                                 "WHERE id = " + toDelete;
             try // @TODO: make hierarchy of try catches for easier debugging
@@ -537,9 +538,9 @@ public class Dot {
                     int id = rs.getInt("id");
                     String fName = rs.getString("fName");
                     String lName = rs.getString("lName");
-                    String email = rs.getDate("email");
+                    String email = rs.getString("email");
                     String contributorRow = String.format("%d\t %s\t %s\t %s\t",
-                            id, fName, lName, email,);
+                            id, fName, lName, email);
                     System.out.println(contributorRow);
                 }
             }
@@ -573,7 +574,7 @@ public class Dot {
                 System.out.println("This is the quit menu.");
                 System.out.println("1. CommitChanges.");
                 System.out.println("2. Abort Changes.");
-               ds option = userInput.nextInt();
+                option = userInput.nextInt();
                 
                 switch (option)
                 {
