@@ -13,6 +13,13 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/* All general TODOs:
+1. try catch hierarchy for each jdbc access
+2. keep static queries/statements separate, as final strings at beginning of prog like Gitorious example
+3. factor jdbc access lines into convenience methods
+4. generally no error checking at all
+5. throw early catch late
+*/
 
 public class Dot {
     
@@ -21,7 +28,10 @@ public class Dot {
         
         private final Scanner userInput = new Scanner(System.in);
         private Connection connection = null;
-
+        
+        private String queryOrStatement; // here so you don't need to keep track of declarations inside try/catch etc
+            // it's just the string to store the new query into
+        
         public Dot()
         {
             try {
@@ -83,9 +93,14 @@ public class Dot {
                 connection.setAutoCommit(false);
             } catch (SQLException sqe)
             {
+                // this is for LOGGING purposes
                 LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
                 sqe.printStackTrace();
                 connection = null;
+                
+                // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
+                System.out.println("Unable to connect to database. Exiting.");
+                System.exit(1);
             }            
         }
         
@@ -185,7 +200,7 @@ public class Dot {
                         goalsMenuEdit();
                         break;
                     case 3: // view a goal
-                        goalsMenuView();
+                        // goalsMenuView();
                         break;
                     case 4:
                         wantToQuit = true;
@@ -226,17 +241,17 @@ public class Dot {
             
             String parentGoalID = "1";
             
-            String statementString = String.format(
+            queryOrStatement = String.format(
                     "INSERT INTO Goals(title, description, priority, type, status, dateCreated, "
                         + "dateUpdated, dateToEnd, projectID, parentGoalID"
                     + "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     
                     title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID);
-            System.err.println("About to execute query:\n" + statementString); // DEBUG
+            System.err.println("About to execute query:\n" + queryOrStatement); // DEBUG
             try
             {
                 Statement statement = connection.createStatement();
-                statement.executeUpdate(statementString);
+                statement.executeUpdate(queryOrStatement);
             }
             catch (SQLException e)
             {
@@ -251,14 +266,23 @@ public class Dot {
             // 1. supposed to prompt for project here. but assuming default project right now.            
             
             // 2. get the list of goals            
-            String statementString = "SELECT * FROM GOALS ORDER BY ID desc";
-            try // @TODO: make hierarchy of try catches for easier debugging
+            ResultSet rs;
+            try
             {
                 Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery(statementString);
-                
-                String columnNames = "ID\t Name\t description\t DateCreated\t DateUpdated\t";
-                System.out.println(columnNames);
+                rs = statement.executeQuery("SELECT * FROM GOALS ORDER BY ID desc");
+            }
+            catch (SQLException sqe)
+            {
+                LOGGER.log(Level.SEVERE, "Error processing result set. Error: {0}", sqe.getMessage());
+                System.out.println("There was an error in retrieving the goals.");
+                return;
+            }
+
+            String columnNames = "ID\t Name\t description\t DateCreated\t DateUpdated\t";
+            System.out.println(columnNames);
+            try
+            {
                 while (rs.next())
                 {
                     int id = rs.getInt("id");
@@ -267,13 +291,15 @@ public class Dot {
                     String dateCreated = rs.getDate("dateCreated").toString();
                     String dateUpdated = rs.getDate("dateUpdated").toString();
                     String goalRow = String.format("%d\t %s\t %s\t %s\t% s\t",
-                            id, name, description, dateCreated, dateUpdated);
+                            id, title, description, dateCreated, dateUpdated);
                     System.out.println(goalRow);
                 }
             }
-            catch (SQLException e)
+            catch (SQLException sqe)
             {
-                System.out.println("There was an error in retrieving the goals.");
+                LOGGER.log(Level.SEVERE, "Error processing result set. Error: {0}", sqe.getMessage());
+                System.out.println("There was an error in processing the result set.");
+                return;
             }
             
             // 3. Prompt for a goal by its ID
@@ -282,13 +308,21 @@ public class Dot {
             
             // 4. Even though it's inefficient to query one more time,
             // just get the Goal again by its ID
-            String queryString = "SELECT * FROM GOALS WHERE id = " + id;
-            try // @TODO: make hierarchy of try catches for easier debugging
+            try
             {
                 Statement statement = connection.createStatement();
-                ResultSet rs = statement.executeQuery(queryString);
+                rs = statement.executeQuery("SELECT * FROM GOALS WHERE id = " + id);
+            }
+            catch (SQLException sqe)
+            {
+                LOGGER.log(Level.SEVERE, "Error retrieving a goal w/ specific ID. Error: {0}", sqe.getMessage());
+                System.out.println("There was an error in retrieving the Goal.");
+                return;
+            }            
+            
+            try
+            { // begin getting attributes of that row
                 rs.next();
-                
                 // get all the attributes
                 String title = rs.getString("title");
                 String description = rs.getString("description");
@@ -301,27 +335,85 @@ public class Dot {
                 int projectID = rs.getInt("projectID");
                 int parentGoalID = rs.getInt("parentGoalID");
                 
-                // print all the attributes, just line by line
-                System.out.println("These are the attributes you can edit:");
-                System.out.println("1. Title: " + title);
-                System.out.println("2. Description: " + description);
-                System.out.println("3. Priority: " + priority);
-                System.out.println("4. Type: " + type);
-                System.out.println("5. Status: " + status);
-                System.out.println("6. Date created: " + dateCreated);
-                System.out.println("7. Date updated: " + dateUpdated);
-                System.out.println("8. Date to end: " + dateToEnd);
-                System.out.println("Parent ID: " + projectID); // just print so they know, can't edit
-                System.out.println("Parent Goal ID: " + parentGoalID);
-            }
-            catch (SQLException e)
+                boolean wantToQuit = false;
+                while (!wantToQuit)
+                { // begin main menu loop
+                    System.out.println("Enter the number of the attribute to edit.");
+                    // 5. print all the attributes, just line by line
+                    System.out.println("These are the attributes you can edit:");
+                    System.out.println("1. Title: " + title);
+                    System.out.println("2. Description: " + description);
+                    System.out.println("3. Priority: " + priority);
+                    System.out.println("4. Type: " + type);
+                    System.out.println("5. Status: " + status);
+                    System.out.println("6. Date to end: " + dateToEnd);
+                    System.out.println("Date created: " + dateCreated);
+                    System.out.println("Date updated: " + dateUpdated);
+                    System.out.println("Parent ID: " + projectID); // just print so they know, can't edit
+                    System.out.println("Parent Goal ID: " + parentGoalID);
+                    System.out.println("7. Return to main menu.");
+                    
+                    int option = userInput.nextInt();
+                    switch (option)
+                    { // begin switch on attribute to edit
+                        case 1:
+                            System.out.println("Enter the new TITLE.");
+                            String newTitle = userInput.nextLine();
+                            rs.updateString(title, newTitle);
+                            rs.updateRow();
+                            System.out.println("Update successful.");
+                            break;
+                        case 2:
+                            System.out.println("Enter the new DESCRIPTION.");
+                            String newDescription = userInput.nextLine();
+                            rs.updateString(title, newDescription);
+                            rs.updateRow();
+                            System.out.println("Update successful.");
+                            break;
+                        case 3: // @TODO: select priority from list
+                            System.out.println("Enter the new PRIORITY.");
+                            String newPriority = userInput.nextLine();
+                            rs.updateString(title, newPriority);
+                            rs.updateRow();
+                            System.out.println("Update successful.");
+                            break;
+                        case 4:
+                            System.out.println("Enter the new TYPE.");
+                            String newType = userInput.nextLine();
+                            rs.updateString(title, newType);
+                            rs.updateRow();
+                            System.out.println("Update successful.");
+                            break;
+                        case 5:
+                            System.out.println("Enter the new STATUS.");
+                            String newStatus = userInput.nextLine();
+                            rs.updateString(title, newStatus);
+                            rs.updateRow();
+                            System.out.println("Update successful.");
+                            break;
+                        case 6:
+                            System.out.println("Enter the new END DATE.");
+                            String newEndDate = userInput.nextLine();
+                            rs.updateString(title, newEndDate);
+                            rs.updateRow();
+                            System.out.println("Update successful.");
+                            break;
+                        case 7:
+                            System.out.println("Returning to main menu.");
+                            wantToQuit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid menu option.");
+                            break;
+                    } // end switch on attribute to edit
+                } // end main menu loop
+            } // end getting attributes of row + main menu to edit
+            catch (SQLException sqe)
             {
-                System.out.println("There was an error in retrieving the goals.");
+                LOGGER.log(Level.SEVERE, "Error getting attributes from result set. Error: {0}", sqe.getMessage());
+                sqe.printStackTrace();
             }
-            
-            
-            
-        }
+        } // end edit goal menu
         
         private void contributorsMenu()
         {
@@ -351,7 +443,4 @@ public class Dot {
             Charset encoding = Charset.defaultCharset();
             return encoding.decode(ByteBuffer.wrap(encoded)).toString();
         }
-
-        
-        
 }
