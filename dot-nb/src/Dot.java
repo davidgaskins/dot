@@ -197,43 +197,6 @@ public class Dot {
                 
         }
 
-        private void postsMenu()
-        {
-            int option;
-
-            System.out.println();
-            
-            boolean wantToQuit = false;
-            while (!wantToQuit)
-            {
-                System.out.println("This is the post menu.");
-                System.out.println("1. ADD a post.");
-                System.out.println("2. VIEW a post.");
-                System.out.println("3. BACK to main menu.");
-                option = userInput.nextInt();
-                
-                switch (option)
-                {
-                    case 1: // add a post
-                        postMenuAdd();
-                        break;
-                    case 2: //view a post
-                        postMenuView();
-                        break;
-                    case 3:
-                        wantToQuit = true;
-                        break;
-                    default:
-                        System.out.println("Invalid menu option.");
-                }
-            }
-        }
-        
-        private void commitMenu()
-        {
-            System.out.println("The transaction has been commited.");
-            //need to add the commit code       
-        }
         
         private void rollbackMenu()
         {
