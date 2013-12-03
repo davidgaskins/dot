@@ -4,7 +4,9 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -17,7 +19,7 @@ public class Dot {
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
         
-        private Scanner userInput = new Scanner(System.in);
+        private final Scanner userInput = new Scanner(System.in);
         private Connection connection = null;
 
         public Dot()
@@ -180,8 +182,10 @@ public class Dot {
                         goalsMenuAdd();
                         break;
                     case 2: // edit a goal
+                        goalsMenuEdit();
                         break;
                     case 3: // view a goal
+                        goalsMenuView();
                         break;
                     case 4:
                         wantToQuit = true;
@@ -222,22 +226,101 @@ public class Dot {
             
             String parentGoalID = "1";
             
-            String query = String.format(
+            String statementString = String.format(
                     "INSERT INTO Goals(title, description, priority, type, status, dateCreated, "
                         + "dateUpdated, dateToEnd, projectID, parentGoalID"
                     + "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                     
                     title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID);
-            System.err.println("About to execute query:\n" + query); // DEBUG
+            System.err.println("About to execute query:\n" + statementString); // DEBUG
             try
             {
                 Statement statement = connection.createStatement();
-                statement.executeQuery(query);
+                statement.executeUpdate(statementString);
             }
             catch (SQLException e)
             {
                 System.out.println("There was an error in adding the goal. Check that your input is correct.");
             }
+        }
+        
+        private void goalsMenuEdit()
+        {
+            userInput.nextLine();
+            
+            // 1. supposed to prompt for project here. but assuming default project right now.            
+            
+            // 2. get the list of goals            
+            String statementString = "SELECT * FROM GOALS ORDER BY ID desc";
+            try // @TODO: make hierarchy of try catches for easier debugging
+            {
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(statementString);
+                
+                String columnNames = "ID\t Name\t description\t DateCreated\t DateUpdated\t";
+                System.out.println(columnNames);
+                while (rs.next())
+                {
+                    int id = rs.getInt("id");
+                    String title = rs.getString("title");
+                    String description = rs.getString("description");
+                    String dateCreated = rs.getDate("dateCreated").toString();
+                    String dateUpdated = rs.getDate("dateUpdated").toString();
+                    String goalRow = String.format("%d\t %s\t %s\t %s\t% s\t",
+                            id, name, description, dateCreated, dateUpdated);
+                    System.out.println(goalRow);
+                }
+            }
+            catch (SQLException e)
+            {
+                System.out.println("There was an error in retrieving the goals.");
+            }
+            
+            // 3. Prompt for a goal by its ID
+            System.out.println("Enter the ID of the goal you want to edit.");
+            int id = userInput.nextInt();
+            
+            // 4. Even though it's inefficient to query one more time,
+            // just get the Goal again by its ID
+            String queryString = "SELECT * FROM GOALS WHERE id = " + id;
+            try // @TODO: make hierarchy of try catches for easier debugging
+            {
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(queryString);
+                rs.next();
+                
+                // get all the attributes
+                String title = rs.getString("title");
+                String description = rs.getString("description");
+                String priority = rs.getString("priority");
+                String type = rs.getString("type");
+                String status = rs.getString("status");
+                String dateCreated = rs.getDate("dateCreated").toString();
+                String dateUpdated = rs.getDate("dateUpdated").toString();
+                String dateToEnd = rs.getDate("dateToEnd").toString();
+                int projectID = rs.getInt("projectID");
+                int parentGoalID = rs.getInt("parentGoalID");
+                
+                // print all the attributes, just line by line
+                System.out.println("These are the attributes you can edit:");
+                System.out.println("1. Title: " + title);
+                System.out.println("2. Description: " + description);
+                System.out.println("3. Priority: " + priority);
+                System.out.println("4. Type: " + type);
+                System.out.println("5. Status: " + status);
+                System.out.println("6. Date created: " + dateCreated);
+                System.out.println("7. Date updated: " + dateUpdated);
+                System.out.println("8. Date to end: " + dateToEnd);
+                System.out.println("Parent ID: " + projectID); // just print so they know, can't edit
+                System.out.println("Parent Goal ID: " + parentGoalID);
+            }
+            catch (SQLException e)
+            {
+                System.out.println("There was an error in retrieving the goals.");
+            }
+            
+            
+            
         }
         
         private void contributorsMenu()
