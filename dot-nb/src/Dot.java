@@ -139,11 +139,4 @@ public class Dot {
         
 
         // http://stackoverflow.com/questions/326390/how-to-create-a-java-string-from-the-contents-of-a-file
-        private static String readFile(String path) 
-        throws IOException 
-        {
-            byte[] encoded = Files.readAllBytes(Paths.get(path));
-            Charset encoding = Charset.defaultCharset();
-            return encoding.decode(ByteBuffer.wrap(encoded)).toString();
-        } 
 }
