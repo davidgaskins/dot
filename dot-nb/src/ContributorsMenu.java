@@ -22,6 +22,43 @@ public class ContributorsMenu
         this.connection = connection;
     }
     
+    private void contributorsMenu()
+    {
+        int option;
+
+        System.out.println();
+
+        boolean wantToQuit = false;
+        while (!wantToQuit)
+        {
+            System.out.println("This is the contributor menu.");
+            System.out.println("1. VIEW all contributors.");
+            System.out.println("2. DELETE a contributor.");
+            System.out.println("3. VIEW a contributor's contact information.");
+            System.out.println("4. BACK to main menu.");
+            option = userInput.nextInt();
+
+            switch (option)
+            {
+                case 1: // add a contributor
+                    contributorsMenuView();
+                    break;
+                case 2: // edit a contributor
+                    contributorsMenuDelete();
+                    break;
+                case 3: // view a contributor
+                    contributorsCIMenuView();
+                    break;
+                case 4:
+                    wantToQuit = true;
+                    break;
+                default:
+                    System.out.println("Invalid menu option.");
+            }
+        }
+
+    }
+        
     private void contributorsCIMenuView()
     {
         //show the user all of the contributors and ask which for one
@@ -46,6 +83,7 @@ public class ContributorsMenu
             ;
         }
     }
+    
     private void contributorsMenuDelete(){
         //show the user all of the contributors, and ask which one 
         //that they would like to delete
