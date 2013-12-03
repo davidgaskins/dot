@@ -157,7 +157,33 @@ public class Dot {
 
         private void postsMenu()
         {
+            int option;
+
+            System.out.println();
+            
+            boolean wantToQuit = false;
+            while (!wantToQuit)
+            {
+                System.out.println("This is the post menu.");
+                System.out.println("1. ADD a post.");
+                System.out.println("2. View a post.");
+                System.out.println("3. BACK to main menu.");
+                option = userInput.nextInt();
                 
+                switch (option)
+                {
+                    case 1: // add a post
+                        postMenuAdd();
+                        break;
+                    case 2: //view a post
+                        postMenuView();
+                        break;
+                    case 3:
+                        wantToQuit = true;
+                        break;
+                    default:
+                        System.out.println("Invalid menu option.");
+                }
         }
         
         private void goalsMenu()
@@ -325,21 +351,80 @@ public class Dot {
         
         private void contributorsMenu()
         {
+            int option;
+
+            System.out.println();
+            
+            boolean wantToQuit = false;
+            while (!wantToQuit)
+            {
+                System.out.println("This is the contributor menu.");
+                System.out.println("1. View all contributors.");
+                System.out.println("2. Delete a contributor.");
+                System.out.println("3. VIEW a contributor's contact information.");
+                System.out.println("4. BACK to main menu.");
+                option = userInput.nextInt();
+                
+                switch (option)
+                {
+                    case 1: // add a contributor
+                        contributorsMenuView();
+                        break;
+                    case 2: // edit a contributor
+                        contributorsMenuDelete();
+                        break;
+                    case 3: // view a contributor
+                        contributorsCIMenuView();
+                        break;
+                    case 4:
+                        wantToQuit = true;
+                        break;
+                    default:
+                        System.out.println("Invalid menu option.");
+                }
+            }
                 
         }
         
         private void commitMenu()
         {
-                
+            System.out.println("The transaction has been commited.");
+            //need to add the commit code       
         }
         
         private void rollbackMenu()
         {
-                
+            System.out.println("The transaction has been rolled back.");
+            //need to add the rollback code.
         }
         
         private void quitMenu()
         {
+            int option;
+
+            System.out.println();
+            
+            boolean wantToQuit = false;
+            while (!wantToQuit)
+            {
+                System.out.println("This is the quit menu.");
+                System.out.println("1. CommitChanges.");
+                System.out.println("2. Abort Changes.");
+               ds option = userInput.nextInt();
+                
+                switch (option)
+                {
+                    case 1: // commit the Transaction
+                        commitMenu();
+                        break;
+                    case 2: // rollback the Transaction
+                        rollbackMenu();
+                        break;
+                    default:
+                        System.out.println("Invalid menu option.");
+                }
+            }
+
                 
         }
         
