@@ -34,7 +34,8 @@ CREATE TABLE contributors(
 	id INT NOT NULL AUTO_INCREMENT,
 	fName VARCHAR(15),
 	lName VARCHAR(15),
-	email VARCHAR(30) NOT NULL, --  Contributors must be able to be contacted thru email
+	email VARCHAR(30) NOT NULL, 
+	--  Contributors must be able to be contacted thru email
 	
 	--  Commit, Post, ManagementAssignment, and WorkAssignment
 	--  all reference Contributor. Use surrogate key "id" to 
