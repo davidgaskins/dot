@@ -58,7 +58,7 @@ public class Dot {
             
             Dot dot = new Dot();
             dot.connectToMartelDB();
-            // dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
+            dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
             // permission to do that on infoserver. waiting on David Gaskins to set up server
             // where we have permission to create db
             
@@ -74,7 +74,6 @@ public class Dot {
             try
             {
                 Statement statement = connection.createStatement();
-                statement.executeUpdate("CREATE DATABASE dot2");
                 statement.executeQuery(query);
             }
             catch (SQLException sqe)
