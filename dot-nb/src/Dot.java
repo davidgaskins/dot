@@ -62,7 +62,13 @@ public class Dot {
             // permission to do that on infoserver. waiting on David Gaskins to set up server
             // where we have permission to create db
             
+            //load local settings files
+            FileUtil.init();
+            
             dot.mainMenu();
+            
+            //save settings
+            FileUtil.close();
 	   }
         
         private void initializeMartelDB() throws IOException
