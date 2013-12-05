@@ -1,12 +1,12 @@
-DROP TABLE posts;
-DROP TABLE changes;
-DROP TABLE commits;
-DROP TABLE managementAssignments;
-DROP TABLE workAssignments;
-DROP TABLE goals;
-DROP TABLE projects;
-DROP TABLE phoneNumbers;
-DROP TABLE contributors;
+-- DROP TABLE posts;
+-- DROP TABLE changes;
+-- DROP TABLE commits;
+-- DROP TABLE managementAssignments;
+-- DROP TABLE workAssignments;
+-- DROP TABLE goals;
+-- DROP TABLE projects;
+-- DROP TABLE phoneNumbers;
+-- DROP TABLE contributors;
 
 
 -- the following 9 tables are for our data
