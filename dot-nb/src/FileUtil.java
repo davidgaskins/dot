@@ -26,13 +26,29 @@ public class FileUtil {
     
     public static ConfigFile settings;
     public static int repositoryCount = 0;
+    public static String homeDirectory;
     /**
      * To be called at the start of this program. Makes sure that globally
      * needed files are present and creates them if not.
      */
     public static boolean init() {
+        //get home directory
+        try {
+        Runtime r = Runtime.getRuntime();
+            Process p = r.exec(new String[] {"sh", "-c", "echo ~"});
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            p.waitFor();
+            homeDirectory = reader.readLine();
+            System.out.println(homeDirectory);
+        } catch (IOException ex) {
+            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
         //check that the .dot folder exists
-        File settingsDir = new File("~/.dot");
+        File settingsDir = new File(homeDirectory + "/.dot");
         if(!settingsDir.isDirectory()){
             System.out.println("Creating global settings directory");
             if(!settingsDir.mkdir()) {
@@ -42,7 +58,7 @@ public class FileUtil {
         }
         
         //make sure there is an empty file for diffs
-        File empty = new File("~/.dot/empty");
+        File empty = new File(homeDirectory + "/.dot/empty");
         empty.delete();
         try {
             empty.createNewFile();
@@ -56,10 +72,11 @@ public class FileUtil {
         
         
         //load config file
-        settings = new ConfigFile("~/.dot/settings.conf");
+        settings = new ConfigFile(homeDirectory + "/.dot/settings.conf");
         try {
             settings.load();
         } catch (FileNotFoundException ex) {
+            System.out.println("Settings file not created yet");
         }
         //check for needed settings
         if(settings.get("user") == null) {
@@ -85,7 +102,7 @@ public class FileUtil {
         //if first file is null, assign to empty file
         //if second is null or invalid, return null
         if(oldFile == null) {
-            oldFile = "~/.dot/empty";
+            oldFile = homeDirectory + "/.dot/empty";
         }
         if(newFile == null) {
             System.err.println("Comparison file is null");

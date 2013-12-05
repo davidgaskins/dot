@@ -75,6 +75,7 @@ public class MainMenu
                     break;
                 case 7:
                     quitMenu();
+                    wantToQuit = true;
                     break;
             }
         }
@@ -107,6 +108,7 @@ public class MainMenu
                     break;
                 case 2: // rollback the Transaction
                     rollbackMenu();
+                    wantToQuit = true;
                     break;
                 default:
                     System.out.println("Invalid menu option.");
