@@ -2,10 +2,14 @@
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -116,5 +120,13 @@ public class FileUtil {
         if(settings != null) {
             settings.save();
         }
+    }
+    
+    public static String readFile(String path) 
+    throws IOException 
+    {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        Charset encoding = Charset.defaultCharset();
+        return encoding.decode(ByteBuffer.wrap(encoded)).toString();
     }
 }
