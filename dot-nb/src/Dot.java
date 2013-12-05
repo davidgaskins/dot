@@ -1,12 +1,6 @@
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -22,7 +16,25 @@ import java.util.logging.Logger;
 */
 
 public class Dot {
-    
+        // @TODO
+        // set session transaction isolation level serializable:
+        // which locks access to DB whiel other transactions waiting
+        // but as soon as you commit or rollback the waiting transactions can start
+        
+	public static void main(String args[]) throws IOException 
+        {
+            LOGGER.setLevel(Level.INFO);
+            
+            Dot dot = new Dot();
+            dot.connectToMartelDB();
+            dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
+            // permission to do that on infoserver. waiting on David Gaskins to set up server
+            // where we have permission to create db
+            
+            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
+            mainMenu.mainMenu();
+	}
+
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
         
@@ -47,49 +59,34 @@ public class Dot {
 	//static User guy;
 	//static String workingDirectory
 
-        // @TODO
-        // set session transaction isolation level serializable:
-        // which locks access to DB whiel other transactions waiting
-        // but as soon as you commit or rollback the waiting transactions can start
-        
-	public static void main(String args[]) throws IOException 
-        {
-            LOGGER.setLevel(Level.INFO);
-            
-            Dot dot = new Dot();
-            dot.connectToMartelDB();
-            // dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
-            // permission to do that on infoserver. waiting on David Gaskins to set up server
-            // where we have permission to create db
-            
-            //load local settings files
-            FileUtil.init();
-            
-            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
-            mainMenu.mainMenu();
-            
-            
-            //save settings
-            FileUtil.close();
-	   }
-        
         private void initializeMartelDB() throws IOException
         {
-            String query = FileUtil.readFile("dot-sql-create.sql");
-                        
-            System.err.println("About to execute query:\n" + query); // DEBUG
-            try
+            String[] fileNames = {"dot-sql-insert-projects-table.sql",
+                "dot-sql-insert-contributors-table.sql",
+                "dot-sql-insert-phoneNumbers-table.sql",
+                "dot-sql-insert-goals-table.sql",
+                "dot-sql-workAssignments-table.sql",
+                "dot-sql-insert-managementAssignments-table.sql",
+                "dot-sql-commits-table.sql",
+                "dot-sql-changes-table.sql",
+                "dot-sql-insert.sql"};
+            for (int i = 0; i < fileNames.length; i++)
             {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate("CREATE DATABASE dot2");
-                statement.executeQuery(query);
+                String query = FileUtil.readFile( fileNames[i] );
+                try
+                {
+                    Statement statement = connection.createStatement();
+                    statement.executeUpdate(query);
+                }
+                catch (SQLException sqe)
+                {
+                    LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}", sqe.getMessage());
+                    sqe.printStackTrace();
+                }
             }
-            catch (SQLException sqe)
-            {
-                LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}", sqe.getMessage());
-                sqe.printStackTrace();
-            }
+            
         }
+        
         private void connectToMartelDB()
         {
             try {
