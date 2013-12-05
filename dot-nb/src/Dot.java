@@ -58,7 +58,7 @@ public class Dot {
             
             Dot dot = new Dot();
             dot.connectToMartelDB();
-            dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
+            //dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
             // permission to do that on infoserver. waiting on David Gaskins to set up server
             // where we have permission to create db
             
@@ -68,13 +68,12 @@ public class Dot {
         
         private void initializeMartelDB() throws IOException
         {
-            String query = FileUtil.readFile("dot-sql-create.sql");
-                        
-            System.err.println("About to execute query:\n" + query); // DEBUG
+            String query = FileUtil.readFile("dot-sql-workAssignments-table.sql");
+            
             try
             {
                 Statement statement = connection.createStatement();
-                statement.executeQuery(query);
+                statement.executeUpdate(query);
             }
             catch (SQLException sqe)
             {
@@ -82,6 +81,7 @@ public class Dot {
                 sqe.printStackTrace();
             }
         }
+        
         private void connectToMartelDB()
         {
             try {

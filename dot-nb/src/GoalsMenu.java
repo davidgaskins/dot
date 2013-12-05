@@ -105,7 +105,8 @@ public class GoalsMenu
         }
         catch (SQLException sqe)
         {
-            System.out.println("There was an error in adding the goal. Check that your input is correct.");
+            LOGGER.log(Level.SEVERE, "Error adding goal. Error: {0}", sqe.getMessage());
+            sqe.printStackTrace();
         }
     }
 
