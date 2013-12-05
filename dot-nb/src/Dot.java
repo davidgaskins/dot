@@ -22,7 +22,25 @@ import java.util.logging.Logger;
 */
 
 public class Dot {
-    
+        // @TODO
+        // set session transaction isolation level serializable:
+        // which locks access to DB whiel other transactions waiting
+        // but as soon as you commit or rollback the waiting transactions can start
+        
+	public static void main(String args[]) throws IOException 
+        {
+            LOGGER.setLevel(Level.INFO);
+            
+            Dot dot = new Dot();
+            dot.connectToMartelDB();
+            // dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
+            // permission to do that on infoserver. waiting on David Gaskins to set up server
+            // where we have permission to create db
+            
+            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
+            mainMenu.mainMenu();
+	}
+
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
         
@@ -47,24 +65,6 @@ public class Dot {
 	//static User guy;
 	//static String workingDirectory
 
-        // @TODO
-        // set session transaction isolation level serializable:
-        // which locks access to DB whiel other transactions waiting
-        // but as soon as you commit or rollback the waiting transactions can start
-        
-	public static void main(String args[]) throws IOException 
-        {
-            LOGGER.setLevel(Level.INFO);
-            
-            Dot dot = new Dot();
-            dot.connectToMartelDB();
-            // dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
-            // permission to do that on infoserver. waiting on David Gaskins to set up server
-            // where we have permission to create db
-            
-            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
-            mainMenu.mainMenu();
-	   }
         
         private void initializeMartelDB() throws IOException
         {
