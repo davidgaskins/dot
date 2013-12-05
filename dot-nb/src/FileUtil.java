@@ -24,7 +24,7 @@ public class FileUtil {
         return null;
     }
     
-    private static String readFile(String path) 
+    public static String readFile(String path) 
     throws IOException 
     {
         byte[] encoded = Files.readAllBytes(Paths.get(path));

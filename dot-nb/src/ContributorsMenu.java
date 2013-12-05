@@ -76,8 +76,8 @@ public class ContributorsMenu
             //simply print the resulting phoneNumbers
             while (rs.next())
             {
-                String line = rs.getMessage();
-                System.out.println(line);
+                //String line = rs.getMessage(); @TODO implement this
+                //System.out.println(line);
             }
         } catch (SQLException sqe) // @TODO
         {
@@ -101,8 +101,8 @@ public class ContributorsMenu
             //simply print out the result, which should show that the row was deleted
             while (rs.next())
             {
-                String line = rs.getMessage();
-                System.out.println(line);
+                //String line = rs.getMessage();
+                //System.out.println(line);
             }
         }
         catch (SQLException e)

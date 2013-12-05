@@ -68,7 +68,7 @@ public class Dot {
         
         private void initializeMartelDB() throws IOException
         {
-            String query = readFile("dot-sql-create.sql");
+            String query = FileUtil.readFile("dot-sql-create.sql");
                         
             System.err.println("About to execute query:\n" + query); // DEBUG
             try
