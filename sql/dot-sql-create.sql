@@ -14,7 +14,7 @@ CREATE TABLE projects(
 	title VARCHAR(20) NOT NULL,
 	dateToEnd TIMESTAMP,
 	description TEXT,
-	dateStarted DATE NOT NULL,
+	dateStarted TIMESTAMP NOT NULL,
 	id INT NOT NULL AUTO_INCREMENT,
 	
 	-- ManagementAssignment and Goal both reference Project.
