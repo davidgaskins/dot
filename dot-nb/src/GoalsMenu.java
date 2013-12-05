@@ -109,6 +109,7 @@ public class GoalsMenu
             LOGGER.log(Level.SEVERE, "Error getting attributes from result set. Error: {0}", sqe.getMessage());
             sqe.printStackTrace();
             System.exit(1);
+           
         }
     }
 

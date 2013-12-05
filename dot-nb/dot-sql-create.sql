@@ -4,9 +4,9 @@ DROP TABLE commits;
 DROP TABLE managementAssignments;
 DROP TABLE workAssignments;
 DROP TABLE goals;
-DROP TABLE projects;
 DROP TABLE phoneNumbers;
 DROP TABLE contributors;
+DROP TABLE projects;
 
 
 -- the following 9 tables are for our data
@@ -34,13 +34,12 @@ CREATE TABLE contributors(
 	id INT NOT NULL AUTO_INCREMENT,
 	fName VARCHAR(15),
 	lName VARCHAR(15),
-	email VARCHAR(30) NOT NULL, --  Contributors must be able to be contacted thru email
-	
+	email VARCHAR(30) NOT NULL, 
+	CONSTRAINT contributors_pk PRIMARY KEY(id),
+	--  Contributors must be able to be contacted through email
 	--  Commit, Post, ManagementAssignment, and WorkAssignment
 	--  all reference Contributor. Use surrogate key "id" to 
 	--  reduce memory usage, and becaue CK email may change
-	CONSTRAINT contributors_pk PRIMARY KEY(id),
-	
 	--  Assume no Contributors share email
 	CONSTRAINT contributors_ck UNIQUE (email)
 );
@@ -121,7 +120,10 @@ CREATE TABLE posts (
 	--  This implies that client only deletes Goal for a serious reason, such as
 	--  the fact that it is now completely irrelevant
 	CONSTRAINT posts_fk FOREIGN KEY (goalID) 
-		REFERENCES goals(id) ON DELETE CASCADE
+		REFERENCES goals(id) ON DELETE CASCADE,
+		
+	CONSTRAINT posts_fk FOREIGN KEY (contributorID) 
+		REFERENCES contributors(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
 	dateStarted TIMESTAMP NOT NULL,

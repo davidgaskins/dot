@@ -65,17 +65,14 @@ public class Dot {
 	//static User guy;
 	//static String workingDirectory
 
-        
         private void initializeMartelDB() throws IOException
         {
-            String query = FileUtil.readFile("dot-sql-create.sql");
-                        
-            System.err.println("About to execute query:\n" + query); // DEBUG
+            String query = FileUtil.readFile("dot-sql-workAssignments-table.sql");
+            
             try
             {
                 Statement statement = connection.createStatement();
-                statement.executeUpdate("CREATE DATABASE dot2");
-                statement.executeQuery(query);
+                statement.executeUpdate(query);
             }
             catch (SQLException sqe)
             {
@@ -83,6 +80,7 @@ public class Dot {
                 sqe.printStackTrace();
             }
         }
+        
         private void connectToMartelDB()
         {
             try {
