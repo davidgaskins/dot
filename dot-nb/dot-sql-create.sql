@@ -35,9 +35,8 @@ CREATE TABLE contributors(
 	fName VARCHAR(15),
 	lName VARCHAR(15),
 	email VARCHAR(30) NOT NULL, 
-
 	CONSTRAINT contributors_pk PRIMARY KEY(id),
-	--  Contributors must be able to be contacted thru email
+	--  Contributors must be able to be contacted through email
 	--  Commit, Post, ManagementAssignment, and WorkAssignment
 	--  all reference Contributor. Use surrogate key "id" to 
 	--  reduce memory usage, and becaue CK email may change
@@ -121,7 +120,10 @@ CREATE TABLE posts (
 	--  This implies that client only deletes Goal for a serious reason, such as
 	--  the fact that it is now completely irrelevant
 	CONSTRAINT posts_fk FOREIGN KEY (goalID) 
-		REFERENCES goals(id) ON DELETE CASCADE
+		REFERENCES goals(id) ON DELETE CASCADE,
+		
+	CONSTRAINT posts_fk FOREIGN KEY (contributorID) 
+		REFERENCES contributors(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
 	dateStarted TIMESTAMP NOT NULL,
