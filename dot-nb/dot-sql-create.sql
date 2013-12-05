@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+-- DROP TABLE posts;
+-- DROP TABLE changes;
+-- DROP TABLE commits;
+-- DROP TABLE managementAssignments;
+-- DROP TABLE workAssignments;
+-- DROP TABLE goals;
+-- DROP TABLE projects;
+-- DROP TABLE phoneNumbers;
+-- DROP TABLE contributors;
+=======
 DROP TABLE posts;
 DROP TABLE changes;
 DROP TABLE commits;
@@ -7,6 +18,7 @@ DROP TABLE goals;
 DROP TABLE phoneNumbers;
 DROP TABLE contributors;
 DROP TABLE projects;
+>>>>>>> 9f37549aa306d416e7d244cc67fcb051a51ccdd2
 
 
 -- the following 9 tables are for our data
@@ -35,8 +47,14 @@ CREATE TABLE contributors(
 	fName VARCHAR(15),
 	lName VARCHAR(15),
 	email VARCHAR(30) NOT NULL, 
+<<<<<<< HEAD
+
+	CONSTRAINT contributors_pk PRIMARY KEY(id),
+	--  Contributors must be able to be contacted thru email
+=======
 	CONSTRAINT contributors_pk PRIMARY KEY(id),
 	--  Contributors must be able to be contacted through email
+>>>>>>> 9f37549aa306d416e7d244cc67fcb051a51ccdd2
 	--  Commit, Post, ManagementAssignment, and WorkAssignment
 	--  all reference Contributor. Use surrogate key "id" to 
 	--  reduce memory usage, and becaue CK email may change
@@ -120,10 +138,14 @@ CREATE TABLE posts (
 	--  This implies that client only deletes Goal for a serious reason, such as
 	--  the fact that it is now completely irrelevant
 	CONSTRAINT posts_fk FOREIGN KEY (goalID) 
+<<<<<<< HEAD
+		REFERENCES goals(id) ON DELETE CASCADE
+=======
 		REFERENCES goals(id) ON DELETE CASCADE,
 		
 	CONSTRAINT posts_fk FOREIGN KEY (contributorID) 
 		REFERENCES contributors(id) ON DELETE CASCADE
+>>>>>>> 9f37549aa306d416e7d244cc67fcb051a51ccdd2
 );
 CREATE TABLE workAssignments(
 	dateStarted TIMESTAMP NOT NULL,
