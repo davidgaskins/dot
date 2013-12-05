@@ -71,28 +71,32 @@ public class GoalsMenu
         System.out.println("Enter the DESCRIPTION of the goal.");
         String description = userInput.nextLine();
 
-        System.out.println("Enter the PRIORITY of the goal.");
-        String priority = userInput.nextLine();
+//        System.out.println("Enter the PRIORITY of the goal.");
+//        String priority = userInput.nextLine();
+//
+//        System.out.println("Enter the TYPE of the goal.");
+//        String type = userInput.nextLine();
+//
+//        System.out.println("Enter the STATUS of the goal.");
+//        String status = userInput.nextLine();
 
-        System.out.println("Enter the TYPE of the goal.");
-        String type = userInput.nextLine();
+        String priority = "CRITICAL";
+        String type = "BUG";
+        String status = "OPEN";
+        
+        String dateCreated = "2000-01-01";//@TODO
 
-        System.out.println("Enter the STATUS of the goal.");
-        String status = userInput.nextLine();
-
-        String dateCreated = "January 1 2000";//@TODO
-
-        String dateUpdated = "January 2 2001";//@TODO
+        String dateUpdated = "2005-01-01";//@TODO
 
         System.out.println("Enter the END DATE of the goal.");
-        String dateToEnd = "January 3 2003"; //@TODO
+        String dateToEnd = "2009-01-01"; //@TODO
 
         int projectID = 5;
 
         int parentGoalID = 2;
 
         queryOrStatement = String.format(
-                "INSERT INTO Goals(title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID)\n"
+                "INSERT INTO goals(title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID)\n"
                 + "VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, %d)",
 
                 title, description, priority, type, status, dateCreated, 
@@ -105,8 +109,7 @@ public class GoalsMenu
         }
         catch (SQLException sqe)
         {
-            System.out.println("There was an error in adding the goal. Check that your input is correct.");
-            LOGGER.log(Level.SEVERE, "Error getting attributes from result set. Error: {0}", sqe.getMessage());
+            LOGGER.log(Level.SEVERE, "Error adding goals. Error: {0}", sqe.getMessage());
             sqe.printStackTrace();
             System.exit(1);
            

@@ -1,12 +1,6 @@
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -33,7 +27,7 @@ public class Dot {
             
             Dot dot = new Dot();
             dot.connectToMartelDB();
-            // dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
+            dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
             // permission to do that on infoserver. waiting on David Gaskins to set up server
             // where we have permission to create db
             
@@ -67,18 +61,30 @@ public class Dot {
 
         private void initializeMartelDB() throws IOException
         {
-            String query = FileUtil.readFile("dot-sql-workAssignments-table.sql");
+            String[] fileNames = {"dot-sql-insert-projects-table.sql",
+                "dot-sql-insert-contributors-table.sql",
+                "dot-sql-insert-phoneNumbers-table.sql",
+                "dot-sql-insert-goals-table.sql",
+                "dot-sql-workAssignments-table.sql",
+                "dot-sql-insert-managementAssignments-table.sql",
+                "dot-sql-commits-table.sql",
+                "dot-sql-changes-table.sql",
+                "dot-sql-insert.sql"};
+            for (int i = 0; i < fileNames.length; i++)
+            {
+                String query = FileUtil.readFile( fileNames[i] );
+                try
+                {
+                    Statement statement = connection.createStatement();
+                    statement.executeUpdate(query);
+                }
+                catch (SQLException sqe)
+                {
+                    LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}", sqe.getMessage());
+                    sqe.printStackTrace();
+                }
+            }
             
-            try
-            {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate(query);
-            }
-            catch (SQLException sqe)
-            {
-                LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}", sqe.getMessage());
-                sqe.printStackTrace();
-            }
         }
         
         private void connectToMartelDB()
