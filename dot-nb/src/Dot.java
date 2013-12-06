@@ -58,7 +58,7 @@ public class Dot {
 
         private void initializeMartelDB() throws IOException
         {
-            String[] fileNames = new String[] {"dot-sql-create-all-tables.sql", "dot-sql-insert-all-tables.sql"};
+            String[] fileNames = new String[] {"dot-sql-drop-all-tables.sql", "dot-sql-create-and-insert-enum.sql", "dot-sql-create-all-tables.sql", "dot-sql-insert-all-tables.sql"};
             for (String fileName : fileNames)
             {
                 String[] statements = FileUtil.readFile(fileName).split(";");
@@ -71,7 +71,8 @@ public class Dot {
                     }
                     catch (SQLException sqe)
                     {
-                        LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}. Offending statement was " + statementString, sqe.getMessage());
+                        LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}. In file " + fileName + ", offending statement was " + statementString, sqe.getMessage());
+                        System.exit(1);
                     }
                 }
             }

@@ -1,19 +1,9 @@
-DROP TABLE IF EXISTS posts;
-DROP TABLE IF EXISTS changes;
-DROP TABLE IF EXISTS commits;
-DROP TABLE IF EXISTS managementAssignments;
-DROP TABLE IF EXISTS workAssignments;
-DROP TABLE IF EXISTS goals;
-DROP TABLE IF EXISTS phoneNumbers;
-DROP TABLE IF EXISTS contributors;
-DROP TABLE IF EXISTS projects;
-
 -- the following 9 tables are for our data
 CREATE TABLE projects(
 	title VARCHAR(20) NOT NULL,
-	dateToEnd TIMESTAMP,
+	dateToEnd DATETIME,
 	description TEXT,
-	dateStarted TIMESTAMP NOT NULL,
+	dateStarted DATETIME NOT NULL,
 	id INT NOT NULL AUTO_INCREMENT,
 	
 	--  ManagementAssignment and Goal both reference Project.
@@ -43,8 +33,8 @@ CREATE TABLE contributors(
 	CONSTRAINT contributors_ck UNIQUE (email)
 );
 CREATE TABLE managementAssignments(
-	dateStarted TIMESTAMP NOT NULL,
-	dateToEnd TIMESTAMP,
+	dateStarted DATETIME NOT NULL,
+	dateToEnd DATETIME,
 	
 	--  If a Project is still being worked on past its dateFinished,
 	--  its managers (the Contributors in this ManagementAssignment) are not finished
@@ -84,14 +74,14 @@ CREATE TABLE phoneNumbers(
 );
 CREATE TABLE goals(
 	id INT NOT NULL AUTO_INCREMENT,
-	title VARCHAR(20) NOT NULL,
+	title VARCHAR(30) NOT NULL,
 	description TEXT NOT NULL,
-	priority ENUM('CRITICAL', 'MEDIUM', 'LOW'),
-	type ENUM('BUG', 'IMPROVEMENT', 'LONG-TERM'),
-	status ENUM('OPEN', 'CLOSED', 'NOFIX', 'ASSIGNED', 'DUPLICATE', 'POSTPONED'),
-	dateCreated TIMESTAMP NOT NULL,
-	dateUpdated TIMESTAMP,
-	dateToEnd TIMESTAMP,
+	priority CHAR(20),
+	type CHAR(20),
+	status CHAR(20),
+	dateCreated DATETIME NOT NULL,
+	dateUpdated DATETIME,
+	dateToEnd DATETIME,
 	projectID INT,
 	parentGoalID INT, --  can be null because top level Goals don't need have to have a parent
 	
@@ -104,11 +94,19 @@ CREATE TABLE goals(
 	--  If a Goal is deleted, all of the subGoals that contribute to its
 	--  completion do not matter either
 	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) 
-		REFERENCES goals (id) ON DELETE CASCADE
+		REFERENCES goals (id) ON DELETE CASCADE,
+		
+	-- Priority, type, and status are enum. reference those tables
+	CONSTRAINT goals_fk_priorities FOREIGN KEY (priority)
+		REFERENCES goalPriorities(goalPriority),
+	CONSTRAINT goals_fk_types FOREIGN KEY (type)
+		REFERENCES goalTypes(goalType),
+	CONSTRAINT goals_fk_statuses FOREIGN KEY (status)
+		REFERENCES goalStatuses(goalStatus)
 );
 CREATE TABLE posts (
 	body TEXT,
-	dateAndTime TIMESTAMP NOT NULL,
+	dateAndTime DATETIME NOT NULL,
 	contributorID INT NOT NULL, 
 	goalID INT,
 	
@@ -125,8 +123,8 @@ CREATE TABLE posts (
 		REFERENCES contributors(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
-	dateStarted TIMESTAMP NOT NULL,
-	dateToEnd TIMESTAMP,
+	dateStarted DATETIME NOT NULL,
+	dateToEnd DATETIME,
 	
 	--  A work assignment may be past its dateToEnd, but still not finished
 	finished BOOLEAN,
@@ -140,7 +138,7 @@ CREATE TABLE workAssignments(
 CREATE TABLE commits(
 	contributorID INT NOT NULL,
 	goalID INT NOT NULL, 
-	commitDate TIMESTAMP,
+	commitDate DATETIME,
 	description TEXT,
 	id INT NOT NULL AUTO_INCREMENT, 
 	
