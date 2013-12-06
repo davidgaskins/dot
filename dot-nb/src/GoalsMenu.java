@@ -71,18 +71,16 @@ public class GoalsMenu
         System.out.println("Enter the DESCRIPTION of the goal.");
         String description = userInput.nextLine();
 
-//        System.out.println("Enter the PRIORITY of the goal.");
-//        String priority = userInput.nextLine();
-//
-//        System.out.println("Enter the TYPE of the goal.");
-//        String type = userInput.nextLine();
-//
-//        System.out.println("Enter the STATUS of the goal.");
-//        String status = userInput.nextLine();
+        // @TODO: error checking on enums
+        System.out.println("Enter the PRIORITY of the goal.");
+        String priority = userInput.nextLine();
 
-        String priority = "CRITICAL";
-        String type = "BUG";
-        String status = "OPEN";
+        System.out.println("Enter the TYPE of the goal.");
+        String type = userInput.nextLine();
+
+        System.out.println("Enter the STATUS of the goal.");
+        String status = userInput.nextLine();
+        
         
         String dateCreated = "2000-01-01";//@TODO
 
@@ -112,8 +110,8 @@ public class GoalsMenu
             LOGGER.log(Level.SEVERE, "Error adding goals. Error: {0}", sqe.getMessage());
             sqe.printStackTrace();
             System.exit(1);
-           
         }
+        System.out.println("No exception, so let's assume your goal was added successfully.");
     }
 
     public void goalsMenuEdit()
@@ -143,7 +141,7 @@ public class GoalsMenu
             System.out.println("There was an error in retrieving the Goal.");
             return;
         }            
-
+        System.out.println("Retrieved results.");
         try
         { // begin getting attributes of that row
             rs.next();
@@ -246,7 +244,7 @@ public class GoalsMenu
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM GOALS ORDER BY ID desc");
+            rs = statement.executeQuery("SELECT * FROM goals ORDER BY id desc");
         }
         catch (SQLException sqe)
         {
@@ -254,7 +252,7 @@ public class GoalsMenu
             System.out.println("There was an error in retrieving the goals.");
             return;
         }            
-
+        System.out.println("Retrieved goals successfully.");
         // 2. print out the goals
         String columnNames = "ID\t Name\t description\t DateCreated\t DateUpdated\t";
         System.out.println(columnNames);
@@ -267,7 +265,11 @@ public class GoalsMenu
                 String description = rs.getString("description");
                 String dateCreated = rs.getDate("dateCreated").toString();
                 String dateUpdated = rs.getDate("dateUpdated").toString();
-                String goalRow = String.format("%d\t %s\t %s\t %s\t% s\t",
+                String goalRow = String.format("%4d\t"
+                        + "%20s\t"
+                        + "%20s\t"
+                        + "%s\t"
+                        + "%s\t",
                         id, title, description, dateCreated, dateUpdated);
                 System.out.println(goalRow);
             }
