@@ -41,9 +41,6 @@ public class Dot {
         private final Scanner userInput = new Scanner(System.in);
         private Connection connection = null;
         
-        private String queryOrStatement; // here so you don't need to keep track of declarations inside try/catch etc
-            // it's just the string to store the new query into
-        
         public Dot()
         {
             try {
@@ -61,30 +58,23 @@ public class Dot {
 
         private void initializeMartelDB() throws IOException
         {
-            String[] fileNames = {"dot-sql-insert-projects-table.sql",
-                "dot-sql-insert-contributors-table.sql",
-                "dot-sql-insert-phoneNumbers-table.sql",
-                "dot-sql-insert-goals-table.sql",
-                "dot-sql-workAssignments-table.sql",
-                "dot-sql-insert-managementAssignments-table.sql",
-                "dot-sql-commits-table.sql",
-                "dot-sql-changes-table.sql",
-                "dot-sql-insert.sql"};
-            for (int i = 0; i < fileNames.length; i++)
+            String[] fileNames = new String[] {"dot-sql-create-all-tables.sql", "dot-sql-insert-all-tables.sql"};
+            for (String fileName : fileNames)
             {
-                String query = FileUtil.readFile( fileNames[i] );
-                try
+                String[] statements = FileUtil.readFile(fileName).split(";");
+                for (String statementString : statements) 
                 {
-                    Statement statement = connection.createStatement();
-                    statement.executeUpdate(query);
-                }
-                catch (SQLException sqe)
-                {
-                    LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}", sqe.getMessage());
-                    sqe.printStackTrace();
+                    try
+                    {
+                        Statement statement = connection.createStatement();
+                        statement.executeUpdate(statementString);
+                    }
+                    catch (SQLException sqe)
+                    {
+                        LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}. Offending statement was " + statementString, sqe.getMessage());
+                    }
                 }
             }
-            
         }
         
         private void connectToMartelDB()

@@ -1,25 +1,12 @@
-<<<<<<< HEAD
--- DROP TABLE posts;
--- DROP TABLE changes;
--- DROP TABLE commits;
--- DROP TABLE managementAssignments;
--- DROP TABLE workAssignments;
--- DROP TABLE goals;
--- DROP TABLE projects;
--- DROP TABLE phoneNumbers;
--- DROP TABLE contributors;
-=======
-DROP TABLE posts;
-DROP TABLE changes;
-DROP TABLE commits;
-DROP TABLE managementAssignments;
-DROP TABLE workAssignments;
-DROP TABLE goals;
-DROP TABLE phoneNumbers;
-DROP TABLE contributors;
-DROP TABLE projects;
->>>>>>> 9f37549aa306d416e7d244cc67fcb051a51ccdd2
-
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS changes;
+DROP TABLE IF EXISTS commits;
+DROP TABLE IF EXISTS managementAssignments;
+DROP TABLE IF EXISTS workAssignments;
+DROP TABLE IF EXISTS goals;
+DROP TABLE IF EXISTS phoneNumbers;
+DROP TABLE IF EXISTS contributors;
+DROP TABLE IF EXISTS projects;
 
 -- the following 9 tables are for our data
 CREATE TABLE projects(
@@ -47,14 +34,8 @@ CREATE TABLE contributors(
 	fName VARCHAR(15),
 	lName VARCHAR(15),
 	email VARCHAR(30) NOT NULL, 
-<<<<<<< HEAD
-
-	CONSTRAINT contributors_pk PRIMARY KEY(id),
-	--  Contributors must be able to be contacted thru email
-=======
 	CONSTRAINT contributors_pk PRIMARY KEY(id),
 	--  Contributors must be able to be contacted through email
->>>>>>> 9f37549aa306d416e7d244cc67fcb051a51ccdd2
 	--  Commit, Post, ManagementAssignment, and WorkAssignment
 	--  all reference Contributor. Use surrogate key "id" to 
 	--  reduce memory usage, and becaue CK email may change
@@ -137,15 +118,11 @@ CREATE TABLE posts (
 	--  If a Goal is deleted, no discussion needs to be made about how to solve it. 
 	--  This implies that client only deletes Goal for a serious reason, such as
 	--  the fact that it is now completely irrelevant
-	CONSTRAINT posts_fk FOREIGN KEY (goalID) 
-<<<<<<< HEAD
-		REFERENCES goals(id) ON DELETE CASCADE
-=======
+	CONSTRAINT posts_goals_fk FOREIGN KEY (goalID) 
 		REFERENCES goals(id) ON DELETE CASCADE,
 		
-	CONSTRAINT posts_fk FOREIGN KEY (contributorID) 
+	CONSTRAINT posts_contributors_fk FOREIGN KEY (contributorID) 
 		REFERENCES contributors(id) ON DELETE CASCADE
->>>>>>> 9f37549aa306d416e7d244cc67fcb051a51ccdd2
 );
 CREATE TABLE workAssignments(
 	dateStarted TIMESTAMP NOT NULL,
