@@ -119,10 +119,10 @@ CREATE TABLE posts (
 	--  If a Goal is deleted, no discussion needs to be made about how to solve it. 
 	--  This implies that client only deletes Goal for a serious reason, such as
 	--  the fact that it is now completely irrelevant
-	CONSTRAINT posts_fk FOREIGN KEY (goalID) 
+	CONSTRAINT posts_fk1 FOREIGN KEY (goalID) 
 		REFERENCES goals(id) ON DELETE CASCADE,
-		
-	CONSTRAINT posts_fk FOREIGN KEY (contributorID) 
+
+	CONSTRAINT posts_fk2 FOREIGN KEY (contributorID) 
 		REFERENCES contributors(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
@@ -137,6 +137,13 @@ CREATE TABLE workAssignments(
 	
 	--  A Contributor may work on a Goal in many time periods
 	CONSTRAINT workAssignments_pk PRIMARY KEY(dateStarted, goalID, contributorID)
+
+	CONSTRAINT workAssignments_fk1 FOREIGN KEY (goalID) 
+		REFERENCES goals(id) ON DELETE CASCADE,
+
+	CONSTRAINT workAssignments_fk2 FOREIGN KEY (contributorID) 
+		REFERENCES contributors(id) ON DELETE CASCADE
+
 );
 CREATE TABLE commits(
 	contributorID INT NOT NULL,
