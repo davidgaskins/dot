@@ -100,7 +100,7 @@ CREATE TABLE goals(
 	CONSTRAINT goals_fk_goals FOREIGN KEY (parentGoalID) 
 		REFERENCES goals (id) ON DELETE CASCADE,
 		
-	CONSTRAINT goals_fk_projects FOREIGN KEY (status)
+	CONSTRAINT goals_fk_projects FOREIGN KEY (projectID)
 		REFERENCES projects(id) ON DELETE CASCADE
 
 	-- Priority, type, and status are enum. reference those tables
