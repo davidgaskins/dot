@@ -22,7 +22,7 @@ public class Dot {
         // but as soon as you commit or rollback the waiting transactions can start
         
 	public static void main(String args[]) throws IOException 
-        {
+    {
             LOGGER.setLevel(Level.INFO);
             
             Dot dot = new Dot();

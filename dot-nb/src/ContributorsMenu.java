@@ -73,11 +73,16 @@ public class ContributorsMenu
         try{
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
+            System.out.println("You are viewing the contact information for contributor: " + id);
             //simply print the resulting phoneNumbers
             while (rs.next())
             {
-                //String line = rs.getMessage(); @TODO implement this
-                //System.out.println(line);
+                int contID = rs.getInt("contributorID");
+                String phoneNum = rs.getString("phoneNumber");
+                String phoneType = rs.getString("phoneType");
+                System.out.println("phone number: " +phoneNum);
+                System.out.println("phone Type: " +phoneType);
+
             }
         } catch (SQLException sqe) // @TODO
         {
@@ -97,13 +102,7 @@ public class ContributorsMenu
         {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
-
-            //simply print out the result, which should show that the row was deleted
-            while (rs.next())
-            {
-                //String line = rs.getMessage();
-                //System.out.println(line);
-            }
+            contributorsMenuView();
         }
         catch (SQLException e)
         {
