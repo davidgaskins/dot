@@ -40,7 +40,7 @@ public class PostsMenu
         {
             System.out.println("This is the post menu. Obviously, "
                     + "you cannot ADD posts on behalf of users, "
-                    + "but you can moderate posts and view them.");
+                    + "but you can 1. moderate posts and 2. view them.");
             System.out.println("1. EDIT (moderate) a post.");
             System.out.println("2. VIEW a post.");
             System.out.println("3. BACK to main menu.");
