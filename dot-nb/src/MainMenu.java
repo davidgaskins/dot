@@ -83,10 +83,15 @@ public class MainMenu
 
     private void rollbackMenu()
     {
+        connection.rollback();
         System.out.println("The transaction has been rolled back.");
-        //need to add the rollback code.
     }
 
+    private void commitMenu()
+    {
+        connection.commit();      
+        System.out.println("The transaction has been commited.");
+    }
     private void quitMenu()
     {
         int option;
@@ -116,9 +121,4 @@ public class MainMenu
         }  
     }
 
-    private void commitMenu()
-    {
-        System.out.println("The transaction has been commited.");
-        //need to add the commit code       
-    }
 }
