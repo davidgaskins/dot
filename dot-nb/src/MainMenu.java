@@ -1,5 +1,6 @@
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -83,15 +84,30 @@ public class MainMenu
 
     private void rollbackMenu()
     {
-        connection.rollback();
+        try
+        {
+            connection.rollback();
+        }
+        catch (SQLException sqe)
+        {
+            System.out.println("Error.");
+        }
         System.out.println("The transaction has been rolled back.");
     }
 
     private void commitMenu()
     {
-        connection.commit();      
+        try
+        {
+            connection.commit();
+        }
+        catch (SQLException sqe)
+        {
+            System.out.println("Error.");
+        }     
         System.out.println("The transaction has been commited.");
     }
+    
     private void quitMenu()
     {
         int option;
@@ -110,6 +126,7 @@ public class MainMenu
             {
                 case 1: // commit the Transaction
                     commitMenu();
+                    wantToQuit = true;
                     break;
                 case 2: // rollback the Transaction
                     rollbackMenu();
