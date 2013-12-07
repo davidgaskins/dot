@@ -1,7 +1,10 @@
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
@@ -74,6 +77,19 @@ public class PostsMenu
         int id = userInput.nextInt();
 
         // get the post again by its id
+        try
+        {
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT * FROM POSTS WHERE id = " + id);
+        }
+        catch (SQLException sqe)
+        {
+            LOGGER.log(Level.SEVERE, "Error retrieving a post w/ that id. Error: {0}", sqe.getMessage());
+            System.out.println("There was an error in retrieving the post.");
+            return;
+        }
+        
+        // retrieved the post. now list attributes to edit
     }
 
     private void postMenuView() 
