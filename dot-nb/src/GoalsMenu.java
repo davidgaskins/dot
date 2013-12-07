@@ -71,6 +71,7 @@ public class GoalsMenu
         System.out.println("Enter the DESCRIPTION of the goal.");
         String description = userInput.nextLine();
 
+        // @TODO: error checking on enums
         System.out.println("Enter the PRIORITY of the goal.");
         String priority = userInput.nextLine();
 
@@ -79,24 +80,25 @@ public class GoalsMenu
 
         System.out.println("Enter the STATUS of the goal.");
         String status = userInput.nextLine();
+        
+        
+        String dateCreated = "2000-01-01";//@TODO
 
-        String dateCreated = "January 1 2000";
-
-        String dateUpdated = "January 2 2001";
+        String dateUpdated = "2005-01-01";//@TODO
 
         System.out.println("Enter the END DATE of the goal.");
-        String dateToEnd = userInput.nextLine();
+        String dateToEnd = "2009-01-01"; //@TODO
 
-        String projectID = "SampleProject";
+        int projectID = 5;
 
-        String parentGoalID = "1";
+        int parentGoalID = 2;
 
         queryOrStatement = String.format(
-                "INSERT INTO Goals(title, description, priority, type, status, dateCreated, "
-                    + "dateUpdated, dateToEnd, projectID, parentGoalID"
-                + "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                "INSERT INTO goals(title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID)\n"
+                + "VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, %d)",
 
-                title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID);
+                title, description, priority, type, status, dateCreated, 
+                    dateUpdated, dateToEnd, projectID, parentGoalID);
         System.err.println("About to execute query:\n" + queryOrStatement); // DEBUG
         try
         {
@@ -105,8 +107,11 @@ public class GoalsMenu
         }
         catch (SQLException sqe)
         {
-            System.out.println("There was an error in adding the goal. Check that your input is correct.");
+            LOGGER.log(Level.SEVERE, "Error adding goals. Error: {0}", sqe.getMessage());
+            sqe.printStackTrace();
+            System.exit(1);
         }
+        System.out.println("No exception, so let's assume your goal was added successfully.");
     }
 
     public void goalsMenuEdit()
@@ -136,7 +141,7 @@ public class GoalsMenu
             System.out.println("There was an error in retrieving the Goal.");
             return;
         }            
-
+        System.out.println("Retrieved results.");
         try
         { // begin getting attributes of that row
             rs.next();
@@ -239,7 +244,7 @@ public class GoalsMenu
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM GOALS ORDER BY ID desc");
+            rs = statement.executeQuery("SELECT * FROM goals ORDER BY id desc");
         }
         catch (SQLException sqe)
         {
@@ -247,7 +252,7 @@ public class GoalsMenu
             System.out.println("There was an error in retrieving the goals.");
             return;
         }            
-
+        System.out.println("Retrieved goals successfully.");
         // 2. print out the goals
         String columnNames = "ID\t Name\t description\t DateCreated\t DateUpdated\t";
         System.out.println(columnNames);
@@ -260,7 +265,11 @@ public class GoalsMenu
                 String description = rs.getString("description");
                 String dateCreated = rs.getDate("dateCreated").toString();
                 String dateUpdated = rs.getDate("dateUpdated").toString();
-                String goalRow = String.format("%d\t %s\t %s\t %s\t% s\t",
+                String goalRow = String.format("%4d\t"
+                        + "%20s\t"
+                        + "%20s\t"
+                        + "%s\t"
+                        + "%s\t",
                         id, title, description, dateCreated, dateUpdated);
                 System.out.println(goalRow);
             }

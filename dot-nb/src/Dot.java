@@ -1,12 +1,6 @@
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
@@ -22,15 +16,30 @@ import java.util.logging.Logger;
 */
 
 public class Dot {
-    
+        // @TODO
+        // set session transaction isolation level serializable:
+        // which locks access to DB whiel other transactions waiting
+        // but as soon as you commit or rollback the waiting transactions can start
+        
+	public static void main(String args[]) throws IOException 
+        {
+            LOGGER.setLevel(Level.INFO);
+            
+            Dot dot = new Dot();
+            dot.connectToMartelDB();
+            dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
+            // permission to do that on infoserver. waiting on David Gaskins to set up server
+            // where we have permission to create db
+            
+            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
+            mainMenu.mainMenu();
+	}
+
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
         
         private final Scanner userInput = new Scanner(System.in);
         private Connection connection = null;
-        
-        private String queryOrStatement; // here so you don't need to keep track of declarations inside try/catch etc
-            // it's just the string to store the new query into
         
         public Dot()
         {
@@ -47,42 +56,28 @@ public class Dot {
 	//static User guy;
 	//static String workingDirectory
 
-        // @TODO
-        // set session transaction isolation level serializable:
-        // which locks access to DB whiel other transactions waiting
-        // but as soon as you commit or rollback the waiting transactions can start
-        
-	public static void main(String args[]) throws IOException 
-        {
-            LOGGER.setLevel(Level.INFO);
-            
-            Dot dot = new Dot();
-            dot.connectToMartelDB();
-            // dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
-            // permission to do that on infoserver. waiting on David Gaskins to set up server
-            // where we have permission to create db
-            
-            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
-            mainMenu.mainMenu();
-	   }
-        
         private void initializeMartelDB() throws IOException
         {
-            String query = FileUtil.readFile("dot-sql-create.sql");
-                        
-            System.err.println("About to execute query:\n" + query); // DEBUG
-            try
+            String[] fileNames = new String[] {"dot-sql-drop-all-tables.sql", "dot-sql-create-and-insert-enum.sql", "dot-sql-create-all-tables.sql", "dot-sql-insert-all-tables.sql"};
+            for (String fileName : fileNames)
             {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate("CREATE DATABASE dot2");
-                statement.executeQuery(query);
-            }
-            catch (SQLException sqe)
-            {
-                LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}", sqe.getMessage());
-                sqe.printStackTrace();
+                String[] statements = FileUtil.readFile(fileName).split(";");
+                for (String statementString : statements) 
+                {
+                    try
+                    {
+                        Statement statement = connection.createStatement();
+                        statement.executeUpdate(statementString);
+                    }
+                    catch (SQLException sqe)
+                    {
+                        LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}. In file " + fileName + ", offending statement was " + statementString, sqe.getMessage());
+                        System.exit(1);
+                    }
+                }
             }
         }
+        
         private void connectToMartelDB()
         {
             try {
@@ -92,7 +87,15 @@ public class Dot {
 
                 connection = DriverManager.getConnection(url, username, password);
                 connection.setAutoCommit(false);
-            } catch (SQLException sqe)
+            } catch (SQLException sqe){ 
+                try{
+                String url = "jdbc:mysql://localhost:3306/cecs323m16";
+                String username = "cecs323m16";
+                String password = "aigoiY";
+
+                connection = DriverManager.getConnection(url, username, password);
+                connection.setAutoCommit(false);
+            } catch (SQLException sqe2)
             {
                 // this is for LOGGING purposes
                 LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
@@ -102,7 +105,8 @@ public class Dot {
                 // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
                 System.out.println("Unable to connect to database. Exiting.");
                 System.exit(1);
-            }            
+            }          
+            }
         }
         
         private void connectToGaskinsDB()

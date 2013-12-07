@@ -1,20 +1,12 @@
-DROP TABLE posts;
-DROP TABLE changes;
-DROP TABLE commits;
-DROP TABLE managementAssignments;
-DROP TABLE workAssignments;
-DROP TABLE goals;
-DROP TABLE phoneNumbers;
-DROP TABLE contributors;
-DROP TABLE projects;
-
-
+-- Tan Tran
+-- David Gaskins
+-- David Martel 
 -- the following 9 tables are for our data
 CREATE TABLE projects(
 	title VARCHAR(20) NOT NULL,
-	dateToEnd TIMESTAMP,
+	dateToEnd DATETIME,
 	description TEXT,
-	dateStarted TIMESTAMP NOT NULL,
+	dateStarted DATETIME NOT NULL,
 	id INT NOT NULL AUTO_INCREMENT,
 	
 	--  ManagementAssignment and Goal both reference Project.
@@ -32,20 +24,21 @@ CREATE TABLE projects(
 );
 CREATE TABLE contributors(
 	id INT NOT NULL AUTO_INCREMENT,
-	fName VARCHAR(15),
-	lName VARCHAR(15),
+	fName VARCHAR(30),
+	lName VARCHAR(30),
 	email VARCHAR(30) NOT NULL, 
 	CONSTRAINT contributors_pk PRIMARY KEY(id),
 	--  Contributors must be able to be contacted through email
 	--  Commit, Post, ManagementAssignment, and WorkAssignment
 	--  all reference Contributor. Use surrogate key "id" to 
-	--  reduce memory usage, and becaue CK email may change
+	--  reduce memory usage, and becauSe CK email may change
 	--  Assume no Contributors share email
 	CONSTRAINT contributors_ck UNIQUE (email)
+
 );
 CREATE TABLE managementAssignments(
-	dateStarted TIMESTAMP NOT NULL,
-	dateToEnd TIMESTAMP,
+	dateStarted DATETIME NOT NULL,
+	dateToEnd DATETIME,
 	
 	--  If a Project is still being worked on past its dateFinished,
 	--  its managers (the Contributors in this ManagementAssignment) are not finished
@@ -85,15 +78,15 @@ CREATE TABLE phoneNumbers(
 );
 CREATE TABLE goals(
 	id INT NOT NULL AUTO_INCREMENT,
-	title VARCHAR(20) NOT NULL,
+	title VARCHAR(30) NOT NULL,
 	description TEXT NOT NULL,
-	priority ENUM('CRITICAL', 'MEDIUM', 'LOW'),
-	type ENUM('BUG', 'IMPROVEMENT', 'LONG-TERM'),
-	status ENUM('OPEN', 'CLOSED', 'NOFIX', 'ASSIGNED', 'DUPLICATE', 'POSTPONED'),
-	dateCreated TIMESTAMP NOT NULL,
-	dateUpdated TIMESTAMP,
-	dateToEnd TIMESTAMP,
-	projectID INT,
+	priority CHAR(20),
+	type CHAR(20),
+	status CHAR(20),
+	dateCreated DATETIME NOT NULL,
+	dateUpdated DATETIME,
+	dateToEnd DATETIME,
+	projectID INT NOT NULL,
 	parentGoalID INT, --  can be null because top level Goals don't need have to have a parent
 	
 	--  Goal can reference many parent Goals, so reduce memory usage by using ID
@@ -104,12 +97,25 @@ CREATE TABLE goals(
 	
 	--  If a Goal is deleted, all of the subGoals that contribute to its
 	--  completion do not matter either
-	CONSTRAINT goals_fk FOREIGN KEY (parentGoalID) 
-		REFERENCES goals (id) ON DELETE CASCADE
+	CONSTRAINT goals_fk_goals FOREIGN KEY (parentGoalID) 
+		REFERENCES goals (id) ON DELETE CASCADE,
+		
+	CONSTRAINT goals_fk_projects FOREIGN KEY (status)
+		REFERENCES projects(id) ON DELETE CASCADE
+
+	-- Priority, type, and status are enum. reference those tables
+	CONSTRAINT goals_fk_priorities FOREIGN KEY (priority)
+		REFERENCES goalPriorities(goalPriority),
+
+	CONSTRAINT goals_fk_types FOREIGN KEY (type)
+		REFERENCES goalTypes(goalType),
+
+	CONSTRAINT goals_fk_statuses FOREIGN KEY (status)
+		REFERENCES goalStatuses(goalStatus)
 );
 CREATE TABLE posts (
 	body TEXT,
-	dateAndTime TIMESTAMP NOT NULL,
+	dateAndTime DATETIME NOT NULL,
 	contributorID INT NOT NULL, 
 	goalID INT,
 	
@@ -119,15 +125,16 @@ CREATE TABLE posts (
 	--  If a Goal is deleted, no discussion needs to be made about how to solve it. 
 	--  This implies that client only deletes Goal for a serious reason, such as
 	--  the fact that it is now completely irrelevant
-	CONSTRAINT posts_fk1 FOREIGN KEY (goalID) 
-		REFERENCES goals(id) ON DELETE CASCADE,
 
-	CONSTRAINT posts_fk2 FOREIGN KEY (contributorID) 
+	CONSTRAINT posts_goals_fk FOREIGN KEY (goalID) 
+		REFERENCES goals(id) ON DELETE CASCADE,
+		
+	CONSTRAINT posts_contributors_fk FOREIGN KEY (contributorID) 
 		REFERENCES contributors(id) ON DELETE CASCADE
 );
 CREATE TABLE workAssignments(
-	dateStarted TIMESTAMP NOT NULL,
-	dateToEnd TIMESTAMP,
+	dateStarted DATETIME NOT NULL,
+	dateToEnd DATETIME,
 	
 	--  A work assignment may be past its dateToEnd, but still not finished
 	finished BOOLEAN,
@@ -138,17 +145,17 @@ CREATE TABLE workAssignments(
 	--  A Contributor may work on a Goal in many time periods
 	CONSTRAINT workAssignments_pk PRIMARY KEY(dateStarted, goalID, contributorID)
 
-	CONSTRAINT workAssignments_fk1 FOREIGN KEY (goalID) 
+	CONSTRAINT workAssignments_goals_fk FOREIGN KEY (goalID) 
 		REFERENCES goals(id) ON DELETE CASCADE,
 
-	CONSTRAINT workAssignments_fk2 FOREIGN KEY (contributorID) 
+	CONSTRAINT workAssignments_contributors_fk FOREIGN KEY (contributorID) 
 		REFERENCES contributors(id) ON DELETE CASCADE
 
 );
 CREATE TABLE commits(
 	contributorID INT NOT NULL,
 	goalID INT NOT NULL, 
-	commitDate TIMESTAMP,
+	commitDate DATETIME,
 	description TEXT,
 	id INT NOT NULL AUTO_INCREMENT, 
 	
@@ -165,6 +172,7 @@ CREATE TABLE commits(
 
 	-- it is impossible for the same contributor to make a commit at precisely the same time
 
+
 	CONSTRAINT changes_ck UNIQUE (commitDate, contributorID)
 );
 CREATE TABLE changes(
@@ -179,5 +187,5 @@ CREATE TABLE changes(
 	--  Commit can only be deleted if it is the latest Commit.
 	--  In that case, delete its changes too.
 	CONSTRAINT changes_fk FOREIGN KEY(commitID) 
-		REFERENCES commits(id) ON DELETE CASCADE
+		REFERENCES commits(id) ON DELETE NO ACTION 
 );
