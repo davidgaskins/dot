@@ -1,5 +1,6 @@
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -34,8 +35,10 @@ public class PostsMenu
         boolean wantToQuit = false;
         while (!wantToQuit)
         {
-            System.out.println("This is the post menu.");
-            System.out.println("1. ADD a post.");
+            System.out.println("This is the post menu. Obviously, "
+                    + "you cannot ADD posts on behalf of users, "
+                    + "but you can moderate posts and view them.");
+            System.out.println("1. EDIT (moderate) a post.");
             System.out.println("2. VIEW a post.");
             System.out.println("3. BACK to main menu.");
             option = userInput.nextInt();
@@ -43,7 +46,7 @@ public class PostsMenu
             switch (option)
             {
                 case 1: // add a post
-                    postMenuAdd();
+                    postMenuEdit();
                     break;
                 case 2: //view a post
                     postMenuView();
@@ -57,14 +60,25 @@ public class PostsMenu
         }
     }
 
-    private void postMenuAdd() 
+    private void postMenuEdit() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ResultSet rs;
+        userInput.nextLine();
+        // 1. supposed to prompt for project here
+        
+        // 2. get the list of posts
+        postMenuView();
+        
+        // 3. prompt for a post by its id
+        System.out.println("Enter the ID of the post you want to edit.");
+        int id = userInput.nextInt();
+
+        // get the post again by its id
     }
 
     private void postMenuView() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
     
 }

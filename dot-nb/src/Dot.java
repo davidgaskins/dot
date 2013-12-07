@@ -99,7 +99,7 @@ public class Dot {
             {
                 // this is for LOGGING purposes
                 LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
-                sqe.printStackTrace();
+                sqe2.printStackTrace();
                 connection = null;
                 
                 // this is for the PROGRAM's purpose. i.e., exit because we can't do anything

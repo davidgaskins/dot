@@ -101,7 +101,7 @@ CREATE TABLE goals(
 		REFERENCES goals (id) ON DELETE CASCADE,
 		
 	CONSTRAINT goals_fk_projects FOREIGN KEY (projectID)
-		REFERENCES projects(id) ON DELETE CASCADE
+		REFERENCES projects(id) ON DELETE CASCADE,
 
 	-- Priority, type, and status are enum. reference those tables
 	CONSTRAINT goals_fk_priorities FOREIGN KEY (priority)
@@ -143,7 +143,7 @@ CREATE TABLE workAssignments(
 	contributorID INT NOT NULL,
 	
 	--  A Contributor may work on a Goal in many time periods
-	CONSTRAINT workAssignments_pk PRIMARY KEY(dateStarted, goalID, contributorID)
+	CONSTRAINT workAssignments_pk PRIMARY KEY(dateStarted, goalID, contributorID),
 
 	CONSTRAINT workAssignments_goals_fk FOREIGN KEY (goalID) 
 		REFERENCES goals(id) ON DELETE CASCADE,
