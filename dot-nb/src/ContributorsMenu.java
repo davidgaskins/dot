@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -86,7 +87,10 @@ public class ContributorsMenu
             }
         } catch (SQLException sqe) // @TODO
         {
-            System.out.println("failed to view contact information for id:"+ id);
+            LOGGER.log(Level.SEVERE, "Error getting getting contact info. Error: {0}", sqe.getMessage());
+            sqe.printStackTrace();
+
+            System.out.println("There was an error in retrieving contact info.");
         }
     }
     
@@ -105,8 +109,11 @@ public class ContributorsMenu
             statement.executeUpdate(statementString);
             contributorsMenuView();
         }
-        catch (SQLException e)
+        catch (SQLException sqe)
         {
+            LOGGER.log(Level.SEVERE, "Error getting retrieving contributors. Error: {0}", sqe.getMessage());
+            sqe.printStackTrace();
+
             System.out.println("There was an error in retrieving the contributors.");
         }
     }
@@ -132,7 +139,9 @@ public class ContributorsMenu
         }
         catch (SQLException sqe)
         {
+            LOGGER.log(Level.SEVERE, "Error getting retrieving contributors. Error: {0}", sqe.getMessage());
             System.out.println("There was an error in retrieving the contributors.");
+            sqe.printStackTrace();
         }
 
     }
