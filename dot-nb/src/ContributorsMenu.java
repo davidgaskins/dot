@@ -37,8 +37,9 @@ public class ContributorsMenu
             System.out.println("2. DELETE a contributor.");
             System.out.println("3. VIEW a contributor's contact information.");
             System.out.println("4. BACK to main menu.");
+            
             option = userInput.nextInt();
-
+            String userIn = userInput.nextLine();
             switch (option)
             {
                 case 1: // add a contributor
@@ -69,7 +70,7 @@ public class ContributorsMenu
         String toView = userInput.nextLine();
         int id = Integer.parseInt(toView);
         String statementString = "SELECT * FROM phoneNumbers " +
-                                    "WHERE id = " + id;
+                                    "WHERE contributorID = " + id + ";";
         try{
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
@@ -77,16 +78,15 @@ public class ContributorsMenu
             //simply print the resulting phoneNumbers
             while (rs.next())
             {
-                int contID = rs.getInt("contributorID");
+                String contributorID = rs.getString("contributorID");
+                int contID = Integer.parseInt(contributorID);
                 String phoneNum = rs.getString("phoneNumber");
                 String phoneType = rs.getString("phoneType");
-                System.out.println("phone number: " +phoneNum);
-                System.out.println("phone Type: " +phoneType);
-
+                System.out.println("phone type: " +phoneType +"\tphone number: " +phoneNum);
             }
         } catch (SQLException sqe) // @TODO
         {
-            ;
+            System.out.println("failed to view contact information for id:"+ id);
         }
     }
     
@@ -95,13 +95,14 @@ public class ContributorsMenu
         //that they would like to delete
         System.out.println("Enter the id of the contributor that you would like to delete.");
         contributorsMenuView();
-        String toDelete = userInput.nextLine();                      
-        String statementString = "DELETE FROM contributors"+
-                            "WHERE id = " + toDelete;
+        String toDelete = userInput.nextLine();
+        int idToDelete = Integer.parseInt(toDelete);
+        String statementString = "DELETE FROM contributors "+
+                            "WHERE id = " + idToDelete + ";";
         try // @TODO: make hierarchy of try catches for easier debugging
         {
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(statementString);
+            statement.executeUpdate(statementString);
             contributorsMenuView();
         }
         catch (SQLException e)
@@ -110,13 +111,13 @@ public class ContributorsMenu
         }
     }
     private void contributorsMenuView(){
-        String statementString = "SELECT * FROM contributors";
+        String statementString = "SELECT * FROM contributors;";
         try // @TODO: make hierarchy of try catches for easier debugging
         {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
 
-            String columnNames = "ID\t fName\t lName\t email";
+            String columnNames = "ID\t\t fName\t\t lName\t\temail";
             System.out.println(columnNames);
             while (rs.next())
             {
@@ -124,7 +125,7 @@ public class ContributorsMenu
                 String fName = rs.getString("fName");
                 String lName = rs.getString("lName");
                 String email = rs.getString("email");
-                String contributorRow = String.format("%d\t %s\t %s\t %s\t",
+                String contributorRow = String.format("%d\t\t %s\t\t %s\t %s\t",
                         id, fName, lName, email);
                 System.out.println(contributorRow);
             }
@@ -135,5 +136,4 @@ public class ContributorsMenu
         }
 
     }
-
 }
