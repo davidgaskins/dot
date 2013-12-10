@@ -24,6 +24,7 @@ CREATE TABLE projects(
 );
 CREATE TABLE contributors(
 	id INT NOT NULL AUTO_INCREMENT,
+        -- updated length of strings
 	fName VARCHAR(30),
 	lName VARCHAR(30),
 	email VARCHAR(30) NOT NULL, 
@@ -114,13 +115,16 @@ CREATE TABLE goals(
 		REFERENCES goalStatuses(goalStatus)
 );
 CREATE TABLE posts (
+        id INT NOT NULL AUTO_INCREMENT,
 	body TEXT,
+        -- this is still our CK, so we still want the NOT NULL constraint
 	dateAndTime DATETIME NOT NULL,
 	contributorID INT NOT NULL, 
-	goalID INT,
+	goalID INT NOT NULL,
 	
-	--  Two Posts may be posted by different Contributors at the same time on the same goal
-	CONSTRAINT posts_pk PRIMARY KEY (dateAndTime, goalID, contributorID),
+        CONSTRAINT posts_pk PRIMARY KEY (id),
+	
+        CONSTRAINT posts_ck unique (dateAndTime, goalID, contributorID),
 	
 
 	CONSTRAINT posts_goals_fk FOREIGN KEY (goalID) 

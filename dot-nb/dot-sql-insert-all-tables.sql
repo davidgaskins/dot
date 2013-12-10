@@ -29,7 +29,7 @@ INSERT INTO goals (title, description, priority, type, status, dateCreated, date
 	('documentation', 'the API documentation', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-12-2 12:23:55', '2013-12-2 12:23:55', '2013-11-17 12:23:55', 2, NULL),
 	('documentation', 'API documenation for caffeine complex', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-5-10 12:23:55', '2013-3-10 12:23:55', '2013-2-24 12:23:55', 3, NULL), -- earlier date was 2-29, but sql caught that! wow!
 	('back end', 'backend complete for caffeine complex', 'CRITICAL', 'IMPROVEMENT', 'OPEN', '2013-4-10 12:23:55', '2013-4-9 12:23:55', '2013-2-20 12:23:55', 3, NULL);
-INSERT INTO posts VALUES
+INSERT INTO posts (body, dateAndTime, contributorID, goalID) VALUES
 	('we need to add real data', '2013-12-2 12:23:55', 1, 1),
 	('do not forget that we need two sequence diagrams', '2013-11-15 12:24:55', 2, 2),
 	('we will be using perl', '2013-11-14 12:25:55', 3, 3),
