@@ -3,13 +3,13 @@ transactions are all or nothing
 
 STEPS
 	begin
-	execute a set of data manipualtions and or queires
-	if no errors occur then commit the transactiona and end
+	execute a set of data manipualtions and or queries
+	if no errors occur then commit the transaction and end
 	if errors, roll back
 
 Most SQL languages have a default of autocommit
 	how to changes this in SQL
-	//must, must have
+	//must must have
 	connection.setAutoCommit(false);
 
 set isolation level

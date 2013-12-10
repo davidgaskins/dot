@@ -1,4 +1,4 @@
-run this in a terminal to forward the port for mysql
-replace username with your login to heart
+#run this in a terminal to forward the port for mysql
+#replace username with your login to heart
 
-ssh -L 3306:infoserver.cecs.csulb.edu:3306 username@heart.cecs.csulb.edu
+ssh -L 3306:infoserver.cecs.csulb.edu:3306 dgaskins@heart.cecs.csulb.edu
