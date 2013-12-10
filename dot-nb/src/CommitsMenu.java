@@ -130,10 +130,16 @@ public class CommitsMenu
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT bodyOfDiff"
-                    + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID"
-                    + "ORDER BY commits.commitDate DESC"
-                    + "WHERE commits.commitID <=" + commitIDToStopAt);
+            if(commitIDToStopAt.trim().equals("")) {
+                rs = statement.executeQuery("SELECT bodyOfDiff "
+                    + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID "
+                    + "ORDER BY commits.commitDate DESC ");
+            } else {
+                rs = statement.executeQuery("SELECT bodyOfDiff "
+                    + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID "
+                    + "ORDER BY commits.commitDate DESC "
+                    + "WHERE commits.commitID <= " + commitIDToStopAt);
+            }
         }
         catch (SQLException sqe)
         {

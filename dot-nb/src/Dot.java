@@ -30,7 +30,6 @@ public class Dot {
 	public static void main(String args[]) throws IOException 
     	{
             LOGGER.setLevel(Level.INFO);
-            
             Dot dot = new Dot();
             dot.connectToMartelDB();
             dot.initializeMartelDB();
@@ -110,13 +109,23 @@ public class Dot {
         private void connectToMartelDB()
         {
             try {
+                System.out.println("Connecting to local server");
                 String url = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
                 String username = "cecs323m16";
                 String password = "aigoiY";
 
                 connection = DriverManager.getConnection(url, username, password);
                 connection.setAutoCommit(false);
-            } catch (SQLException sqe)
+            } catch (SQLException sqe){
+                try{
+                System.out.println("Connecting to local server (or ssh forwarded server)");
+                String url = "jdbc:mysql://localhost:3306/cecs323m16";
+                String username = "cecs323m16";
+                String password = "aigoiY";
+                
+                connection = DriverManager.getConnection(url, username, password);
+                connection.setAutoCommit(false);
+            } catch (SQLException sqe2)
             {
                 // this is for LOGGING purposes
                 LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
@@ -127,6 +136,7 @@ public class Dot {
                 System.out.println("Unable to connect to database. Exiting.");
                 System.exit(1);
             }          
+            }
         }
         
         private void connectToGaskinsDB()
