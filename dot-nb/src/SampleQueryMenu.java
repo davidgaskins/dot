@@ -93,8 +93,8 @@ public class SampleQueryMenu
         }
         catch (SQLException sqe)
         {
-            LOGGER.log(Level.SEVERE, "Error retrieving a goal w/ specific ID. Error: {0}", sqe.getMessage());
-            System.out.println("There was an error in retrieving the Goal.");
+            LOGGER.log(Level.SEVERE, "Error: {0}", sqe.getMessage());
+            System.out.println("There was an error executing the query.");
             return;
         }            
         String columnNames = "Title" + "\t" + "numCommits";
@@ -105,6 +105,66 @@ public class SampleQueryMenu
                 String title = rs.getString("title");
                 String count = rs.getString("numCommits");
                 System.out.println(title + "\t" + count);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SampleQueryMenu.class.getName()).log(Level.SEVERE, "Error executing query", ex);
+            System.out.println("There was an error executing the query.");
+        }
+    }
+    
+    public void query3()
+    {
+        ResultSet rs = null;
+        try
+        {
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery(query3);
+        }
+        catch (SQLException sqe)
+        {
+            LOGGER.log(Level.SEVERE, "Error retrieving a goal w/ specific ID. Error: {0}", sqe.getMessage());
+            System.out.println("There was an error in retrieving the Goal.");
+            return;
+        }            
+        String columnNames = "fName" + "\t" + "lName" + "\t" + "email";
+        System.out.println(columnNames);
+        try {
+            while ( rs.next())
+            {
+                String fName = rs.getString("fName");
+                String lName = rs.getString("lName");
+                String email = rs.getString("email");
+                System.out.println(fName + "\t" + lName + "\t" + email);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SampleQueryMenu.class.getName()).log(Level.SEVERE, "Error executing query", ex);
+            System.out.println("There was an error executing the query.");
+        }
+    }
+    
+    public void query2()
+    {
+        ResultSet rs = null;
+        try
+        {
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery(query2);
+        }
+        catch (SQLException sqe)
+        {
+            LOGGER.log(Level.SEVERE, "Error retrieving a goal w/ specific ID. Error: {0}", sqe.getMessage());
+            System.out.println("There was an error in retrieving the Goal.");
+            return;
+        }            
+        String columnNames = "fName" + "\t" + "lName" + "\t" + "email";
+        System.out.println(columnNames);
+        try {
+            while ( rs.next())
+            {
+                String fName = rs.getString("fName");
+                String lName = rs.getString("lName");
+                String email = rs.getString("email");
+                System.out.println(fName + "\t" + lName + "\t" + email);
             }
         } catch (SQLException ex) {
             Logger.getLogger(SampleQueryMenu.class.getName()).log(Level.SEVERE, "Error executing query", ex);
@@ -132,19 +192,19 @@ public class SampleQueryMenu
                     query1();
                     break;
                 case 2:
-                    //query2();
+                    query2();
                     break;
                 case 3:
-                    //query3();
+                    query3();
                     break;
                 case 4:
-                    //query4();
+                    query4();
                     break;
                 case 5:
-                    //query5();
+                    query5();
                     break;
                 case 6:
-                    //query6();
+                    query6();
                     break;
                 case 7:
                     wantToQuit = true;
