@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -127,6 +128,15 @@ public class FileUtil {
             Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
+    }
+    
+    public static void build(List<String> patches, String path) {
+        try {
+            File f = new File(path);
+            f.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     static boolean checkRepository(String directory) {

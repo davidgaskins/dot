@@ -27,32 +27,37 @@ public class Commit {
         fileList = new LinkedList();
     }
     
-    public void generateChanges() {
+    public List<Change> generateChanges() {
         File repository = new File(directory);
         if(!repository.isDirectory()) {
             System.err.println("Repository does not exist");
-            return;
+            return null;
         }
         
         Map<String,File> childList = new TreeMap<String,File>();
         listFiles(directory, repository, childList);
-        Iterator it = childList.entrySet().iterator();
+        Iterator it;
+        /*
+        it = childList.entrySet().iterator();
         while(it.hasNext()) {
             Map.Entry<String,File> pairs = (Map.Entry<String,File>) it.next();
             System.out.println(pairs.getValue());
         }
+                */
         
-        System.out.println("Printing previous commit files");
+        //System.out.println("Printing previous commit files");
         
         Map<String,File> parentList = new TreeMap<String,File>();
         String parentDir = directory + "/.dot/previous_commit";
         File parentRepo = new File(parentDir);
         listFiles(parentDir, parentRepo, parentList);
+        /*
         it = parentList.entrySet().iterator();
         while(it.hasNext()) {
             Map.Entry<String,File> pairs = (Map.Entry<String,File>) it.next();
             System.out.println(pairs.getValue());
         }
+        */
         
         fileList = new LinkedList<Change>();
         
@@ -71,10 +76,10 @@ public class Commit {
                 cur.diff = FileUtil.diff(cur.parent.getPath(), cur.child.getPath());
             }
             fileList.add(cur);
-            System.out.println(cur);
+            //System.out.println(cur);
             
         }
-        
+        return fileList;
     }
     
     private void listFiles(String repoDir, File dir, Map<String,File> returnFileList) {
@@ -83,9 +88,9 @@ public class Commit {
             if(fileList[i].isFile()) {
                 //add all files to list
                 String path = fileList[i].getPath();
-                System.out.println("Absolute: " + path);
+                //System.out.println("Absolute: " + path);
                 path = path.substring(repoDir.length());
-                System.out.println("Relative: " + path);
+                //System.out.println("Relative: " + path);
                 
                 returnFileList.put(path,fileList[i]);
             } else if(fileList[i].isDirectory() && !fileList[i].isHidden()){
