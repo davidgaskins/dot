@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -132,9 +133,24 @@ public class FileUtil {
     
     public static void build(List<String> patches, String path) {
         try {
+            //create new file
             File f = new File(path);
             f.createNewFile();
+            
+            Runtime r = Runtime.getRuntime();
+            //apply patches
+            
+            for(String patch: patches) {
+            Process p = r.exec("patch " + path);
+            OutputStreamWriter writer= new OutputStreamWriter(p.getOutputStream());
+            writer.write(patch);
+            writer.flush();;
+            p.waitFor();
+            
+            }
         } catch (IOException ex) {
+            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
             Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
