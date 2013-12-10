@@ -47,7 +47,8 @@ public class MainMenu
             System.out.println("4. Manage CONTRIBUTORS.[parent deletion]");
             System.out.println("5. COMMIT changes to the database.");
             System.out.println("6. ROLLBACK changes since the last commit.");
-            System.out.println("7. QUIT.");
+            System.out.println("7. Run SAMPLE QUERIES.");
+            System.out.println("8. Exit.");
             option = userInput.nextInt();
 
             // since there isn't an array of statements to execute,
@@ -75,6 +76,8 @@ public class MainMenu
                     rollbackMenu();
                     break;
                 case 7:
+                    sampleQueryMenu.sampleQueryMenu();
+                case 8:
                     quitMenu();
                     wantToQuit = true;
                     break;

@@ -1,6 +1,10 @@
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
@@ -79,6 +83,35 @@ public class SampleQueryMenu
         this.connection = connection;
     }
     
+    public void query1()
+    {
+        ResultSet rs = null;
+        try
+        {
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery(query1);
+        }
+        catch (SQLException sqe)
+        {
+            LOGGER.log(Level.SEVERE, "Error retrieving a goal w/ specific ID. Error: {0}", sqe.getMessage());
+            System.out.println("There was an error in retrieving the Goal.");
+            return;
+        }            
+        String columnNames = "Title" + "\t" + "numCommits";
+        System.out.println(columnNames);
+        try {
+            while ( rs.next())
+            {
+                String title = rs.getString("title");
+                String count = rs.getString("numCommits");
+                System.out.println(title + "\t" + count);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SampleQueryMenu.class.getName()).log(Level.SEVERE, "Error executing query", ex);
+            System.out.println("There was an error executing the query.");
+        }
+    }
+    
     public void sampleQueryMenu()
     {
         boolean wantToQuit = false;
@@ -99,19 +132,19 @@ public class SampleQueryMenu
                     query1();
                     break;
                 case 2:
-                    query2();
+                    //query2();
                     break;
                 case 3:
-                    query3();
+                    //query3();
                     break;
                 case 4:
-                    query4();
+                    //query4();
                     break;
                 case 5:
-                    query5();
+                    //query5();
                     break;
                 case 6:
-                    query6();
+                    //query6();
                     break;
                 case 7:
                     wantToQuit = true;
