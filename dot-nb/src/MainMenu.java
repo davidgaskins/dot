@@ -32,7 +32,7 @@ public class MainMenu
         ContributorsMenu contributorsMenu = new ContributorsMenu(LOGGER, connection);
         CommitsMenu commitsMenu = new CommitsMenu(LOGGER, connection);
         PostsMenu postsMenu = new PostsMenu(LOGGER, connection);
-
+        SampleQueryMenu sampleQueryMenu = new SampleQueryMenu(LOGGER, connection);
         int option;
 
         System.out.println("This is the management console of the DOT issue tracker and source control program.");
