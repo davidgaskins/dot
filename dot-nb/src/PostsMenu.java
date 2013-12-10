@@ -43,10 +43,11 @@ public class PostsMenu
                     + "but you can 1. moderate posts and 2. view them.");
             System.out.println("1. EDIT (moderate) a post.");
             System.out.println("2. VIEW ALL posts");
-            System.out.println("3. VIEW a particular post.");
+            System.out.println("3. VIEW a posts by a particular contributor.");
             System.out.println("4. BACK to main menu.");
-            option = userInput.nextInt();
-
+            String line = userInput.nextLine();
+            option = Integer.parseInt(line);
+            
             switch (option)
             {
                 case 1: // add a post
@@ -70,21 +71,33 @@ public class PostsMenu
     private void postMenuEdit() 
     {
         ResultSet rs;
-        userInput.nextLine();
-        // 1. supposed to prompt for project here
         
-        // 2. get the list of posts
       
-        
-        // 3. prompt for a post by its id
+        postMenuView();
         System.out.println("Enter the ID of the post you want to edit.");
-        int id = userInput.nextInt();
-
+        String newLine = userInput.nextLine();
+        int id = Integer.parseInt(newLine);
+        String statementString = "SELECT * FROM posts "
+                                        + "WHERE id = "+ id+ ";";
         // get the post again by its id
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM POSTS WHERE id = " + id);
+            rs = statement.executeQuery(statementString);
+            String columnNames = "id\t\tcontributorID\t goalID\t\tdataAndTime\tBody";
+            System.out.println(columnNames);
+            while (rs.next())
+            {
+                int postID = rs.getInt("id");
+                String body = rs.getString("body");
+                String dateAndTime = rs.getString("dateAndTime");
+                int contributorID = rs.getInt("contributorID");
+                int goalID = rs.getInt("goalID");
+                String postLine = String.format("%d\t\t %d\t\t %d\t\t %s\t %s", 
+                            id, contributorID, goalID, dateAndTime, body); 
+                
+                System.out.println(postLine);
+            }
         }
         catch (SQLException sqe)
         {
@@ -97,27 +110,34 @@ public class PostsMenu
     }
     private void postMenuViewAPost()
     {
-        System.out.println("Enter the id of the post that you would like to see.");
+        System.out.println("Enter the contributor id for which you would like to view posts.");
         String toView = userInput.nextLine();
-        int id = Integer.parseInt(toView);
+        int contId = Integer.parseInt(toView);
+
+        
         String statementString = "SELECT * FROM posts " +
-                                    "WHERE id = " + id + ";";
+                                    "WHERE contributorID = " + contId;
         try{
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
-            System.out.println("You are viewing the contact information for contributor: " + id);
-            //simply print the resulting post
+            //simply print the resulting posts
+            String columnNames = "id\t\t contributorID\t goalID\t\tdataAndTime\t\tBody";
+            System.out.println(columnNames);
             while (rs.next())
             {
-                String contributorID = rs.getString("contributorID");
-                int contID = Integer.parseInt(contributorID);
-                String phoneNum = rs.getString("phoneNumber");
-                String phoneType = rs.getString("phoneType");
-                System.out.println("phone type: " +phoneType +"\tphone number: " +phoneNum);
+                int id = rs.getInt("id");
+                String body = rs.getString("body");
+                String dateAndTime = rs.getString("dateAndTime");
+                int contributorID = rs.getInt("contributorID");
+                int goalID = rs.getInt("goalID");
+                String postLine = String.format("%d\t\t %d\t\t %d\t\t %s\t %s", 
+                            id, contributorID, goalID, dateAndTime, body); 
+                
+                System.out.println(postLine);
             }
         } catch (SQLException sqe) // @TODO
         {
-            System.out.println("failed to view contact information for id:"+ id);
+//            System.out.println("failed to view contact information for id:"+ id);
         }
     }
     private void postMenuView() 
@@ -128,16 +148,17 @@ public class PostsMenu
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
 
-            String columnNames = "contributorID\t\t goalID\t\tdataAndTime\tBody";
+            String columnNames = "id\t\t contributorID\t goalID\t\tdataAndTime\t\tBody";
             System.out.println(columnNames);
             while (rs.next())
             {
+                int id = rs.getInt("id");
                 String body = rs.getString("body");
                 String dateAndTime = rs.getString("dateAndTime");
                 int contributorID = rs.getInt("contributorID");
                 int goalID = rs.getInt("goalID");
-                String postLine = String.format("%d\t\t %d\t\t %s\t %s", 
-                            contributorID, goalID, dateAndTime, body); 
+                String postLine = String.format("%d\t\t%d\t\t %d\t\t %s\t %s", 
+                            id, contributorID, goalID, dateAndTime, body); 
                 
                 System.out.println(postLine);
            }

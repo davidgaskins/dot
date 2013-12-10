@@ -20,16 +20,20 @@ public class Dot {
         // set session transaction isolation level serializable:
         // which locks access to DB whiel other transactions waiting
         // but as soon as you commit or rollback the waiting transactions can start
+        String databaseURL = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16"; // @TODO: where do we finally connect to when submitting?
+        private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
+        private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
         
+        private final Scanner userInput = new Scanner(System.in);
+        private Connection connection = null;
+
 	public static void main(String args[]) throws IOException 
-    {
+    	{
             LOGGER.setLevel(Level.INFO);
             
             Dot dot = new Dot();
             dot.connectToMartelDB();
-            dot.initializeMartelDB(); // SUPPOSED to CREATE the database, but we don't have
-            // permission to do that on infoserver. waiting on David Gaskins to set up server
-            // where we have permission to create db
+            dot.initializeMartelDB();
             
             FileUtil.init();
             
@@ -39,12 +43,6 @@ public class Dot {
             FileUtil.close();
 	}
 
-        private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
-        private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
-        
-        private final Scanner userInput = new Scanner(System.in);
-        private Connection connection = null;
-        
         public Dot()
         {
             try {
@@ -54,7 +52,7 @@ public class Dot {
                 System.exit(1);
             }
             
-            System.out.println("DB_DRIVER init succesful.");
+            System.out.println("DB_DRIVER init successful.");
         }
 
 	//static User guy;
@@ -62,7 +60,8 @@ public class Dot {
 
         private void initializeMartelDB() throws IOException
         {
-            String[] fileNames = new String[] {"dot-sql-drop-all-tables.sql", "dot-sql-create-and-insert-enum.sql", "dot-sql-create-all-tables.sql", "dot-sql-insert-all-tables.sql"};
+            String[] fileNames = new String[] {"dot-sql-drop-all-tables.sql", "dot-sql-create-and-insert-enum.sql", 
+		"dot-sql-create-all-tables.sql", "dot-sql-insert-all-tables.sql"};
             for (String fileName : fileNames)
             {
                 String[] statements = FileUtil.readFile(fileName).split(";");
@@ -75,13 +74,38 @@ public class Dot {
                     }
                     catch (SQLException sqe)
                     {
-                        LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}. In file " + fileName + ", offending statement was " + statementString, sqe.getMessage());
+                        LOGGER.log(Level.SEVERE, "Unable to init database due to error {0}. In file " 
+				+ fileName + ", offending statement was " + statementString, sqe.getMessage());
                         System.exit(1);
                     }
                 }
             }
         }
         
+	private void connectToDB()
+	{
+		
+		try 
+		{
+			System.out.println("Enter the username.");
+			String username = userInput.nextLine();
+			System.out.println("Enter the password.");
+			String password = userInput.nextLine();
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
+		} 
+		catch (SQLException sqe) 
+		{
+                // this is for LOGGING purposes
+		LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
+                sqe.printStackTrace();
+                connection = null;
+
+		// this is for the PROGRAM's purpose. i.e., exit because we can't do anything
+                System.out.println("Unable to connect to database. Exiting.");
+                System.exit(1);
+	}
+
         private void connectToMartelDB()
         {
             try {
@@ -91,26 +115,17 @@ public class Dot {
 
                 connection = DriverManager.getConnection(url, username, password);
                 connection.setAutoCommit(false);
-            } catch (SQLException sqe){ 
-                try{
-                String url = "jdbc:mysql://localhost:3306/cecs323m16";
-                String username = "cecs323m16";
-                String password = "aigoiY";
-
-                connection = DriverManager.getConnection(url, username, password);
-                connection.setAutoCommit(false);
-            } catch (SQLException sqe2)
+            } catch (SQLException sqe)
             {
                 // this is for LOGGING purposes
                 LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
-                sqe2.printStackTrace();
+                sqe.printStackTrace();
                 connection = null;
                 
                 // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
                 System.out.println("Unable to connect to database. Exiting.");
                 System.exit(1);
             }          
-            }
         }
         
         private void connectToGaskinsDB()
@@ -134,17 +149,5 @@ public class Dot {
                 System.exit(1);
             }            
         }
-        
-//        private void connectToDB()
-//        {
-//            System.out.println("Enter the username.");
-//            String username = userInput.nextLine();
-//            System.out.println("Enter the password.");
-//            String password = userInput.nextLine();
-//            
-//            connection = DriverManager.getConnection(, username, password)
-//        }
-        
 
-        // http://stackoverflow.com/questions/326390/how-to-create-a-java-string-from-the-contents-of-a-file
 }

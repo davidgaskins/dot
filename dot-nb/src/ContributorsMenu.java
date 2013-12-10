@@ -111,10 +111,9 @@ public class ContributorsMenu
         }
         catch (SQLException sqe)
         {
-            LOGGER.log(Level.SEVERE, "Error getting retrieving contributors. Error: {0}", sqe.getMessage());
-            sqe.printStackTrace();
-
-            System.out.println("There was an error in retrieving the contributors.");
+            System.out.println("This contributor can't be deleted, its a parent to a commit [on delete NO ACTION]");
+            //LOGGER.log(Level.SEVERE, "Error getting retrieving contributors. Error: {0}", sqe.getMessage());
+            //sqe.printStackTrace();
         }
     }
     private void contributorsMenuView(){

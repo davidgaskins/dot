@@ -80,30 +80,44 @@ public class GoalsMenu
 
         System.out.println("Enter the STATUS of the goal.");
         String status = userInput.nextLine();
-        
-        
-        String dateCreated = "2000-01-01";//@TODO
 
-        String dateUpdated = "2005-01-01";//@TODO
+	// Date() initializer is set to the current time
+        Date dateCreated = new Date();
+	// Since we're just creating, updated time is created time.
+	// clone to make sure they're different objects. not sure
+	// it matters
+        Date dateUpdated = dateCreated.clone();
+	
+	// now end date is actually a user input
+        System.out.println("Enter the END DATE (no time) of the goal. Format is mm/dd/yy");
+	// getDateInstance() adjusts for time zone, encoding etc
+	DateFormat dateFormat = DateFormat.getDateInstance();
 
-        System.out.println("Enter the END DATE of the goal.");
-        String dateToEnd = "2009-01-01"; //@TODO
-
-        int projectID = 5;
+	// format method turns string into a java.util.Date: yy/mm/dd in
+	Date dateToEnd = dateFormat.format( userInput.nextLine());
+        projectID = 5;
 
         int parentGoalID = 2;
 
-        queryOrStatement = String.format(
-                "INSERT INTO goals(title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID)\n"
-                + "VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, %d)",
+	PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO goals(" 
+		+ title + ", " 
+		+ description + ", " 
+		+ priority + ", " 
+		+ type + ", " 
+		+ status + ", " 
+		+ "?" + ", " // dateCreated
+		+ "?", + ", " // dateUpdated
+		+ "?" + ", " // dateToEnd
+		+ projectID + ", "
+		+ parentGoalID);
+	preparedStatement.setDate(1, dateCreated);
+	preparedStatement.setDate(2, dateUpdated);
+	preparedStatement.setDate(3, dateToEnd);
 
-                title, description, priority, type, status, dateCreated, 
-                    dateUpdated, dateToEnd, projectID, parentGoalID);
         System.err.println("About to execute query:\n" + queryOrStatement); // DEBUG
         try
         {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(queryOrStatement);
+            preparedStatement.executeUpdate();
         }
         catch (SQLException sqe)
         {
