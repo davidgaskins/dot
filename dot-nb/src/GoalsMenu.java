@@ -3,6 +3,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,7 +89,7 @@ public class GoalsMenu
 	// Since we're just creating, updated time is created time.
 	// clone to make sure they're different objects. not sure
 	// it matters
-        Date dateUpdated = dateCreated.clone();
+        Date dateUpdated = (Date) dateCreated.clone();
 	
 	// now end date is actually a user input
         System.out.println("Enter the END DATE (no time) of the goal. Format is mm/dd/yy");
@@ -94,19 +97,24 @@ public class GoalsMenu
 	DateFormat dateFormat = DateFormat.getDateInstance();
 
 	// format method turns string into a java.util.Date: yy/mm/dd in
-	Date dateToEnd = dateFormat.format( userInput.nextLine());
-        projectID = 5;
+	Date dateToEnd;
+        try {
+            dateToEnd = dateFormat.parse( userInput.nextLine() );
+        } catch (ParseException ex) {
+            Logger.getLogger(GoalsMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int projectID = 5;
 
         int parentGoalID = 2;
 
-	PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO goals(" 
+	java.sql.PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO goals(" 
 		+ title + ", " 
 		+ description + ", " 
 		+ priority + ", " 
 		+ type + ", " 
 		+ status + ", " 
 		+ "?" + ", " // dateCreated
-		+ "?", + ", " // dateUpdated
+		+ "?" + ", " // dateUpdated
 		+ "?" + ", " // dateToEnd
 		+ projectID + ", "
 		+ parentGoalID);
