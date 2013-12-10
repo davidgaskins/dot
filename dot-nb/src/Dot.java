@@ -102,7 +102,6 @@ public class Dot {
                 System.exit(1);
 	}
 
-
         private void connectToMartelDB()
         {
             try {
@@ -146,17 +145,5 @@ public class Dot {
                 System.exit(1);
             }            
         }
-        
-//        private void connectToDB()
-//        {
-//            System.out.println("Enter the username.");
-//            String username = userInput.nextLine();
-//            System.out.println("Enter the password.");
-//            String password = userInput.nextLine();
-//            
-//            connection = DriverManager.getConnection(, username, password)
-//        }
-        
 
-        // http://stackoverflow.com/questions/326390/how-to-create-a-java-string-from-the-contents-of-a-file
 }
