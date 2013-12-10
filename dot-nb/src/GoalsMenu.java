@@ -70,6 +70,15 @@ public class GoalsMenu
     public void goalsMenuAdd()
     {
         userInput.nextLine();
+        
+        System.out.println("Enter the ID of the project this goal belongs to.");
+        ProjectsMenu projectsMenu = new ProjectsMenu(LOGGER, connection);
+        projectsMenu.projectsMenuView();
+        int projectID = userInput.nextInt();
+        
+        System.out.println("Enter the ID of the goal this goal is a subgoal of.");
+        goalsMenuView();
+        int parentGoalID = userInput.nextInt();
 
         System.out.println("Enter the TITLE of the goal.");
         String title = userInput.nextLine();
@@ -109,9 +118,7 @@ public class GoalsMenu
             System.out.println("Error. The date cannot be parsed. Exiting to Goals menu.");
             return;
         }
-        int projectID = 5;
-
-        int parentGoalID = 2;
+        
 
         try
         {

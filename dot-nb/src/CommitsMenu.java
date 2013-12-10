@@ -64,14 +64,14 @@ public class CommitsMenu
         }
     }
     
-    public void commitsMenuView()
+    public void commitsMenuView(int projectID)
     {
         ResultSet rs;
         // 1. get the goals
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM commits ORDER BY commitDate DESC");
+            rs = statement.executeQuery("SELECT * FROM commits INNER JOIN projects ON projectID = " + projectID + "ORDER BY commitDate DESC");
         }
         catch (SQLException sqe)
         {
@@ -110,9 +110,14 @@ public class CommitsMenu
     
     private void commitsMenuCheckout() 
     {
+        System.out.println("Enter the ID of the project to retrieve commits from.");
+        ProjectsMenu projectsMenu = new ProjectsMenu(LOGGER, connection);
+        projectsMenu.projectsMenuView();
+        int projectID = userInput.nextInt();
+
         ResultSet rs;
         //find commit to checkout
-        commitsMenuView();
+        commitsMenuView(projectID);
         
         System.out.println("Which commit would you like to checkout?");
         String commitIDToStopAt = userInput.nextLine();

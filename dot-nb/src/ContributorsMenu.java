@@ -65,7 +65,7 @@ public class ContributorsMenu
         //show the user all of the contributors and ask which for one
         //they would like to see their contact info.
         contributorsMenuView();
-        System.out.println("Enter the id of the contributor that you would like to see the contact information.");
+        System.out.println("Enter the id of the contributor that you would like to see the contact information of.");
 
         String toView = userInput.nextLine();
         int id = Integer.parseInt(toView);

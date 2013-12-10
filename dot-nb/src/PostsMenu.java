@@ -41,7 +41,7 @@ public class PostsMenu
                     + "you cannot ADD posts on behalf of users, "
                     + "but you can 1. moderate posts and 2. view them.");
             System.out.println("1. EDIT (moderate) a post.");
-            System.out.println("2. VIEW ALL posts.");
+            System.out.println("2. VIEW ALL posts on all projects.");
             System.out.println("3. BACK to main menu.");
             String line = userInput.nextLine();
             option = Integer.parseInt(line);
