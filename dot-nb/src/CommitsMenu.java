@@ -48,8 +48,14 @@ public class CommitsMenu
             System.out.println("1. DELETE latest commit");
             System.out.println("2. CHECKOUT the repo.");
             System.out.println("3. BACK to menu menu");
-            input = userInput.nextLine();
             
+            //check input
+            input = userInput.nextLine();
+            InputChecker in = new InputChecker(input);
+            if(in.hasAlpha()){
+                System.out.println("That was not an int, try again.");
+                continue;
+            }
             input = input.trim();
             switch(input) {
                 case "1":
@@ -116,7 +122,14 @@ public class CommitsMenu
         System.out.println("Enter the ID of the project to retrieve commits from.");
         ProjectsMenu projectsMenu = new ProjectsMenu(LOGGER, connection);
         projectsMenu.projectsMenuView();
-        int projectID = userInput.nextInt();
+        String input = userInput.nextLine();
+        //check input
+        InputChecker in = new InputChecker(input);
+        if(in.hasAlpha()){
+            System.out.println("That was not an int, returning to commits menu.");
+            return;
+        }
+        int projectID = Integer.parseInt(input);
 
         ResultSet rs;
         //find commit to checkout
@@ -126,7 +139,7 @@ public class CommitsMenu
         String commitIDToStopAt = userInput.nextLine();
                
         //find repository
-        System.out.println("What directory would you like to initialize");
+        System.out.println("Enter the direcory name that would you like to initialize");
         repositoryDir = userInput.nextLine();
         if(repositoryDir.trim().equals("")) {
             //set working directory

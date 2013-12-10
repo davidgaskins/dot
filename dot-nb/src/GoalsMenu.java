@@ -33,8 +33,6 @@ public class GoalsMenu
 
     public void goalsMenu()
     {
-        int option;
-
         System.out.println();
 
         boolean wantToQuit = false;
@@ -45,20 +43,25 @@ public class GoalsMenu
             System.out.println("2. EDIT a goal.");
             System.out.println("3. VIEW a goal.");
             System.out.println("4. BACK to main menu.");
-            option = userInput.nextInt();
-
-            switch (option)
+            String input = userInput.nextLine();
+            InputChecker in = new InputChecker(input);
+            if(in.hasAlpha()){
+                System.out.println("That was not an int, try again.");
+                continue;
+            }
+            input = input.trim();
+            switch (input)
             {
-                case 1: // add a goal
+                case "1": // add a goal
                     goalsMenuAdd();
                     break;
-                case 2: // edit a goal
+                case "2": // edit a goal
                     goalsMenuEdit();
                     break;
-                case 3: // view a goal
+                case "3": // view a goal
                     goalsMenuView();
                     break;
-                case 4:
+                case "4":
                     wantToQuit = true;
                     break;
                 default:
@@ -69,17 +72,33 @@ public class GoalsMenu
 
     public void goalsMenuAdd()
     {
-        userInput.nextLine();
         
         System.out.println("Enter the ID of the project this goal belongs to.");
         ProjectsMenu projectsMenu = new ProjectsMenu(LOGGER, connection);
         projectsMenu.projectsMenuView();
-        int projectID = userInput.nextInt();
+        
+        //take in and check input
+        String input = userInput.nextLine();
+        //check input
+        InputChecker in = new InputChecker(input);
+        if(in.hasAlpha()){
+            System.out.println("That was not an int, returning to goals menu.");
+            return;
+        }
+        int projectID = Integer.parseInt(input);
         
         System.out.println("Enter the ID of the goal this goal is a subgoal of.");
         goalsMenuView();
-        int parentGoalID = userInput.nextInt();
-
+        
+        input = userInput.nextLine();
+        //check input
+        in = new InputChecker(input);
+        if(in.hasAlpha()){
+            System.out.println("That was not an int, returning to goals menu.");
+            return;
+        }
+        int parentGoalID = Integer.parseInt(input);
+           
         System.out.println("Enter the TITLE of the goal.");
         String title = userInput.nextLine();
 
@@ -159,7 +178,14 @@ public class GoalsMenu
 
         // 3. Prompt for a goal by its ID
         System.out.println("Enter the ID of the goal you want to edit.");
-        int id = userInput.nextInt();
+        String input = userInput.nextLine();
+        //check input
+        InputChecker in = new InputChecker(input);
+        if(in.hasAlpha()){
+            System.out.println("That was not an int, returning to goals menu.");
+            return;
+        }
+        int id = Integer.parseInt(input);
 
         // 4. Even though it's inefficient to query one more time,
         // just get the Goal again by its ID
@@ -207,11 +233,17 @@ public class GoalsMenu
                 System.out.println("Parent ID: " + projectID); // just print so they know, can't edit
                 System.out.println("Parent Goal ID: " + parentGoalID);
                 System.out.println("7. Return to main menu.");
-
-                int option = userInput.nextInt();
-                switch (option)
+                input = userInput.nextLine();
+                //check input
+                in = new InputChecker(input);
+                if(in.hasAlpha()){
+                    System.out.println("That was not an int, returning to goals menu.");
+                    return;
+                }
+                input = input.trim();
+                switch (input)
                 { // begin switch on attribute to edit
-                    case 1:
+                    case "1":
                         System.out.println("Enter the new TITLE.");
                         String newTitle = userInput.nextLine();
                         rs.updateString(title, newTitle);
@@ -225,7 +257,7 @@ public class GoalsMenu
                         }
                         System.out.println("Update successful.");
                         break;
-                    case 2:
+                    case "2":
                         System.out.println("Enter the new DESCRIPTION.");
                         String newDescription = userInput.nextLine();
                         rs.updateString(title, newDescription);
@@ -239,7 +271,7 @@ public class GoalsMenu
                         }
                         System.out.println("Update successful.");
                         break;
-                    case 3: // @TODO: select priority from list
+                    case "3": // @TODO: select priority from list
                         System.out.println("Enter the new PRIORITY.");
                         String newPriority = userInput.nextLine();
                         rs.updateString(title, newPriority);
@@ -253,7 +285,7 @@ public class GoalsMenu
                         }
                         System.out.println("Update successful.");
                         break;
-                    case 4:
+                    case "4":
                         System.out.println("Enter the new TYPE.");
                         String newType = userInput.nextLine();
                         rs.updateString(title, newType);
@@ -267,7 +299,7 @@ public class GoalsMenu
                         }
                         System.out.println("Update successful.");
                         break;
-                    case 5:
+                    case "5":
                         System.out.println("Enter the new STATUS.");
                         String newStatus = userInput.nextLine();
                         rs.updateString(title, newStatus);
@@ -281,7 +313,7 @@ public class GoalsMenu
                         }
                         System.out.println("Update successful.");
                         break;
-                    case 6:
+                    case "6":
                         System.out.println("Enter the new END DATE.");
                         String newEndDate = userInput.nextLine();
                         rs.updateString(title, newEndDate);
@@ -295,7 +327,7 @@ public class GoalsMenu
                         }
                         System.out.println("Update successful.");
                         break;
-                    case 7:
+                    case "7":
                         System.out.println("Returning to main menu.");
                         wantToQuit = true;
                         break;

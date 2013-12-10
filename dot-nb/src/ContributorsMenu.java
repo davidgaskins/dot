@@ -25,10 +25,7 @@ public class ContributorsMenu
     
     public void contributorsMenu()
     {
-        int option;
-
-        System.out.println();
-
+        String input;
         boolean wantToQuit = false;
         while (!wantToQuit)
         {
@@ -37,20 +34,26 @@ public class ContributorsMenu
             System.out.println("2. DELETE a contributor.");
             System.out.println("3. VIEW a contributor's contact information.");
             System.out.println("4. BACK to main menu.");
-            
-            option = userInput.nextInt();
-            switch (option)
+            //check input
+            input = userInput.nextLine();
+            InputChecker in = new InputChecker(input);
+            if(in.hasAlpha()){
+                System.out.println("That was not an int, try again.");
+                continue;
+            }
+            input = input.trim();
+            switch (input)
             {
-                case 1: // add a contributor
+                case "1": // add a contributor
                     contributorsMenuView();
                     break;
-                case 2: // edit a contributor
+                case "2": // edit a contributor
                     contributorsMenuDelete();
                     break;
-                case 3: // view a contributor
+                case "3": // view a contributor
                     contributorsMenuViewContactInfo();
                     break;
-                case 4:
+                case "4":
                     wantToQuit = true;
                     break;
                 default:
@@ -66,16 +69,20 @@ public class ContributorsMenu
         //they would like to see their contact info.
         contributorsMenuView();
         System.out.println("Enter the id of the contributor that you would like to see the contact information of.");
-
-        String toView = userInput.nextLine();
-        int id = Integer.parseInt(toView);
+        String input = userInput.nextLine();
+        InputChecker in = new InputChecker(input);
+        if(in.hasAlpha()){
+            System.out.println("That was not an int, returning to contributors menu");
+            return;
+        }
+        input = input.trim();
         String statementString = "SELECT * FROM phoneNumbers " +
-                                    "WHERE contributorID = " + id;
+                                    "WHERE contributorID = " + input;
         try
         {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
-            System.out.println("You are viewing the contact information for contributor: " + id);
+            System.out.println("You are viewing the contact information for contributor: " + input);
             //simply print the resulting phoneNumbers
             while (rs.next())
             {
@@ -99,10 +106,15 @@ public class ContributorsMenu
         //that they would like to delete
         System.out.println("Enter the id of the contributor that you would like to delete.");
         contributorsMenuView();
-        String toDelete = userInput.nextLine();
-        int idToDelete = Integer.parseInt(toDelete);
+        String input = userInput.nextLine();
+        InputChecker in = new InputChecker(input);
+        if(in.hasAlpha()){
+            System.out.println("That was not an int, returning to contributors menu");
+            return;
+        }
+        input = input.trim();
         String statementString = "DELETE FROM contributors "+
-                            "WHERE id = " + idToDelete;
+                            "WHERE id = " + input;
         try // @TODO: make hierarchy of try catches for easier debugging
         {
             Statement statement = connection.createStatement();

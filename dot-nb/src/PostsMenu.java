@@ -30,7 +30,6 @@ public class PostsMenu
     
     public void postsMenu()
     {
-        int option;
 
         System.out.println();
 
@@ -44,17 +43,24 @@ public class PostsMenu
             System.out.println("2. VIEW ALL posts on all projects.");
             System.out.println("3. BACK to main menu.");
             String line = userInput.nextLine();
-            option = Integer.parseInt(line);
+            String input = userInput.nextLine();
+            //check input
+            InputChecker in = new InputChecker(input);
+            if(in.hasAlpha()){
+                System.out.println("That was not an int, returning to posts menu.");
+                return;
+            }
+            input = input.trim();
             
-            switch (option)
+            switch (input)
             {
-                case 1: // add a post
+                case "1": // add a post
                     postMenuEdit();
                     break;
-                case 2: //view all posts
+                case "2": //view all posts
                     postMenuView();
                     break;
-                case 3:
+                case "3":
                     wantToQuit = true;
                     break;
                 default:
@@ -68,8 +74,15 @@ public class PostsMenu
         ResultSet rs;
         postMenuView();
         System.out.println("Enter the ID of the post you want to edit.");
-        String newLine = userInput.nextLine();
-        int id = Integer.parseInt(newLine);
+        String input = userInput.nextLine();
+        //check input
+        InputChecker in = new InputChecker(input);
+        if(in.hasAlpha()){
+            System.out.println("That was not an int, returning to posts menu.");
+            return;
+        }
+        int id = Integer.parseInt(input);
+        
         System.out.println("Enter the new body of the post (all on one line).");
         String newBody = userInput.nextLine();
         String statementString = "UPDATE posts " + 
