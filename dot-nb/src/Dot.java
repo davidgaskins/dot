@@ -91,19 +91,20 @@ public class Dot {
 			String username = userInput.nextLine();
 			System.out.println("Enter the password.");
 			String password = userInput.nextLine();
-			connection = DriverManager.getConnection(url, username, password);
+			connection = DriverManager.getConnection(databaseURL, username, password);
 			connection.setAutoCommit(false);
 		} 
 		catch (SQLException sqe) 
 		{
-                // this is for LOGGING purposes
-		LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
-                sqe.printStackTrace();
-                connection = null;
+                    // this is for LOGGING purposes
+                    LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
+                    sqe.printStackTrace();
+                    connection = null;
 
-		// this is for the PROGRAM's purpose. i.e., exit because we can't do anything
-                System.out.println("Unable to connect to database. Exiting.");
-                System.exit(1);
+                    // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
+                    System.out.println("Unable to connect to database. Exiting.");
+                    System.exit(1);
+                }
 	}
 
         private void connectToMartelDB()
