@@ -70,7 +70,7 @@ public class ContributorsMenu
         String toView = userInput.nextLine();
         int id = Integer.parseInt(toView);
         String statementString = "SELECT * FROM phoneNumbers " +
-                                    "WHERE contributorID = " + id + ";";
+                                    "WHERE contributorID = " + id;
         try
         {
             Statement statement = connection.createStatement();
@@ -102,7 +102,7 @@ public class ContributorsMenu
         String toDelete = userInput.nextLine();
         int idToDelete = Integer.parseInt(toDelete);
         String statementString = "DELETE FROM contributors "+
-                            "WHERE id = " + idToDelete + ";";
+                            "WHERE id = " + idToDelete;
         try // @TODO: make hierarchy of try catches for easier debugging
         {
             Statement statement = connection.createStatement();
@@ -117,7 +117,7 @@ public class ContributorsMenu
         }
     }
     private void contributorsMenuView(){
-        String statementString = "SELECT * FROM contributors;";
+        String statementString = "SELECT * FROM contributors";
         try // @TODO: make hierarchy of try catches for easier debugging
         {
             Statement statement = connection.createStatement();

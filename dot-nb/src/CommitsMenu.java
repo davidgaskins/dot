@@ -49,6 +49,7 @@ public class CommitsMenu
             System.out.println("2. CHECKOUT the repo.");
             System.out.println("3. BACK to menu menu");
             input = userInput.nextLine();
+            
             input = input.trim();
             switch(input) {
                 case "1":
