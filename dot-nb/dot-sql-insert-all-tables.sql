@@ -46,7 +46,7 @@ INSERT INTO workAssignments VALUES
 	('2013-11-14 12:23:55', '2013-12-2 12:23:55', TRUE, 3, 2);
 INSERT INTO commits (contributorID, goalID, commitDate, description) VALUES
 	(1, 1, '2013-11-18 12:23:55', 'unfinshed syntax for projects insertion'),
-	(1, 1, '2013-11-19 12:23:55', 'finished syntax for projects insertion'),
+	(2, 2, '2013-11-19 12:23:55', 'finished syntax for projects insertion'),
 	(1, 1, '2013-11-24 12:23:55', 'unfinished syntax for phoneNumbers, goals posts insertion'),
 	(1, 1, '2013-11-29 12:23:55', 'finished syntax for phoneNumbers insertion'),
 	(1, 1, '2013-12-4 12:23:55', 'finished all the rest of the syntax insertion');
