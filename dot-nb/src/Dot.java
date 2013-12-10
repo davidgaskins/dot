@@ -20,7 +20,7 @@ public class Dot {
         // set session transaction isolation level serializable:
         // which locks access to DB whiel other transactions waiting
         // but as soon as you commit or rollback the waiting transactions can start
-        String databaseURL = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16"; // @TODO: where do we finally connect to when submitting?
+        private final static String databaseURL = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16"; // @TODO: where do we finally connect to when submitting?
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
         
@@ -83,7 +83,6 @@ public class Dot {
         
 	private void connectToDB()
 	{
-		
 		try 
 		{
 			System.out.println("Enter the username.");
@@ -138,27 +137,4 @@ public class Dot {
             }          
             }
         }
-        
-        private void connectToGaskinsDB()
-        {
-            try {
-                String url = "jdbc:mysql://davidgaskins.com:3306/dot";
-                String username = "root";
-                String password = "#FeqkTlnZ#";
-
-                connection = DriverManager.getConnection(url, username, password);
-                connection.setAutoCommit(false);
-            } catch (SQLException sqe)
-            {
-                // this is for LOGGING purposes
-                LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
-                sqe.printStackTrace();
-                connection = null;
-                
-                // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
-                System.out.println("Unable to connect to database. Exiting.");
-                System.exit(1);
-            }            
-        }
-
 }

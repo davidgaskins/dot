@@ -22,14 +22,14 @@ public class GoalsMenu
     Connection connection;
     private static Logger LOGGER;
     
+    private final Scanner userInput = new Scanner(System.in);
+    private String queryOrStatement;
+    
     public GoalsMenu(Logger LOGGER, Connection connection)
     {
         this.LOGGER = LOGGER;
         this.connection = connection;
     }
-    
-    private final Scanner userInput = new Scanner(System.in);
-    private String queryOrStatement;
 
     public void goalsMenu()
     {
@@ -70,6 +70,15 @@ public class GoalsMenu
     public void goalsMenuAdd()
     {
         userInput.nextLine();
+        
+        System.out.println("Enter the ID of the project this goal belongs to.");
+        ProjectsMenu projectsMenu = new ProjectsMenu(LOGGER, connection);
+        projectsMenu.projectsMenuView();
+        int projectID = userInput.nextInt();
+        
+        System.out.println("Enter the ID of the goal this goal is a subgoal of.");
+        goalsMenuView();
+        int parentGoalID = userInput.nextInt();
 
         System.out.println("Enter the TITLE of the goal.");
         String title = userInput.nextLine();
@@ -87,29 +96,29 @@ public class GoalsMenu
         System.out.println("Enter the STATUS of the goal.");
         String status = userInput.nextLine();
         
+        // Make a calendar, which has time zone and encoding info.
+        // Get the current time for the calendar, which returns util.Date
+        // Use getTime() on util.Date to get a milliseconds value
+        // Use that milliseconds value to make a sql.Date
         java.util.Calendar calendar = java.util.Calendar.getInstance();
         java.util.Date utilDate = calendar.getTime();
         java.sql.Date dateCreated = new java.sql.Date(utilDate.getTime());
 	// Since we're just creating, updated time is created time.
-	// clone to make sure they're different objects. not sure
-	// it matters
+	// clone to make sure they're different objects
         java.sql.Date dateUpdated = (java.sql.Date) dateCreated.clone();
-
-        System.out.println("Enter the END DATE (no time) of the goal. Format is mm dd yyy");
-        SimpleDateFormat format = new SimpleDateFormat("MM dd yyyy");
+        
+        SimpleDateFormat format = new SimpleDateFormat("MM dd yyyy"); // format parses the input
         java.sql.Date dateToEnd = null;
+        System.out.println("Enter the END DATE (no time) of the goal. Format is mm dd yyy");
         try {
             java.util.Date parsed = format.parse( userInput.nextLine() );
             dateToEnd = new java.sql.Date(parsed.getTime());
         } catch (ParseException ex) {
-            Logger.getLogger(GoalsMenu.class.getName()).log(Level.SEVERE, "Bad java. Bad!", ex);
-            System.out.println("Bad date format."); // @TODO. what to do now. reprompt?
+            Logger.getLogger(GoalsMenu.class.getName()).log(Level.SEVERE, "Error parsing date", ex);
+            System.out.println("Error. The date cannot be parsed. Exiting to Goals menu.");
+            return;
         }
         
-	// format method turns string into a java.util.Date: yy/mm/dd in
-        int projectID = 5;
-
-        int parentGoalID = 2;
 
         try
         {
@@ -131,10 +140,11 @@ public class GoalsMenu
 
         } catch (SQLException sqe)
         {
-            LOGGER.log(Level.SEVERE, "Error making date. Error: {0}", sqe.getMessage());
+            LOGGER.log(Level.SEVERE, "Error adding goal. Error: {0}", sqe.getMessage());
+            System.out.println("There was an error in adding the goal.");
+            return;
         }
-        System.err.println("About to execute query:\n" + queryOrStatement); // DEBUG
-        System.out.println("No exception, so let's assume your goal was added successfully.");
+        System.out.println("The goal was added successfully.");
     }
 
     public void goalsMenuEdit()
@@ -205,42 +215,84 @@ public class GoalsMenu
                         System.out.println("Enter the new TITLE.");
                         String newTitle = userInput.nextLine();
                         rs.updateString(title, newTitle);
-                        rs.updateRow();
+                        try
+                        {
+                            rs.updateRow();
+                        }
+                        catch (SQLException sqe)
+                        {
+                            System.out.println("The update was unsuccessful.");
+                        }
                         System.out.println("Update successful.");
                         break;
                     case 2:
                         System.out.println("Enter the new DESCRIPTION.");
                         String newDescription = userInput.nextLine();
                         rs.updateString(title, newDescription);
-                        rs.updateRow();
+                        try
+                        {
+                            rs.updateRow();
+                        }
+                        catch (SQLException sqe)
+                        {
+                            System.out.println("The update was unsuccessful.");
+                        }
                         System.out.println("Update successful.");
                         break;
                     case 3: // @TODO: select priority from list
                         System.out.println("Enter the new PRIORITY.");
                         String newPriority = userInput.nextLine();
                         rs.updateString(title, newPriority);
-                        rs.updateRow();
+                        try
+                        {
+                            rs.updateRow();
+                        }
+                        catch (SQLException sqe)
+                        {
+                            System.out.println("The update was unsuccessful.");
+                        }
                         System.out.println("Update successful.");
                         break;
                     case 4:
                         System.out.println("Enter the new TYPE.");
                         String newType = userInput.nextLine();
                         rs.updateString(title, newType);
-                        rs.updateRow();
+                        try
+                        {
+                            rs.updateRow();
+                        }
+                        catch (SQLException sqe)
+                        {
+                            System.out.println("The update was unsuccessful.");
+                        }
                         System.out.println("Update successful.");
                         break;
                     case 5:
                         System.out.println("Enter the new STATUS.");
                         String newStatus = userInput.nextLine();
                         rs.updateString(title, newStatus);
-                        rs.updateRow();
+                        try
+                        {
+                            rs.updateRow();
+                        }
+                        catch (SQLException sqe)
+                        {
+                            System.out.println("The update was unsuccessful.");
+                        }
                         System.out.println("Update successful.");
                         break;
                     case 6:
                         System.out.println("Enter the new END DATE.");
                         String newEndDate = userInput.nextLine();
                         rs.updateString(title, newEndDate);
-                        rs.updateRow();
+                        try
+                        {
+                            rs.updateRow();
+                        }
+                        catch (SQLException sqe)
+                        {
+                            System.out.println("The update was unsuccessful.");
+                        }
                         System.out.println("Update successful.");
                         break;
                     case 7:
@@ -256,7 +308,6 @@ public class GoalsMenu
         catch (SQLException sqe)
         {
             LOGGER.log(Level.SEVERE, "Error getting attributes from result set. Error: {0}", sqe.getMessage());
-            sqe.printStackTrace();
         }
     }
 

@@ -15,7 +15,6 @@ public class ContributorsMenu
     Connection connection;
     private static Logger LOGGER;
     private final Scanner userInput;
-    private String queryOrStatement;
     
     public ContributorsMenu(Logger LOGGER, Connection connection)
     {
@@ -40,7 +39,6 @@ public class ContributorsMenu
             System.out.println("4. BACK to main menu.");
             
             option = userInput.nextInt();
-            String userIn = userInput.nextLine();
             switch (option)
             {
                 case 1: // add a contributor
@@ -50,7 +48,7 @@ public class ContributorsMenu
                     contributorsMenuDelete();
                     break;
                 case 3: // view a contributor
-                    contributorsCIMenuView();
+                    contributorsMenuViewContactInfo();
                     break;
                 case 4:
                     wantToQuit = true;
@@ -62,17 +60,19 @@ public class ContributorsMenu
 
     }
         
-    private void contributorsCIMenuView()
+    private void contributorsMenuViewContactInfo()
     {
         //show the user all of the contributors and ask which for one
         //they would like to see their contact info.
-        System.out.println("Enter the id of the contributor that you would like to see the contact information.");
         contributorsMenuView();
+        System.out.println("Enter the id of the contributor that you would like to see the contact information of.");
+
         String toView = userInput.nextLine();
         int id = Integer.parseInt(toView);
         String statementString = "SELECT * FROM phoneNumbers " +
-                                    "WHERE contributorID = " + id + ";";
-        try{
+                                    "WHERE contributorID = " + id;
+        try
+        {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
             System.out.println("You are viewing the contact information for contributor: " + id);
@@ -102,7 +102,7 @@ public class ContributorsMenu
         String toDelete = userInput.nextLine();
         int idToDelete = Integer.parseInt(toDelete);
         String statementString = "DELETE FROM contributors "+
-                            "WHERE id = " + idToDelete + ";";
+                            "WHERE id = " + idToDelete;
         try // @TODO: make hierarchy of try catches for easier debugging
         {
             Statement statement = connection.createStatement();
@@ -117,7 +117,7 @@ public class ContributorsMenu
         }
     }
     private void contributorsMenuView(){
-        String statementString = "SELECT * FROM contributors;";
+        String statementString = "SELECT * FROM contributors";
         try // @TODO: make hierarchy of try catches for easier debugging
         {
             Statement statement = connection.createStatement();
@@ -140,7 +140,6 @@ public class ContributorsMenu
         {
             LOGGER.log(Level.SEVERE, "Error getting retrieving contributors. Error: {0}", sqe.getMessage());
             System.out.println("There was an error in retrieving the contributors.");
-            sqe.printStackTrace();
         }
 
     }

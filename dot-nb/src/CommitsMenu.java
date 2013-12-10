@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +26,6 @@ public class CommitsMenu
     Connection connection;
     private static Logger LOGGER;
     private final Scanner userInput;
-    private String queryOrStatement;
     private String repositoryDir;
     
     public CommitsMenu(Logger LOGGER, Connection connection)
@@ -43,11 +44,12 @@ public class CommitsMenu
             System.out.println("This is the commits menu. Obviously, "
                     + "you cannot commit changes on behalf of others, "
                     + "but you can 1. delete the latest commit, and "
-                    + "2. checkout project as it was at a specific commit. ");
+                    + "2. checkout a project as it was at a specific commit. ");
             System.out.println("1. DELETE latest commit");
             System.out.println("2. CHECKOUT the repo.");
             System.out.println("3. BACK to menu menu");
             input = userInput.nextLine();
+            
             input = input.trim();
             switch(input) {
                 case "1":
@@ -65,14 +67,14 @@ public class CommitsMenu
         }
     }
     
-    public void commitsMenuView()
+    public void commitsMenuView(int projectID)
     {
         ResultSet rs;
         // 1. get the goals
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM commits ORDER BY commitDate DESC");
+            rs = statement.executeQuery("SELECT * FROM commits INNER JOIN projects ON projectID = " + projectID + "ORDER BY commitDate DESC");
         }
         catch (SQLException sqe)
         {
@@ -111,9 +113,14 @@ public class CommitsMenu
     
     private void commitsMenuCheckout() 
     {
+        System.out.println("Enter the ID of the project to retrieve commits from.");
+        ProjectsMenu projectsMenu = new ProjectsMenu(LOGGER, connection);
+        projectsMenu.projectsMenuView();
+        int projectID = userInput.nextInt();
+
         ResultSet rs;
         //find commit to checkout
-        commitsMenuView();
+        commitsMenuView(projectID);
         
         System.out.println("Which commit would you like to checkout?");
         String commitIDToStopAt = userInput.nextLine();
@@ -149,16 +156,26 @@ public class CommitsMenu
         }            
 
         //apply diffs to make files
-        List<String> patches = new ArrayList<>();
+        HashMap<String, List<String> > patchesPerFile = new HashMap<>();
         try {
             while (rs.next())
             {
+                String fileName = rs.getString("fileAdjusted");
                 String p = rs.getString("bodyOfDiff");
-                patches.add(p);
+                List<String> patchesListForThatFile = patchesPerFile.get(fileName);
+                if (patchesListForThatFile == null)
+                    patchesListForThatFile = new ArrayList<>();
+                patchesListForThatFile.add(p);
             }
         } catch (SQLException ex) {
             Logger.getLogger(CommitsMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        FileUtil.build(patches, repositoryDir);
+        
+        for ( Map.Entry<String, List<String> > entry : patchesPerFile.entrySet())
+        {
+            String fileName = entry.getKey();
+            List<String> patches = entry.getValue();
+            FileUtil.build(patches, repositoryDir + "/" + fileName);
+        }
     }
 }
