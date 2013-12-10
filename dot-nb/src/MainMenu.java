@@ -90,9 +90,9 @@ public class MainMenu
         }
         catch (SQLException sqe)
         {
-            System.out.println("Error.");
+            System.out.println("Error. The rollback was unsuccessful.");
         }
-        System.out.println("The transaction has been rolled back.");
+        System.out.println("The changes since the last commit have been rolled back.");
     }
 
     private void commitMenu()
