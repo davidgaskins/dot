@@ -103,7 +103,7 @@ public class MainMenu
         }
         catch (SQLException sqe)
         {
-            System.out.println("Error.");
+            System.out.println("Error. The commit was not successful.");
         }     
         System.out.println("The transaction has been commited.");
     }

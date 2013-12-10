@@ -24,7 +24,6 @@ public class CommitsMenu
     Connection connection;
     private static Logger LOGGER;
     private final Scanner userInput;
-    private String queryOrStatement;
     private String repositoryDir;
     
     public CommitsMenu(Logger LOGGER, Connection connection)
@@ -43,7 +42,7 @@ public class CommitsMenu
             System.out.println("This is the commits menu. Obviously, "
                     + "you cannot commit changes on behalf of others, "
                     + "but you can 1. delete the latest commit, and "
-                    + "2. checkout project as it was at a specific commit. ");
+                    + "2. checkout a project as it was at a specific commit. ");
             System.out.println("1. DELETE latest commit");
             System.out.println("2. CHECKOUT the repo.");
             System.out.println("3. BACK to menu menu");

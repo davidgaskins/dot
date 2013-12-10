@@ -21,7 +21,6 @@ public class PostsMenu
     Connection connection;
     private static Logger LOGGER;
     private final Scanner userInput = new Scanner(System.in);
-    private String queryOrStatement;
     
     public PostsMenu(Logger LOGGER, Connection connection)
     {
@@ -42,9 +41,8 @@ public class PostsMenu
                     + "you cannot ADD posts on behalf of users, "
                     + "but you can 1. moderate posts and 2. view them.");
             System.out.println("1. EDIT (moderate) a post.");
-            System.out.println("2. VIEW ALL posts");
-            System.out.println("3. VIEW a posts by a particular contributor.");
-            System.out.println("4. BACK to main menu.");
+            System.out.println("2. VIEW ALL posts.");
+            System.out.println("3. BACK to main menu.");
             String line = userInput.nextLine();
             option = Integer.parseInt(line);
             
@@ -56,10 +54,7 @@ public class PostsMenu
                 case 2: //view all posts
                     postMenuView();
                     break;
-                case 3: //view all posts
-                    postMenuViewAPost();
-                    break;
-                case 4:
+                case 3:
                     wantToQuit = true;
                     break;
                 default:
@@ -92,7 +87,7 @@ public class PostsMenu
                 int contributorID = rs.getInt("contributorID");
                 int goalID = rs.getInt("goalID");
                 String postLine = String.format("%d\t\t %d\t\t %d\t\t %s\t %s", 
-                            id, contributorID, goalID, dateAndTime, body); 
+                            postID, contributorID, goalID, dateAndTime, body); 
                 
                 System.out.println(postLine);
             }
@@ -106,38 +101,7 @@ public class PostsMenu
         
         // retrieved the post. now list attributes to edit
     }
-    private void postMenuViewAPost()
-    {
-        System.out.println("Enter the contributor id for which you would like to view posts.");
-        String toView = userInput.nextLine();
-        int contId = Integer.parseInt(toView);
-
-        
-        String statementString = "SELECT * FROM posts " +
-                                    "WHERE contributorID = " + contId;
-        try{
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(statementString);
-            //simply print the resulting posts
-            String columnNames = "id\t\t contributorID\t goalID\t\tdataAndTime\t\tBody";
-            System.out.println(columnNames);
-            while (rs.next())
-            {
-                int id = rs.getInt("id");
-                String body = rs.getString("body");
-                String dateAndTime = rs.getString("dateAndTime");
-                int contributorID = rs.getInt("contributorID");
-                int goalID = rs.getInt("goalID");
-                String postLine = String.format("%d\t\t %d\t\t %d\t\t %s\t %s", 
-                            id, contributorID, goalID, dateAndTime, body); 
-                
-                System.out.println(postLine);
-            }
-        } catch (SQLException sqe) // @TODO
-        {
-//            System.out.println("failed to view contact information for id:"+ id);
-        }
-    }
+    
     private void postMenuView() 
     {
         String statementString = "SELECT * FROM posts;";
