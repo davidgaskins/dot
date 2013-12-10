@@ -35,8 +35,12 @@ public class Dot {
             dot.connectToMartelDB();
             dot.initializeMartelDB();
             
+            FileUtil.init();
+            
             MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
             mainMenu.mainMenu();
+            
+            FileUtil.close();
 	}
 
         public Dot()

@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,6 +28,8 @@ public class FileUtil {
     public static ConfigFile settings;
     public static int repositoryCount = 0;
     public static String homeDirectory;
+    public static String emptyFile;
+    //public static File emptyFile;
     /**
      * To be called at the start of this program. Makes sure that globally
      * needed files are present and creates them if not.
@@ -87,7 +90,7 @@ public class FileUtil {
         }
         
         repositoryCount = Integer.parseInt(settings.get("repository count"));
-        for(int i=0; i<repositoryCount; i++) {
+        for(int i=0; i<repositoryCount && false; i++) {
             if(checkRepository(settings.get("repostory " + i))){
                 System.err.println("Repository " + settings.get("repository " + i) + " is invalid");
             }
@@ -125,6 +128,15 @@ public class FileUtil {
             Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
+    }
+    
+    public static void build(List<String> patches, String path) {
+        try {
+            File f = new File(path);
+            f.createNewFile();
+        } catch (IOException ex) {
+            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     static boolean checkRepository(String directory) {
