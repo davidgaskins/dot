@@ -71,8 +71,6 @@ public class PostsMenu
     private void postMenuEdit() 
     {
         ResultSet rs;
-        
-      
         postMenuView();
         System.out.println("Enter the ID of the post you want to edit.");
         String newLine = userInput.nextLine();
