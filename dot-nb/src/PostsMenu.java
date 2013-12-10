@@ -70,27 +70,18 @@ public class PostsMenu
         System.out.println("Enter the ID of the post you want to edit.");
         String newLine = userInput.nextLine();
         int id = Integer.parseInt(newLine);
-        String statementString = "SELECT * FROM posts "
-                                        + "WHERE id = "+ id+ ";";
-        // get the post again by its id
+        System.out.println("Enter the new body of the post (all on one line).");
+        String newBody = userInput.nextLine();
+        String statementString = "UPDATE posts " + 
+                                    "SET body = " + newBody 
+                                        + "WHERE id = "+ id;
+        
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery(statementString);
-            String columnNames = "id\t\tcontributorID\t goalID\t\tdataAndTime\tBody";
-            System.out.println(columnNames);
-            while (rs.next())
-            {
-                int postID = rs.getInt("id");
-                String body = rs.getString("body");
-                String dateAndTime = rs.getString("dateAndTime");
-                int contributorID = rs.getInt("contributorID");
-                int goalID = rs.getInt("goalID");
-                String postLine = String.format("%d\t\t %d\t\t %d\t\t %s\t %s", 
-                            postID, contributorID, goalID, dateAndTime, body); 
-                
-                System.out.println(postLine);
-            }
+            statement.executeUpdate(statementString);
+            //print out the database to show that it has been properly updated
+            postMenuView();
         }
         catch (SQLException sqe)
         {
@@ -104,7 +95,7 @@ public class PostsMenu
     
     private void postMenuView() 
     {
-        String statementString = "SELECT * FROM posts;";
+        String statementString = "SELECT * FROM posts";
         try // @TODO: make hierarchy of try catches for easier debugging
         {
             Statement statement = connection.createStatement();
