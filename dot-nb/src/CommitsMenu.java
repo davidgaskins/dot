@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -147,16 +149,26 @@ public class CommitsMenu
         }            
 
         //apply diffs to make files
-        List<String> patches = new ArrayList<>();
+        HashMap<String, List<String> > patchesPerFile = new HashMap<>();
         try {
             while (rs.next())
             {
+                String fileName = rs.getString("fileAdjusted");
                 String p = rs.getString("bodyOfDiff");
-                patches.add(p);
+                List<String> patchesListForThatFile = patchesPerFile.get(fileName);
+                if (patchesListForThatFile == null)
+                    patchesListForThatFile = new ArrayList<>();
+                patchesListForThatFile.add(p);
             }
         } catch (SQLException ex) {
             Logger.getLogger(CommitsMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        FileUtil.build(patches, repositoryDir);
+        
+        for ( Map.Entry<String, List<String> > entry : patchesPerFile.entrySet())
+        {
+            String fileName = entry.getKey();
+            List<String> patches = entry.getValue();
+            FileUtil.build(patches, repositoryDir + "/" + fileName);
+        }
     }
 }
