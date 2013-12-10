@@ -31,8 +31,12 @@ public class Dot {
             // permission to do that on infoserver. waiting on David Gaskins to set up server
             // where we have permission to create db
             
+            FileUtil.init();
+            
             MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
             mainMenu.mainMenu();
+            
+            FileUtil.close();
 	}
 
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());

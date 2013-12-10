@@ -28,6 +28,8 @@ public class CommitsMenu
     
     public void commitsMenu()
     {
-        
+        //this is test code
+        Commit commity = new Commit(FileUtil.settings.get("repository"));
+        commity.generateChanges();
     }
 }
