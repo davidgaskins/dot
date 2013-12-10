@@ -50,7 +50,7 @@ public class Dot {
                 System.exit(1);
             }
             
-            System.out.println("DB_DRIVER init succesful.");
+            System.out.println("DB_DRIVER init successful.");
         }
 
 	//static User guy;
