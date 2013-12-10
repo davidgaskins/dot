@@ -1,5 +1,6 @@
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -97,7 +98,7 @@ public class GoalsMenu
 	DateFormat dateFormat = DateFormat.getDateInstance();
 
 	// format method turns string into a java.util.Date: yy/mm/dd in
-	Date dateToEnd;
+	Date dateToEnd = new Date();
         try {
             dateToEnd = dateFormat.parse( userInput.nextLine() );
         } catch (ParseException ex) {
@@ -107,7 +108,7 @@ public class GoalsMenu
 
         int parentGoalID = 2;
 
-	java.sql.PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO goals(" 
+	PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO goals(" 
 		+ title + ", " 
 		+ description + ", " 
 		+ priority + ", " 

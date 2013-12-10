@@ -1,7 +1,12 @@
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
@@ -11,7 +16,8 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author 009677081
+ * @author David Martel
+ * @author Tan Tran
  */
 public class CommitsMenu 
 {
@@ -31,68 +37,122 @@ public class CommitsMenu
     public void commitsMenu()
     {
         String input;
-        do{
-            System.out.println("Commits Menu");
-            System.out.println("1. Initialize Repository");
-            System.out.println("2. Make Commit");
-            System.out.println("3. Checkout commit");
-            System.out.println("4. Exit");
+        boolean wantToQuit = false;
+        while (!wantToQuit)
+        {
+            System.out.println("This is the commits menu. Obviously, "
+                    + "you cannot commit changes on behalf of others, "
+                    + "but you can 1. delete the latest commit, and "
+                    + "2. checkout project as it was at a specific commit. ");
+            System.out.println("1. DELETE latest commit");
+            System.out.println("2. CHECKOUT the repo.");
+            System.out.println("3. BACK to menu menu");
             input = userInput.nextLine();
             input = input.trim();
             switch(input) {
                 case "1":
-                    initRepository();
+                    // @TODO deleteLatestCommit();
                     break;
                 case "2":
-                    makeCommit();
+                    commitsMenuCheckout();
                     break;
                 case "3":
-                    checkout();
-                    break;
-                case "4":
+                    wantToQuit = true;
                     break;
                 default:
                     System.out.println("Invalid input");
-            
             }
-        
-        } while(!"4".equals(input));
+        }
     }
     
-    private void makeCommit() {
-        //potentially ask user for directory
+    public void commitsMenuView()
+    {
+        ResultSet rs;
+        // 1. get the goals
+        try
+        {
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT * FROM commits ORDER BY commitDate DESC");
+        }
+        catch (SQLException sqe)
+        {
+            LOGGER.log(Level.SEVERE, "Error processing result set. Error: {0}", sqe.getMessage());
+            return;
+        }            
         
-        //use directory from config file to make life easier
-        repositoryDir = FileUtil.settings.get("repository");
-        
-        //generate list of patche files
-        Commit commity = new Commit(repositoryDir);
-        List<Commit.Change> diffList = commity.generateChanges();
-        
-        //start of sql
+        // 2. print out the COMMITS
+        String columnNames = "ID\t ContributorID\t GoalID\t CommitDate\t Description\t";
+        System.out.println(columnNames);
+        try
+        {
+            while (rs.next())
+            {
+                int id = rs.getInt("id");
+                String contributorID = rs.getString("contributorID");
+                String goalID = rs.getString("goalID");
+                String commitDate = rs.getDate("commitDate").toString();
+                String description = rs.getDate("description").toString();
+                String goalRow = String.format("%4d\t"
+                        + "%4d\t"
+                        + "%4d\t"
+                        + "%s\t"
+                        + "%s\t",
+                        id, contributorID, goalID, commitDate, description);
+                System.out.println(goalRow);
+            }
+        }
+        catch (SQLException sqe)
+        {
+            LOGGER.log(Level.SEVERE, "Error processing result set. Error: {0}", sqe.getMessage());
+            System.out.println("There was an error in processing the result set.");
+            return;
+        }
     }
     
-    private void checkout() {
-        String commitID;
+    private void commitsMenuCheckout() 
+    {
+        ResultSet rs;
         //find commit to checkout
-        System.out.println("Which commit would you like to checkout (Default=LastCommit): ");
-        commitID = userInput.nextLine();
+        commitsMenuView();
         
+        System.out.println("Which commit would you like to checkout?");
+        String commitIDToStopAt = userInput.nextLine();
+               
         //find repository
-        System.out.println("What directory would you like to initialize (Default=WorkingDirectory): ");
+        System.out.println("What directory would you like to initialize");
         repositoryDir = userInput.nextLine();
         if(repositoryDir.trim().equals("")) {
             //set working directory
             repositoryDir = System.getProperty("user.dir");
         }
-        
-        //get list of diffs from database
-        
+
+        // 4. get diffs up until that point
+        try
+        {
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery("SELECT bodyOfDiff"
+                    + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID"
+                    + "ORDER BY commits.commitDate DESC"
+                    + "WHERE commits.commitID <=" + commitIDToStopAt);
+        }
+        catch (SQLException sqe)
+        {
+            LOGGER.log(Level.SEVERE, "Error getting diffs. Error: {0}", sqe.getMessage());
+            System.out.println("There was an error in retrieving the Goal.");
+            return;
+        }            
+
         //apply diffs to make files
-        
-    }
-    
-    private void initRepository() {
-        
+        List<String> patches = new ArrayList<>();
+        try {
+            while (rs.next())
+            {
+                String p = rs.getString("bodyOfDiff");
+                patches.add(p);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CommitsMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FileUtil.build(patches, repositoryDir);
     }
 }
