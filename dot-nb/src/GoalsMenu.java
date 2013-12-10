@@ -4,13 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Date;
 
 /**
  *
@@ -85,56 +86,54 @@ public class GoalsMenu
 
         System.out.println("Enter the STATUS of the goal.");
         String status = userInput.nextLine();
-
-	// Date() initializer is set to the current time
-        Date dateCreated = new Date();
+        
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        java.util.Date utilDate = calendar.getTime();
+        java.sql.Date dateCreated = new java.sql.Date(utilDate.getTime());
 	// Since we're just creating, updated time is created time.
 	// clone to make sure they're different objects. not sure
 	// it matters
-        Date dateUpdated = (Date) dateCreated.clone();
-	
-	// now end date is actually a user input
-        System.out.println("Enter the END DATE (no time) of the goal. Format is mm/dd/yy");
-	// getDateInstance() adjusts for time zone, encoding etc
-	DateFormat dateFormat = DateFormat.getDateInstance();
+        java.sql.Date dateUpdated = (java.sql.Date) dateCreated.clone();
 
-	// format method turns string into a java.util.Date: yy/mm/dd in
-	Date dateToEnd = new Date();
+        System.out.println("Enter the END DATE (no time) of the goal. Format is mm dd yyy");
+        SimpleDateFormat format = new SimpleDateFormat("MM dd yyyy");
+        java.sql.Date dateToEnd = null;
         try {
-            dateToEnd = dateFormat.parse( userInput.nextLine() );
+            java.util.Date parsed = format.parse( userInput.nextLine() );
+            dateToEnd = new java.sql.Date(parsed.getTime());
         } catch (ParseException ex) {
-            Logger.getLogger(GoalsMenu.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GoalsMenu.class.getName()).log(Level.SEVERE, "Bad java. Bad!", ex);
+            System.out.println("Bad date format."); // @TODO. what to do now. reprompt?
         }
+        
+	// format method turns string into a java.util.Date: yy/mm/dd in
         int projectID = 5;
 
         int parentGoalID = 2;
 
-	PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO goals(" 
-		+ title + ", " 
-		+ description + ", " 
-		+ priority + ", " 
-		+ type + ", " 
-		+ status + ", " 
-		+ "?" + ", " // dateCreated
-		+ "?" + ", " // dateUpdated
-		+ "?" + ", " // dateToEnd
-		+ projectID + ", "
-		+ parentGoalID);
-	preparedStatement.setDate(1, dateCreated);
-	preparedStatement.setDate(2, dateUpdated);
-	preparedStatement.setDate(3, dateToEnd);
-
-        System.err.println("About to execute query:\n" + queryOrStatement); // DEBUG
         try
         {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO goals(" 
+                    + title + ", " 
+                    + description + ", " 
+                    + priority + ", " 
+                    + type + ", " 
+                    + status + ", " 
+                    + "?" + ", " // dateCreated
+                    + "?" + ", " // dateUpdated
+                    + "?" + ", " // dateToEnd
+                    + projectID + ", "
+                    + parentGoalID);
+            preparedStatement.setDate(1, dateCreated, calendar);
+            preparedStatement.setDate(2, dateUpdated, calendar);
+            preparedStatement.setDate(3, dateToEnd, calendar);
             preparedStatement.executeUpdate();
-        }
-        catch (SQLException sqe)
+
+        } catch (SQLException sqe)
         {
-            LOGGER.log(Level.SEVERE, "Error adding goals. Error: {0}", sqe.getMessage());
-            sqe.printStackTrace();
-            System.exit(1);
+            LOGGER.log(Level.SEVERE, "Error making date. Error: {0}", sqe.getMessage());
         }
+        System.err.println("About to execute query:\n" + queryOrStatement); // DEBUG
         System.out.println("No exception, so let's assume your goal was added successfully.");
     }
 
