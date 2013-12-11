@@ -128,7 +128,7 @@ public class CommitsMenu
         String commitIDToStopAt = userInput.nextLine();
                
         //find repository
-        System.out.println("Enter the direcory name that would you like to initialize");
+        System.out.println("Enter the full path for the new repository");
         //userInput.nextLine();
         repositoryDir = userInput.nextLine();
         if(repositoryDir.trim().equals("")) {
