@@ -70,13 +70,13 @@ INSERT INTO changes VALUES
 	('readme2.txt', '', 'ae03lje9v2', 4),
 	('hello.cpp', CONCAT('0a1,6',  CHAR(13),  '> #include <iostream>'
        ,  CHAR(13),  '> ',  CHAR(13),  '> int main() {'
-       ,  CHAR(13),  '> 	std::cout << "The cow says Hello World\n";'
-       ,  CHAR(13),  '> 	return 0;',  CHAR(13),  '> }'),
+       ,  CHAR(13),  '> std::cout << "The cow says Hello World" << std::endl;'
+       ,  CHAR(13),  '> return 0;',  CHAR(13),  '> }'),
          'ae03lje9v3', 4),
 
 	('readme.txt', CONCAT('4a5,7',  CHAR(13),  '> '
        ,  CHAR(13),  '> To compile, just run '
-       ,  CHAR(13),  '> 	sh build.sh'), 'ae03lje9v2', 5),
+       ,  CHAR(13),  '> sh build.sh'), 'ae03lje9v2', 5),
 	('readme2.txt', '', 'ae03lje9v2', 5),
 	('hello.cpp', '', 'ae03lje9v3', 5),
 	('build', CONCAT('0a1,3',  CHAR(13),  '> #!/bin/sh'
