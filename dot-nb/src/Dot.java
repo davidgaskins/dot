@@ -28,30 +28,29 @@ public class Dot {
             Dot dot = new Dot();
             dot.connectToMartelDB();
             MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
+            
             boolean wantToQuit = false;
             while (!wantToQuit)
             {
-                    System.out.println("Would you like to \n"
-                        + "1. Reinitialize the database\n"
-                        + "2. Continue with the old database");
-                        String input =dot.userInput.nextLine();
+                System.out.println("This is the administration tool for the DOT issue tracker");
+                System.out.println("nd source control program. Before beginning, choose:");
+                System.out.println("1. Reinitialize the database with sample data");
+                System.out.println("2. Continue with the old database");
+                String input =dot.userInput.nextLine();
                     //check input
-                    InputChecker in = new InputChecker(input);
-                    if(in.hasAlpha()){
-                       System.out.println("That was not an int, returning to goals menu.");
-                            return;
-                     }
-                    input = input.trim();
+                InputChecker in = new InputChecker(input);
+                if(in.hasAlpha())
+                {
+                    System.out.println("That was not an int, returning to goals menu.");
+                    return;
+                }
+                input = input.trim();
 
-                // since there isn't an array of statements to execute,
-                // all this menu code doesn't need to be in the same place.
-                // let's just call static methods for each of the submenus
-                // so the main method isn't cluttered with all of them.
                 switch (input)
                 {
                     case "1": // COMMITS
                         dot.initializeMartelDB();
-                        mainMenu.commitMenu();
+                        mainMenu.commitToDatabaseMenu();
                         //dont need a break; here
                     case "2":
                         wantToQuit = true;
