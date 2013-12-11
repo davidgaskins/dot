@@ -122,7 +122,8 @@ public class Dot {
                     connection = null;
 
                     // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
-                    System.out.println("Unable to connect to database. Exiting.");
+                    System.out.println("Unable to connect to database. Make sure you are connected to.");
+                    System.out.println("the heart.cecs.csulb.edu server by SSH.");
                     System.exit(1);
                 }
 	}
