@@ -81,7 +81,7 @@ public class GoalsMenu
         }
         int projectID = Integer.parseInt(input);
         
-        System.out.println("Enter the ID of the goal this goal is a subgoal of.");
+        System.out.println("Enter the ID of the goal this goal is a subgoal of, or 0 for a top-level goal.");
         goalsMenuView();
         
         input = userInput.nextLine();
@@ -91,8 +91,8 @@ public class GoalsMenu
             System.out.println("That was not an int, returning to goals menu.");
             return;
         }
-        int parentGoalID = Integer.parseInt(input);
-           
+        Integer parentGoalID = Integer.parseInt(input);
+        
         System.out.println("Enter the TITLE of the goal.");
         String title = userInput.nextLine();
 
@@ -132,36 +132,71 @@ public class GoalsMenu
             return;
         }
 
-        try
+        if (parentGoalID == 0)
         {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO goals"
-                    + "(title, description, priority, type, status, "
-                    + "dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID) "
-                    + "VALUES("
-                    + "'" + title + "', " 
-                    + "'" + description + "', " 
-                    + "'" + priority + "', " 
-                    + "'" + type + "', " 
-                    + "'" + status + "', " 
-                    + "?" + ", " // dateCreated
-                    + "?" + ", " // dateUpdated
-                    + "?" + ", " // dateToEnd
-                    + projectID + ", "
-                    + parentGoalID
-                    + ");");
-            preparedStatement.setDate(1, dateCreated, calendar);
-            preparedStatement.setDate(2, dateUpdated, calendar);
-            preparedStatement.setDate(3, dateToEnd, calendar);
-            preparedStatement.executeUpdate();
+            try
+            {
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "INSERT INTO goals"
+                        + "(title, description, priority, type, status, "
+                        + "dateCreated, dateUpdated, dateToEnd, projectID) "
+                        + "VALUES("
+                        + "'" + title + "', " 
+                        + "'" + description + "', " 
+                        + "'" + priority + "', " 
+                        + "'" + type + "', " 
+                        + "'" + status + "', " 
+                        + "?" + ", " // dateCreated
+                        + "?" + ", " // dateUpdated
+                        + "?" + ", " // dateToEnd
+                        + projectID
+                        + ");");
+                preparedStatement.setDate(1, dateCreated, calendar);
+                preparedStatement.setDate(2, dateUpdated, calendar);
+                preparedStatement.setDate(3, dateToEnd, calendar);
+                preparedStatement.executeUpdate();
 
-        } catch (SQLException sqe)
-        {
-            LOGGER.log(Level.SEVERE, "Error adding goal. Error: {0}", sqe.getMessage());
-            System.out.println("There was an error in adding the goal.");
-            return;
+            } catch (SQLException sqe)
+            {
+                LOGGER.log(Level.SEVERE, "Error adding goal. Error: {0}", sqe.getMessage());
+                System.out.println("There was an error in adding the goal.");
+                return;
+            }
+            System.out.println("The goal was added successfully.");
         }
-        System.out.println("The goal was added successfully.");
+        else
+        {
+            try
+            {
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "INSERT INTO goals"
+                        + "(title, description, priority, type, status, "
+                        + "dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID) "
+                        + "VALUES("
+                        + "'" + title + "', " 
+                        + "'" + description + "', " 
+                        + "'" + priority + "', " 
+                        + "'" + type + "', " 
+                        + "'" + status + "', " 
+                        + "?" + ", " // dateCreated
+                        + "?" + ", " // dateUpdated
+                        + "?" + ", " // dateToEnd
+                        + projectID + ", "
+                        + parentGoalID
+                        + ");");
+                preparedStatement.setDate(1, dateCreated, calendar);
+                preparedStatement.setDate(2, dateUpdated, calendar);
+                preparedStatement.setDate(3, dateToEnd, calendar);
+                preparedStatement.executeUpdate();
+
+            } catch (SQLException sqe)
+            {
+                LOGGER.log(Level.SEVERE, "Error adding goal. Error: {0}", sqe.getMessage());
+                System.out.println("There was an error in adding the goal.");
+                return;
+            }
+            System.out.println("The goal was added successfully.");
+        }
     }
 
     public void goalsMenuView()
@@ -181,7 +216,7 @@ public class GoalsMenu
         }            
         System.out.println("Retrieved goals successfully.");
         // 2. print out the goals
-        String columnNames = "ID\t Name\t description\t DateCreated\t DateUpdated\t";
+        String columnNames = "ID\t Name\t\t description\t\t\t DateCreated\t DateUpdated\t";
         System.out.println(columnNames);
         try
         {
