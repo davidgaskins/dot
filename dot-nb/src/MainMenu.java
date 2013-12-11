@@ -25,7 +25,6 @@ public class MainMenu
         this.LOGGER = LOGGER;
         this.connection = connection;
     }
-    
     public void mainMenu()
     {
         GoalsMenu goalsMenu = new GoalsMenu(LOGGER, connection);
@@ -103,8 +102,8 @@ public class MainMenu
         }
         System.out.println("The changes since the last commit have been rolled back.");
     }
-
-    private void commitMenu()
+    //needs to be public for access from main
+    public void commitMenu()
     {
         try
         {

@@ -111,7 +111,6 @@ public class SampleQueryMenu
             System.out.println("There was an error executing the query.");
         }
     }
-    
     public void query3()
     {
         ResultSet rs = null;

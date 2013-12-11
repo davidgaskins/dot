@@ -32,11 +32,43 @@ public class Dot {
             LOGGER.setLevel(Level.INFO);
             Dot dot = new Dot();
             dot.connectToMartelDB();
-            dot.initializeMartelDB();
+            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
+            boolean wantToQuit = false;
+            while (!wantToQuit)
+            {
+                    System.out.println("Would you like to \n"
+                        + "1. Reinitialize the database\n"
+                        + "2. Continue with the old database");
+                        String input =dot.userInput.nextLine();
+                    //check input
+                    InputChecker in = new InputChecker(input);
+                    if(in.hasAlpha()){
+                       System.out.println("That was not an int, returning to goals menu.");
+                            return;
+                     }
+                    input = input.trim();
+
+                // since there isn't an array of statements to execute,
+                // all this menu code doesn't need to be in the same place.
+                // let's just call static methods for each of the submenus
+                // so the main method isn't cluttered with all of them.
+                switch (input)
+                {
+                    case "1": // COMMITS
+                        dot.initializeMartelDB();
+                        mainMenu.commitMenu();
+                        //dont need a break; here
+                    case "2":
+                        wantToQuit = true;
+                        break;
+                    default:
+                            System.out.println("Invalid menu option");
+                        break;
+                }
+            }
             
             FileUtil.init();
             
-            MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
             mainMenu.mainMenu();
             
             FileUtil.close();
@@ -108,7 +140,6 @@ public class Dot {
         private void connectToMartelDB()
         {
             try {
-                System.out.println("Connecting to local server");
                 String url = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
                 String username = "cecs323m16";
                 String password = "aigoiY";
