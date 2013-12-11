@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -140,20 +142,38 @@ public class FileUtil {
             File f = new File(path);
             f.createNewFile();
             
+            
             Runtime r = Runtime.getRuntime();
             //apply patches
             
             for(String patch: patches) {
-            Process p = r.exec("patch " + path);
-            OutputStreamWriter writer= new OutputStreamWriter(p.getOutputStream());
-            writer.write(patch);
-            writer.flush();;
-            p.waitFor();
+                System.out.println("About to apply: \n" + patch);
+                //create patch file (because piping didn't work)
+                File patchy = new File(path + ".patch");
+                patchy.createNewFile();
+                BufferedWriter patchWriter = new BufferedWriter(new FileWriter(patchy,true));
+                patchWriter.write(patch);
+                /*
+                String lines[] = patch.split("\n");
+                for(int i=0; i<lines.length; i++) {
+                    patchWriter.write(lines[i] + "\n");
+                    //System.out.println(lines[i]);
+                }
+                        */
+                patchWriter.flush();
+                patchWriter.close();
+                
+                Process p = r.exec("patch " + path + " " + path + ".patch");
+                p.waitFor();
+               // if(!path.contains("build"))
+                    //patchy.delete();
             
             }
         } catch (IOException ex) {
+            ex.printStackTrace();
             Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {
+            ex.printStackTrace();
             Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

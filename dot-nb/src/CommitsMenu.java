@@ -141,11 +141,14 @@ public class CommitsMenu
                
         //find repository
         System.out.println("Enter the direcory name that would you like to initialize");
+        //userInput.nextLine();
         repositoryDir = userInput.nextLine();
         if(repositoryDir.trim().equals("")) {
             //set working directory
             repositoryDir = System.getProperty("user.dir");
         }
+        
+        //System.out.println(repositoryDir);
 
         // 4. get diffs up until that point
         try
@@ -158,8 +161,8 @@ public class CommitsMenu
             } else {
                 rs = statement.executeQuery("SELECT bodyOfDiff, fileAdjusted "
                     + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID "
-                    + "ORDER BY commits.commitDate DESC "
-                    + "WHERE commits.commitID <= " + commitIDToStopAt);
+                    + "WHERE commits.id <= " + commitIDToStopAt
+                    + " ORDER BY commits.commitDate DESC ");
             }
         }
         catch (SQLException sqe)
@@ -176,17 +179,21 @@ public class CommitsMenu
             {
                 String fileName = rs.getString("fileAdjusted");
                 String p = rs.getString("bodyOfDiff");
+                //System.out.println(fileName + " " + p);
                 List<String> patchesListForThatFile = patchesPerFile.get(fileName);
-                if (patchesListForThatFile == null)
+                if (patchesListForThatFile == null) {
                     patchesListForThatFile = new ArrayList<>();
+                    patchesPerFile.put(fileName, patchesListForThatFile);
+                }
                 patchesListForThatFile.add(p);
             }
         } catch (SQLException ex) {
             Logger.getLogger(CommitsMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        //System.out.println("Preparing to build files");
         for ( Map.Entry<String, List<String> > entry : patchesPerFile.entrySet())
         {
+            //System.out.println("Entering for loop");
             String fileName = entry.getKey();
             List<String> patches = entry.getValue();
             FileUtil.build(patches, repositoryDir + "/" + fileName);
