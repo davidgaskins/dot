@@ -129,14 +129,12 @@ public class CommitsMenu
                
         //find repository
         System.out.println("Enter the full path for the new repository");
-        //userInput.nextLine();
         repositoryDir = userInput.nextLine();
         if(repositoryDir.trim().equals("")) {
             //set working directory
             repositoryDir = System.getProperty("user.dir");
         }
         
-        //System.out.println(repositoryDir);
 
         // 4. get diffs up until that point
         try
@@ -178,10 +176,8 @@ public class CommitsMenu
         } catch (SQLException ex) {
             Logger.getLogger(CommitsMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //System.out.println("Preparing to build files");
         for ( Map.Entry<String, List<String> > entry : patchesPerFile.entrySet())
         {
-            //System.out.println("Entering for loop");
             String fileName = entry.getKey();
             List<String> patches = entry.getValue();
             FileUtil.build(patches, repositoryDir + "/" + fileName);

@@ -54,7 +54,7 @@ public class MainMenu
 
             // since there isn't an array of statements to execute,
             // all this menu code doesn't need to be in the same place.
-            // let's just call static methods for each of the submenus
+            // so just call static methods for each of the submenus
             // so the main method isn't cluttered with all of them.
             switch (input)
             {
