@@ -128,7 +128,7 @@ public class CommitsMenu
         String commitIDToStopAt = userInput.nextLine();
                
         //find repository
-        System.out.println("Enter the direcory name that would you like to initialize");
+        System.out.println("Enter the full path for the new repository");
         //userInput.nextLine();
         repositoryDir = userInput.nextLine();
         if(repositoryDir.trim().equals("")) {
@@ -145,12 +145,12 @@ public class CommitsMenu
             if(commitIDToStopAt.trim().equals("")) {
                 rs = statement.executeQuery("SELECT bodyOfDiff, fileAdjusted "
                     + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID "
-                    + "ORDER BY commits.commitDate DESC ");
+                    + "ORDER BY commits.id  ");
             } else {
                 rs = statement.executeQuery("SELECT bodyOfDiff, fileAdjusted "
                     + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID "
                     + "WHERE commits.id <= " + commitIDToStopAt
-                    + " ORDER BY commits.commitDate DESC ");
+                    + " ORDER BY commits.id  ");
             }
         }
         catch (SQLException sqe)

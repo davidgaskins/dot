@@ -5,16 +5,14 @@ David Gaskins
 Tan Tran
 */
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -130,47 +128,7 @@ public class FileUtil {
         return result;
     }
     
-    public static void buildWithPrintWriter(List<String> patches, String path) {
-        System.out.println("Building file " + path);
-        try {
-            //create new file
-            File f = new File(path);
-            f.createNewFile();
-            
-            Runtime r = Runtime.getRuntime();
-            //apply patches
-            
-            for(String patch: patches) {
-                System.out.println("About to apply: \n" + patch);
-                //create patch file (because piping didn't work)
-                File patchy = new File(path + ".patch");
-                patchy.createNewFile();
-                PrintWriter writer = new PrintWriter(patchy);
-                writer.print(patch);
-                /*
-                String lines[] = patch.split("\n");
-                for(int i=0; i<lines.length; i++) {
-                    patchWriter.write(lines[i] + "\n");
-                    //System.out.println(lines[i]);
-                }
-                        */
-                writer.flush();
-                writer.close();
-                
-                Process p = r.exec("patch " + path + " " + path + ".patch");
-                p.waitFor();
-               // if(!path.contains("build"))
-                    //patchy.delete();
-            
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
     
     public static void build(List<String> patches, String path) {
         System.out.println("Building file " + path);
@@ -184,26 +142,34 @@ public class FileUtil {
             //apply patches
             
             for(String patch: patches) {
-                System.out.println("About to apply: \n" + patch);
                 //create patch file (because piping didn't work)
+                
                 File patchy = new File(path + ".patch");
                 patchy.createNewFile();
-                BufferedWriter patchWriter = new BufferedWriter(new FileWriter(patchy,true));
-                patchWriter.write(patch);
-                /*
-                String lines[] = patch.split("\n");
-                for(int i=0; i<lines.length; i++) {
-                    patchWriter.write(lines[i] + "\n");
-                    //System.out.println(lines[i]);
+                
+                //create file writer
+                FileWriter patchWriter = new FileWriter(patchy);
+                
+                //So there is some character that is not welcome.
+                //Java apears to handle it just fine, but the saved file only
+                //contains the last line. The easiest workaround (after hours of
+                //debuging) was to replace all special characters with \n
+                for(int i=0; i<patch.length(); i++) {
+                    if(patch.charAt(i) >= 32 && patch.charAt(i ) < 127)
+                        patchWriter.write(patch.charAt(i));
+                    else
+                        patchWriter.write('\n');
+                    patchWriter.flush();
                 }
-                        */
+                patchWriter.write(('\n'));
+                        
                 patchWriter.flush();
                 patchWriter.close();
                 
                 Process p = r.exec("patch " + path + " " + path + ".patch");
                 p.waitFor();
-               // if(!path.contains("build"))
-                    //patchy.delete();
+                //remove uneeded patch file
+                patchy.delete();
             
             }
         } catch (IOException ex) {
