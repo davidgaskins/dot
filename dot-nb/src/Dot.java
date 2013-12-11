@@ -32,7 +32,7 @@ public class Dot {
             boolean wantToQuit = false;
             while (!wantToQuit)
             {
-                System.out.println("Welcome to the DOT")
+                System.out.println("Welcome to the DOT");
                     System.out.println("Would you like to \n"
                         + "1. Reinitialize the database\n"
                         + "2. Continue with the old database");

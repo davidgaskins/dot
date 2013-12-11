@@ -93,7 +93,6 @@ CREATE TABLE goals(
 	--  Goal can reference many parent Goals, so reduce memory usage by using ID
 	CONSTRAINT goals_pk PRIMARY KEY(id),
 	
-	--  A Goal may be created, not completed, then raised again later
 	CONSTRAINT goals_ck UNIQUE (dateCreated, title),
 	
 	--  If a Goal is deleted, all of the subGoals that contribute to its
