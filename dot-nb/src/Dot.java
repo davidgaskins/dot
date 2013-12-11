@@ -32,18 +32,19 @@ public class Dot {
             boolean wantToQuit = false;
             while (!wantToQuit)
             {
-                System.out.println("Welcome to the DOT")
-                    System.out.println("Would you like to \n"
-                        + "1. Reinitialize the database\n"
-                        + "2. Continue with the old database");
-                        String input =dot.userInput.nextLine();
+                System.out.println("This is the administration tool for the DOT issue tracker");
+                System.out.println("nd source control program. Before beginning, choose:");
+                System.out.println("1. Reinitialize the database with sample data");
+                System.out.println("2. Continue with the old database");
+                String input =dot.userInput.nextLine();
                     //check input
-                    InputChecker in = new InputChecker(input);
-                    if(in.hasAlpha()){
-                       System.out.println("That was not an int, returning to goals menu.");
-                            return;
-                     }
-                    input = input.trim();
+                InputChecker in = new InputChecker(input);
+                if(in.hasAlpha())
+                {
+                    System.out.println("That was not an int, returning to goals menu.");
+                    return;
+                }
+                input = input.trim();
 
                 switch (input)
                 {

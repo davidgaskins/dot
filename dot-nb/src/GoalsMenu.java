@@ -171,7 +171,7 @@ public class GoalsMenu
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM goals ORDER BY id desc");
+            rs = statement.executeQuery("SELECT * FROM goals ORDER BY id ASC");
         }
         catch (SQLException sqe)
         {
