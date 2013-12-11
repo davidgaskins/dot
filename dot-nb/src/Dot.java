@@ -36,7 +36,7 @@ public class Dot {
                 System.out.println("and source control program. Before beginning, choose:");
                 System.out.println("1. Reinitialize the database with sample data");
                 System.out.println("2. Continue with the old database");
-                String input =dot.userInput.nextLine();
+                String input = dot.userInput.nextLine();
                     //check input
                 InputChecker in = new InputChecker(input);
                 if(in.hasAlpha())
@@ -109,9 +109,9 @@ public class Dot {
 		try 
 		{
 			System.out.println("Enter the username.");
-			String username = userInput.nextLine();
+			String username = userInput.nextLine().trim();
 			System.out.println("Enter the password.");
-			String password = userInput.nextLine();
+			String password = userInput.nextLine().trim();
 			connection = DriverManager.getConnection(databaseURL, username, password);
 			connection.setAutoCommit(false);
 		} 
