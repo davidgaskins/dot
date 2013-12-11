@@ -8,12 +8,14 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -141,12 +143,12 @@ public class FileUtil {
             //apply patches
             
             for(String patch: patches) {
-                System.out.println("About to apply: \n" + patch);
+                System.out.println("About to apply: \n");
                 //create patch file (because piping didn't work)
                 File patchy = new File(path + ".patch");
                 patchy.createNewFile();
-                BufferedWriter patchWriter = new BufferedWriter(new FileWriter(patchy,true));
-                patchWriter.write(patch);
+                PrintWriter patchWriter = new PrintWriter(patchy);
+                patchWriter.println(patch);
                 /*
                 String lines[] = patch.split("\n");
                 for(int i=0; i<lines.length; i++) {
@@ -156,11 +158,18 @@ public class FileUtil {
                         */
                 patchWriter.flush();
                 patchWriter.close();
-                
+                BufferedReader ready = new BufferedReader(new FileReader(patchy));
+                String line;
+                System.out.println("Reading file");
+                while((line=ready.readLine()) != null) {
+                    System.out.println(line);
+                }
+                Process sync = r.exec("sync");
+                sync.waitFor();
                 Process p = r.exec("patch " + path + " " + path + ".patch");
                 p.waitFor();
-               // if(!path.contains("build"))
-                    //patchy.delete();
+                if(!path.contains("build"))
+                    patchy.delete();
             
             }
         } catch (IOException ex) {
