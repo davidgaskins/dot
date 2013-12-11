@@ -25,11 +25,13 @@ FROM projects LEFT OUTER JOIN goals ON projects.id = goals.projectID
 INNER JOIN commits ON goals.id = commits.goalID
 GROUP BY projects.title;
 
+
+
 -- b) Get the emails of Contributors who have worked on one or more projects, past and present
 	SELECT contributors.email, COUNT(projects.ID) AS numProjects
 	FROM contributors INNER JOIN workAssignments ON contributors.ID = workAssignments.contributorID
     		INNER JOIN goals ON workAssignments.goalID = goals.ID
-    		INNER JOIN projects on goals.projectID = projects.ID
+    		INNER JOIN projects ON goals.projectID = projects.ID
 	GROUP BY contributors.email
 	HAVING COUNT(projects.ID > 1);
 
@@ -81,4 +83,12 @@ SELECT contributors.email, projects.title
 			FROM projects INNER JOIN managementAssignments
 					ON projects.id = managementAssignments.projectID
 );
+
+-- g) Get the titles of all projects and the number of managers its had, including projects 
+-- with no contributors
+SELECT projects.title, COUNT(contributors.ID) as numContributors
+FROM projects LEFT OUTER JOIN goals ON projects.id = goals.projectID
+	INNER JOIN managementAssignments ON projects.id = managementAssignments.projectID
+	INNER JOIN contributors ON managementAssignments.contributorID = contributors.id
+GROUP BY projects.title;
 
