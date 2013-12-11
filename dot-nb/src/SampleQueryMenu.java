@@ -50,8 +50,7 @@ public class SampleQueryMenu
                 "SELECT posts.dateAndTime\n" +
                     "FROM posts)";
     private static final String query5 = 
-            "SELECT contributors.fName, contributors.lName\n"
-            + "phoneNumbers.phoneType, phoneNumbers.phoneNumber\n"
+            "SELECT contributors.fName, contributors.lName, phoneNumbers.phoneType, phoneNumbers.phoneNumber\n"
             + "FROM projects\n"
             + "INNER JOIN managementAssignments\n"
                 + "ON projects.id = managementAssignments.projectID\n"
@@ -62,7 +61,8 @@ public class SampleQueryMenu
             + "WHERE projects.id NOT IN(\n"
                 + "SELECT projects.id\n"
                 + "FROM projects\n"
-                + "WHERE projects.dateToEnd < NOW()\n";
+                + "WHERE projects.dateToEnd > NOW()\n"
+                +")";
     private static final String query6 = "SELECT contributors.email, projects.title\n" +
         "FROM contributors \n" +
             "INNER JOIN workAssignments \n" +
@@ -190,8 +190,8 @@ public class SampleQueryMenu
             while ( rs.next())
             {
                 String body = rs.getString("body");
-		int bodyLength = body.length();
-		body = body.substring(0, Math.min(bodyLength, 10));
+		//int bodyLength = body.length();
+		//body = body.substring(0, Math.min(bodyLength, 10));
                 String title = rs.getString("title");
                 String email = rs.getString("email");
                 System.out.println(body + "\t" + title + "\t" + email);

@@ -1,3 +1,4 @@
+
 INSERT INTO projects (title, dateToEnd, description, dateStarted) VALUES
 	('dot', '2013-12-09 12:23:55', 'an issue tracker that also tracks source code ', '2013-10-19 12:23:55'),
 	('eugene', '2013-11-20 12:23:55', 'a 2d side scrolling game implented for CECS 343', '2013-9-19 12:23:55'),
@@ -12,7 +13,7 @@ INSERT INTO contributors (fName, lName, email) VALUES
 	('david', 'nguyen', 'davidnguyen@student.csulb.edu' ); 
 INSERT INTO managementAssignments VALUES
 	-- started, end, finished, proj, cont
-	('2013-10-19 12:23:55', '2013-11-19 12:23:55', FALSE, 1, 1),
+	('2013-10-19 12:23:55', '2013-12-10 12:23:55', FALSE, 1, 1),
 	('2013-9-17 12:23:55', '2013-12-02 12:23:55', TRUE, 2, 2),
 	('2013-2-19 12:23:55', '2013-03-19 12:23:55', TRUE, 3, 3),
 	('2013-3-19 12:23:55', '2013-04-19 12:23:55', TRUE, 3, 4),
@@ -51,8 +52,7 @@ INSERT INTO commits (contributorID, goalID, commitDate, description) VALUES
 	(1, 1, '2013-11-29 12:23:55', 'finished syntax for phoneNumbers insertion'),
 	(1, 1, '2013-12-4 12:23:55', 'finished all the rest of the syntax insertion'); 
 INSERT INTO changes VALUES
--- for the body of the diffs, for readablity reasons  we have extracted lines from diffs and only used those 
--- this shows the progress of the dot-sql-insert.sql document
+-- these are actual diffs
 	('readme.txt', CONCAT('0a1,2',  CHAR(13),  '> This is a test java program.' 
        ,  CHAR(13),  '> It demonstrates the print function.'), 'ae03lje9v0', 1),
 
