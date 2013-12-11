@@ -50,7 +50,7 @@ public class SampleQueryMenu
                 "SELECT posts.dateAndTime\n" +
                     "FROM posts)";
     private static final String query5 = 
-            "SELECT contributors.fName, contributors.lName\n
+            "SELECT contributors.fName, contributors.lName\n"
             + "phoneNumbers.phoneType, phoneNumbers.phoneNumber\n"
             + "FROM projects\n"
             + "INNER JOIN managementAssignments\n"

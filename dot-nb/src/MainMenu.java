@@ -47,7 +47,6 @@ public class MainMenu
             System.out.println("6. ROLLBACK changes since the last commit.");
             System.out.println("7. Run SAMPLE QUERIES.");
             System.out.println("8. Exit.");
-            option = userInput.nextInt();
             String input = userInput.nextLine();
             //check input
             InputChecker in = new InputChecker(input);
@@ -81,8 +80,10 @@ public class MainMenu
                 case "6":
                     rollbackMenu();
                     break;
+                case "7":
                     sampleQueryMenu.sampleQueryMenu();
-                case 8:
+                    break;
+                case "8":
                     quitMenu();
                     wantToQuit = true;
                     break;
