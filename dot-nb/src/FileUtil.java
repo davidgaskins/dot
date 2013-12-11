@@ -43,7 +43,7 @@ public class FileUtil {
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             p.waitFor();
             homeDirectory = reader.readLine();
-            System.out.println(homeDirectory);
+            //System.out.println(homeDirectory);
         } catch (IOException ex) {
             Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -60,6 +60,7 @@ public class FileUtil {
                 return false;
             }
         }
+        
         
         //make sure there is an empty file for diffs
         File empty = new File(homeDirectory + "/.dot/empty");
@@ -97,6 +98,7 @@ public class FileUtil {
             }
         }
         
+        settings.save();
         
         return true;
     }
@@ -132,6 +134,7 @@ public class FileUtil {
     }
     
     public static void build(List<String> patches, String path) {
+        System.out.println("Building file " + path);
         try {
             //create new file
             File f = new File(path);

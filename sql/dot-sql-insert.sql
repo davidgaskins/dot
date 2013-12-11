@@ -2,7 +2,7 @@ INSERT INTO projects (title, dateToEnd, description, dateStarted) VALUES
 	('dot', '2013-12-9 12:23:55', 'an issue tracker that also tracks source code ', '2013-10-19 12:23:55'),
 	('eugene', '2013-11-20 12:23:55', 'a 2d side scrolling game implented for CECS 343', '2013-9-19 12:23:55'),
 	('caffeine complex', '2013-5-10 12:23:55', 'a 2d graphics engine implemented in C++ for CECS 343', '2013-2-19 12:23:55'),
-	('manhatten project', '1945-7-20 12:23:55', 'the American attempt to develop a nuclear bomb', '1942-11-19 12:23:55'),
+	('manhatten project', '1980-7-20 12:23:55', 'the American attempt to develop a nuclear bomb', '1980-11-19 12:23:55'),
 	('amazon prime air', '2015-7-20 12:23:55', 'attempt to get amazon products from order to delivery in 30 minutes', '2013-11-19 12:23:55');
 INSERT INTO contributors (fName,lName, email) VALUES
 	('tan', 'tran', 'tantran@student.csulb.edu' ),
@@ -24,10 +24,10 @@ INSERT INTO phoneNumbers VALUES
 	(2, '17148985087', 'WORK'),
 	(2, '17145955646', 'CELL');
 INSERT INTO goals (title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID) VALUES
-	('sql insert statements', 'required sql insert statements for this project', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-11-14 12:23:55', '2013-11-19 12:23:55', '2013-12-2 12:23:55', 1, NULL),	
+	('sql insert statement', 'required sql insert statements for this project', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-11-14 12:23:55', '2013-11-19 12:23:55', '2013-12-2 12:23:55', 1, NULL),	
 	('sequence diagrams', 'sequence diagrams required for binder ', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-12-2 12:23:55', '2013-12-2 12:23:55', '2013-11-16 12:23:55', 2, NULL),
 	('documentation', 'the API documentation', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-12-2 12:23:55', '2013-12-2 12:23:55', '2013-11-17 12:23:55', 2, NULL),
-	('documentation', 'API documenation for caffeine complex', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-5-10 12:23:55', '2013-3-10 12:23:55', '2013-2-29 12:23:55', 3, NULL),
+	('documentation', 'API documenation for caffeine complex', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-5-10 12:23:55', '2013-3-10 12:23:55', '2013-2-28 12:23:55', 3, NULL),
 	('back end', 'backend complete for caffeine complex', 'CRITICAL', 'IMPROVEMENT', 'OPEN', '2013-4-10 12:23:55', '2013-4-9 12:23:55', '2013-2-20 12:23:55', 3, NULL);
 INSERT INTO posts VALUES
 	('we need to add real data', '2013-12-2 12:23:55', 1, 1),
@@ -51,10 +51,31 @@ INSERT INTO commits (contributorID, goalID, commitDate, description) VALUES
 	(1, 1, '2013-11-29 12:23:55', 'finished syntax for phoneNumbers insertion'),
 	(1, 1, '2013-12-4 12:23:55', 'finished all the rest of the syntax insertion');
 INSERT INTO changes VALUES
--- for the body of the diffs, for readablity reasons  we have extracted lines from diffs and only used those 
--- this shows the progress of the dot-sql-insert.sql document
-	('dot-sql-insert.sql', '<INSERT INTO projects VALUES >INSERT INTO projects(title, dateToEnd, description, dateStarted) VALUES  ', 'ae03lje9v0', 1),
-	('dot-sql-insert.sql', '<-- started, end, finished, proj, cont > ', 'ae03lje9v1', 2),
-	('dot-sql-insert.sql', '<INSERT INTO commits VALUES >INSERT INTO commits  ( contributorID, goalID, commitDate, description) VALUES ', 'ae03lje9v2', 3),
-	('dot-sql-insert.sql', '<INSERT INTO goals VALUES >INSERT INTO goals (title, description, priority, type, status, dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID) VALUES', 'ae03lje9v3', 4),
-	('dot-sql-insert.sql', '<INSERT INTO contributors VALUES >INSERT INTO contributors (fName,lName, email) VALUES', 'ae03lje9v4', 5);
+	('readme.txt', CONCAT('0a1,2',  CHAR(13),  '> This is a test java program.' 
+       ,  CHAR(13),  '> It demonstrates the print function.'), 'ae03lje9v0', 1),
+
+	('readme.txt', '', 'ae03lje9v0', 2),
+	('readme2.txt', CONCAT('0a1,2',  CHAR(13),  '> This text is reserved for future purposes.'
+       ,  CHAR(13),  '> Have you mooed today?'),'ae03lje9v0', 2),
+
+	('readme.txt', '', 'ae03lje9v2', 3),
+	('readme2.txt', CONCAT('0a1,2',  CHAR(13),  '> Author: Cow Cow'
+       ,  CHAR(13),  '> '), 'ae03lje9v2', 3),
+
+	('readme.txt', CONCAT('0a1,2',  CHAR(13),  '> Author:David, David, Tan'
+       ,  CHAR(13),  '> '),  'ae03lje9v2', 4),
+	('readme2.txt', '', 'ae03lje9v2', 4),
+	('hello.cpp', CONCAT('0a1,6',  CHAR(13),  '> #include <iostream>'
+       ,  CHAR(13),  '> ',  CHAR(13),  '> int main() {'
+       ,  CHAR(13),  '> 	std::cout << "The cow says Hello World\n";'
+       ,  CHAR(13),  '> 	return 0;',  CHAR(13),  '> }'),
+         'ae03lje9v3', 4),
+
+	('readme.txt', CONCAT('4a5,7',  CHAR(13),  '> '
+       ,  CHAR(13),  '> To compile, just run '
+       ,  CHAR(13),  '> 	sh build.sh'), 'ae03lje9v2', 5),
+	('readme2.txt', '', 'ae03lje9v2', 5),
+	('hello.cpp', '', 'ae03lje9v3', 5),
+	('build', CONCAT('0a1,3',  CHAR(13),  '> #!/bin/sh'
+       ,  CHAR(13),  '> '
+       ,  CHAR(13),  '> gcc -o hello hello.cpp'), 'ae03lje9v4', 5);
