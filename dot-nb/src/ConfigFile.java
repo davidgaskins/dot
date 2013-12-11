@@ -7,6 +7,7 @@ Tan Tran
 */
 import java.util.HashMap;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,11 +28,14 @@ public class ConfigFile {
         map = new HashMap();
     }
 
-    public void load() throws FileNotFoundException {
+    public void load() throws FileNotFoundException{
 
         BufferedReader reader = null;
         FileReader stream = null;
         try {
+            File f = new File(fileName);
+            if(!f.exists())
+                f.createNewFile();
             stream = new FileReader(fileName);
             reader = new BufferedReader(stream);
 
