@@ -28,9 +28,11 @@ public class Dot {
             Dot dot = new Dot();
             dot.connectToMartelDB();
             MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
+            
             boolean wantToQuit = false;
             while (!wantToQuit)
             {
+                System.out.println("Welcome to the DOT")
                     System.out.println("Would you like to \n"
                         + "1. Reinitialize the database\n"
                         + "2. Continue with the old database");
@@ -43,15 +45,11 @@ public class Dot {
                      }
                     input = input.trim();
 
-                // since there isn't an array of statements to execute,
-                // all this menu code doesn't need to be in the same place.
-                // let's just call static methods for each of the submenus
-                // so the main method isn't cluttered with all of them.
                 switch (input)
                 {
                     case "1": // COMMITS
                         dot.initializeMartelDB();
-                        mainMenu.commitMenu();
+                        mainMenu.commitToDatabaseMenu();
                         //dont need a break; here
                     case "2":
                         wantToQuit = true;

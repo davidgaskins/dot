@@ -71,7 +71,7 @@ public class MainMenu
                     contributorsMenu.contributorsMenu();
                     break;
                 case "5":
-                    commitMenu();
+                    commitToDatabaseMenu();
                     break;
                 case "6":
                     rollbackMenu();
@@ -100,7 +100,7 @@ public class MainMenu
         System.out.println("The changes since the last commit have been rolled back.");
     }
     //needs to be public for access from main
-    public void commitMenu()
+    public void commitToDatabaseMenu()
     {
         try
         {
@@ -136,7 +136,7 @@ public class MainMenu
             switch (input)
             {
                 case "1": // commit the Transaction
-                    commitMenu();
+                    commitToDatabaseMenu();
                     wantToQuit = true;
                     break;
                 case "2": // rollback the Transaction
