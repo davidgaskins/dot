@@ -146,11 +146,11 @@ public class GoalsMenu
                     + "(title, description, priority, type, status, "
                     + "dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID) "
                     + "VALUES("
-                    + title + ", " 
-                    + description + ", " 
-                    + priority + ", " 
-                    + type + ", " 
-                    + status + ", " 
+                    + "'" + title + "', " 
+                    + "'" + description + "', " 
+                    + "'" + priority + "', " 
+                    + "'" + type + "', " 
+                    + "'" + status + "', " 
                     + "?" + ", " // dateCreated
                     + "?" + ", " // dateUpdated
                     + "?" + ", " // dateToEnd
@@ -160,8 +160,6 @@ public class GoalsMenu
             preparedStatement.setDate(1, dateCreated, calendar);
             preparedStatement.setDate(2, dateUpdated, calendar);
             preparedStatement.setDate(3, dateToEnd, calendar);
-            System.out.println("Prepared statement: " + preparedStatement.toString());
-            System.out.println();
             preparedStatement.executeUpdate();
 
         } catch (SQLException sqe)
