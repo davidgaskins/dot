@@ -1,18 +1,15 @@
+/*
+    MainMenu.java: The overall UI handler for Dot, gets called from dot.java
+    Tan Tran
+    David Gaskins
+    David Martel
+*/
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author 009677081
- */
 public class MainMenu 
 {
     Connection connection;

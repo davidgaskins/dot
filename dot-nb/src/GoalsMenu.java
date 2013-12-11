@@ -1,4 +1,9 @@
-
+/*
+Goals Menu.java handles UI for the GoalsMenu
+Tan Tran
+David Gaskins
+David Martel
+*/
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,10 +18,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author 009677081
- */
 public class GoalsMenu 
 {
     Connection connection;
@@ -106,13 +107,13 @@ public class GoalsMenu
         String description = userInput.nextLine();
 
         // @TODO: error checking on enums
-        System.out.println("Enter the PRIORITY of the goal.");
+        System.out.println("Enter the PRIORITY of the goal: CRITICAL, MEDIUM, LOW.");
         String priority = userInput.nextLine();
 
-        System.out.println("Enter the TYPE of the goal.");
+        System.out.println("Enter the TYPE of the goal: BUG, IMPROVEMENT, LONG-TERM.");
         String type = userInput.nextLine();
 
-        System.out.println("Enter the STATUS of the goal.");
+        System.out.println("Enter the STATUS of the goal: OPEN, CLOSED, NOFIX, ASSIGNED, DUPLICATE, POSTPONED.");
         String status = userInput.nextLine();
         
         // Make a calendar, which has time zone and encoding info.
@@ -128,7 +129,7 @@ public class GoalsMenu
         
         SimpleDateFormat format = new SimpleDateFormat("MM dd yyyy"); // format parses the input
         java.sql.Date dateToEnd = null;
-        System.out.println("Enter the END DATE (no time) of the goal. Format is mm dd yyy");
+        System.out.println("Enter the END DATE (no time) of the goal. Format is mm dd yyyy");
         try {
             java.util.Date parsed = format.parse( userInput.nextLine() );
             dateToEnd = new java.sql.Date(parsed.getTime());
@@ -137,11 +138,14 @@ public class GoalsMenu
             System.out.println("Error. The date cannot be parsed. Exiting to Goals menu.");
             return;
         }
-        
 
         try
         {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO goals(" 
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "INSERT INTO goals"
+                    + "(title, description, priority, type, status, "
+                    + "dateCreated, dateUpdated, dateToEnd, projectID, parentGoalID) "
+                    + "VALUES("
                     + title + ", " 
                     + description + ", " 
                     + priority + ", " 
@@ -151,10 +155,13 @@ public class GoalsMenu
                     + "?" + ", " // dateUpdated
                     + "?" + ", " // dateToEnd
                     + projectID + ", "
-                    + parentGoalID);
+                    + parentGoalID
+                    + ");");
             preparedStatement.setDate(1, dateCreated, calendar);
             preparedStatement.setDate(2, dateUpdated, calendar);
             preparedStatement.setDate(3, dateToEnd, calendar);
+            System.out.println("Prepared statement: " + preparedStatement.toString());
+            System.out.println();
             preparedStatement.executeUpdate();
 
         } catch (SQLException sqe)

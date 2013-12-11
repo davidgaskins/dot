@@ -1,4 +1,9 @@
-
+/*
+    PostsMenu.java: THe UI for what you can do with posts in the database
+    David Gaskins
+    David Martel
+    Tan Tran
+*/
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,15 +12,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author 009677081
- */
 public class PostsMenu 
 {
     Connection connection;

@@ -1,3 +1,11 @@
+/*
+David Martel
+Tan Tran
+David Gaskins
+Commit.java
+looks through the file system to create the directory .dot in home with the changes 
+to the tracked files
+*/
 
 import java.io.File;
 import java.util.Iterator;
@@ -6,16 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author david
- */
 public class Commit {
     
     private String author, email, message;

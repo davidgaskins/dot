@@ -1,4 +1,10 @@
-
+/*
+ConfigFile.java
+Reads the configuration file
+David Gaskins
+David Martel
+Tan Tran
+*/
 import java.util.HashMap;
 import java.io.BufferedReader;
 import java.io.IOException;
