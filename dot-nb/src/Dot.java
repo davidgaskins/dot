@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Dot {
-        private final static String databaseURL = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16"; // @TODO: where do we finally connect to when submitting?
+        private final static String databaseURL = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
         

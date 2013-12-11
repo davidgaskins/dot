@@ -17,7 +17,6 @@ import java.util.TreeMap;
 
 public class Commit {
     
-    private String author, email, message;
     private List<Change> fileList;
     private String directory;
     
