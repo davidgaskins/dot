@@ -126,9 +126,7 @@ public class ContributorsMenu
         }
         catch (SQLException sqe)
         {
-            System.out.println("This contributor can't be deleted, its a parent to a commit [on delete NO ACTION]");
-            //LOGGER.log(Level.SEVERE, "Error getting retrieving contributors. Error: {0}", sqe.getMessage());
-            //sqe.printStackTrace();
+            System.out.println("This contributor can't be deleted because it is a parent to a commit [on delete NO ACTION]");
         }
     }
     private void contributorsMenuView(){
