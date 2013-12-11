@@ -1,3 +1,10 @@
+/*
+    SampleQueryMenu.java: handles all of our queries, we realize only 3 needed to be implemented in java, but 
+    it was easier to test here than otherwise.
+    David Martel
+    David Gaskins
+    Tan Tran
+*/
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,15 +14,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author 009677081
- */
 public class SampleQueryMenu
 {
     Connection connection;

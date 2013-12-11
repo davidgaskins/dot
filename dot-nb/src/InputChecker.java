@@ -1,13 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author david, david, tan
- * purpose: We call this class to make sure that the input provided is an integer or if it has alpha values in it
+ * InputChecker.java: We call this class to make sure that the input provided is an integer or if it has alpha values in it
+ * David Gaskins
+ * David Martel
+ * Tan Tran
  */
 public class InputChecker {
     private String toBeChecked;

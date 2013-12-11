@@ -1,3 +1,9 @@
+/*
+This class organizes all the file functions
+David Martel
+David Gaskins
+Tan Tran
+*/
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,18 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author david
- * This class is for organizing all file functions. Silly java for forcing 
- * objects everywhere.
- */
 public class FileUtil {
     
     public static ConfigFile settings;

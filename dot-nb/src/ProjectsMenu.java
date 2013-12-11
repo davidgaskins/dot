@@ -1,4 +1,9 @@
-
+/*
+    ProjectMenu.java: Handles viewing projects
+    Tan Tran
+    David Martel
+    David Gaskins
+*/
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,17 +12,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * The Dot user is not presented with a Projects menu from the main menu.
- * However, other menu objects such as GoalsMenu and ContributorsMenu
- * use ProjectsMenu to display a list of projects. For now we do not
- * add functionality to create a project.
- */
-
-/**
- *
- * @author Tan Tran
- */
 public class ProjectsMenu
 {
     Connection connection;

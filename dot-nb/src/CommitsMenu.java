@@ -1,4 +1,9 @@
-
+/*
+CommitsMenu.java : the UI for what you can do with commits in the database
+Tan Tran
+David Gaskins
+David Martel
+*/
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,16 +16,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author David Martel
- * @author Tan Tran
- */
 public class CommitsMenu 
 {
     Connection connection;
@@ -41,13 +36,9 @@ public class CommitsMenu
         boolean wantToQuit = false;
         while (!wantToQuit)
         {
-            System.out.println("This is the commits menu. Obviously, "
-                    + "you cannot commit changes on behalf of others, "
-                    + "but you can 1. delete the latest commit, and "
-                    + "2. checkout a project as it was at a specific commit. ");
-            System.out.println("1. DELETE latest commit");
-            System.out.println("2. CHECKOUT the repo.");
-            System.out.println("3. BACK to menu menu");
+            System.out.println("This is the commits menu.");
+            System.out.println("1. CHECKOUT the repo.");
+            System.out.println("2. BACK to menu menu");
             
             //check input
             input = userInput.nextLine();
@@ -59,12 +50,9 @@ public class CommitsMenu
             input = input.trim();
             switch(input) {
                 case "1":
-                    // @TODO deleteLatestCommit();
-                    break;
-                case "2":
                     commitsMenuCheckout();
                     break;
-                case "3":
+                case "2":
                     wantToQuit = true;
                     break;
                 default:

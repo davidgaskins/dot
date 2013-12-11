@@ -1,3 +1,10 @@
+/*
+Dot.java manages the jdbc connection, calls the other menus
+Tan Tran
+David Gaskins
+David Martel
+*/
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,19 +14,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/* All general TODOs:
-1. try catch hierarchy for each jdbc access
-2. keep static queries/statements separate, as final strings at beginning of prog like Gitorious example
-3. factor jdbc access lines into convenience methods
-4. generally no error checking at all
-5. throw early catch late
-*/
-
 public class Dot {
-        // @TODO
-        // set session transaction isolation level serializable:
-        // which locks access to DB whiel other transactions waiting
-        // but as soon as you commit or rollback the waiting transactions can start
         private final static String databaseURL = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16"; // @TODO: where do we finally connect to when submitting?
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
@@ -85,9 +80,6 @@ public class Dot {
             
             System.out.println("DB_DRIVER init successful.");
         }
-
-	//static User guy;
-	//static String workingDirectory
 
         private void initializeMartelDB() throws IOException
         {
