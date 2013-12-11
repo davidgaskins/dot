@@ -1,4 +1,9 @@
-
+/*
+Goals Menu.java handles UI for the GoalsMenu
+Tan Tran
+David Gaskins
+David Martel
+*/
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,10 +18,6 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author 009677081
- */
 public class GoalsMenu 
 {
     Connection connection;

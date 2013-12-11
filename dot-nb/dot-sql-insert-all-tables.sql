@@ -29,7 +29,7 @@ INSERT INTO goals (title, description, priority, type, status, dateCreated, date
 	('sequence diagrams', 'sequence diagrams required for binder ', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-12-2 12:23:55', '2013-12-2 12:23:55', '2013-11-16 12:23:55', 2, NULL),
 	('documentation', 'the API documentation', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-12-2 12:23:55', '2013-12-2 12:23:55', '2013-11-17 12:23:55', 2, NULL),
 	('documentation', 'API documenation for caffeine complex', 'CRITICAL', 'IMPROVEMENT', 'CLOSED', '2013-5-10 12:23:55', '2013-3-10 12:23:55', '2013-2-24 12:23:55', 3, NULL), -- earlier date was 2-29, but sql caught that! wow!
-	('back end', 'backend complete for caffeine complex', 'CRITICAL', 'IMPROVEMENT', 'OPEN', '2013-4-10 12:23:55', '2013-4-9 12:23:55', '2013-2-20 12:23:55', 3, NULL); 
+	('back end debugging', 'debug the AI code mistakes', 'CRITICAL', 'BUG', 'OPEN', '2013-4-10 12:23:55', '2013-4-9 12:23:55', '2013-2-20 12:23:55', 5, NULL); 
 INSERT INTO posts (body, dateAndTime, contributorID, goalID) VALUES
 	('we need to add real data', '2013-12-2 12:23:55', 1, 1),
 	('do not forget that we need two sequence diagrams', '2013-11-15 12:24:55', 2, 2),
@@ -38,13 +38,14 @@ INSERT INTO posts (body, dateAndTime, contributorID, goalID) VALUES
 	('changed to being implemented in c++', '2013-3-1 12:27:55', 5, 5); 
 INSERT INTO workAssignments VALUES
 -- the first three values represent us working on this sql insert statement goal
+-- date started date ended finished goal id  contributor id
 	('2013-11-17 12:23:55', '2013-12-5 12:30:55', TRUE, 1, 1),
 	('2013-11-17 12:23:55', '2013-12-5 12:23:55', TRUE, 1, 2),
 	('2013-11-17 12:23:55', '2013-12-5 12:23:55', TRUE, 1, 3),
 -- this row represents david g working on sequence diagrams for his 343 project
 	('2013-11-15 12:23:55', '2013-12-2 12:23:55', TRUE, 2, 2),
--- this row represents david g working on documenation for his 343 project
-	('2013-11-14 12:23:55', '2013-12-2 12:23:55', TRUE, 3, 2); 
+-- this row would represent david martel working on 
+	('2013-11-14 12:23:55', '2013-12-2 12:23:55', TRUE, 5, 2); 
 INSERT INTO commits (contributorID, goalID, commitDate, description) VALUES
 	(1, 1, '2013-11-18 12:23:55', 'unfinshed syntax for projects insertion'),
 	(2, 2, '2013-11-19 12:23:55', 'finished syntax for projects insertion'),
