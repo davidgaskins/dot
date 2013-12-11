@@ -134,6 +134,7 @@ public class FileUtil {
     }
     
     public static void build(List<String> patches, String path) {
+        System.out.println("Building file " + path);
         try {
             //create new file
             File f = new File(path);

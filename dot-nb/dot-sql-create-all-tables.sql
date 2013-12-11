@@ -21,7 +21,7 @@ CREATE TABLE projects(
 	--  this constraint forces the client to update a Project's
 	--  due date when it is overdue.
 	CONSTRAINT valid_date_range CHECK (dateToEnd >= dateStarted)
-);
+); 
 CREATE TABLE contributors(
 	id INT NOT NULL AUTO_INCREMENT,
         -- updated length of strings
@@ -36,7 +36,7 @@ CREATE TABLE contributors(
 	--  Assume no Contributors share email
 	CONSTRAINT contributors_ck UNIQUE (email)
 
-);
+); 
 CREATE TABLE managementAssignments(
 	dateStarted DATETIME NOT NULL,
 	dateToEnd DATETIME,
@@ -59,7 +59,7 @@ CREATE TABLE managementAssignments(
 	--  Same for contributor: delete all of a contributor's history with the project
 	CONSTRAINT managementAssignments_fk2 FOREIGN KEY (contributorID) 
 		REFERENCES contributors (id) ON DELETE CASCADE
-);
+); 
 CREATE TABLE phoneNumbers(
 	contributorID INT NOT NULL,
 	
@@ -76,7 +76,7 @@ CREATE TABLE phoneNumbers(
 	--  or an accidentally created Contributor
 	CONSTRAINT phoneNumbers_fk FOREIGN KEY (contributorID) 
 		REFERENCES contributors (id) ON DELETE CASCADE
-);
+); 
 CREATE TABLE goals(
 	id INT NOT NULL AUTO_INCREMENT,
 	title VARCHAR(30) NOT NULL,
@@ -113,7 +113,7 @@ CREATE TABLE goals(
 
 	CONSTRAINT goals_fk_statuses FOREIGN KEY (status)
 		REFERENCES goalStatuses(goalStatus)
-);
+); 
 CREATE TABLE posts (
         id INT NOT NULL AUTO_INCREMENT,
 	body TEXT,
@@ -132,7 +132,7 @@ CREATE TABLE posts (
 		
 	CONSTRAINT posts_contributors_fk FOREIGN KEY (contributorID) 
 		REFERENCES contributors(id) ON DELETE CASCADE
-);
+); 
 CREATE TABLE workAssignments(
 	dateStarted DATETIME NOT NULL,
 	dateToEnd DATETIME,
@@ -152,7 +152,7 @@ CREATE TABLE workAssignments(
 	CONSTRAINT workAssignments_contributors_fk FOREIGN KEY (contributorID) 
 		REFERENCES contributors(id) ON DELETE CASCADE
 
-);
+); 
 CREATE TABLE commits(
 	contributorID INT NOT NULL,
 	goalID INT NOT NULL, 
@@ -175,7 +175,7 @@ CREATE TABLE commits(
 
 
 	CONSTRAINT changes_ck UNIQUE (commitDate, contributorID)
-);
+); 
 CREATE TABLE changes(
 	fileAdjusted VARCHAR(20) NOT NULL,
 	bodyOfDiff TEXT,
@@ -189,4 +189,4 @@ CREATE TABLE changes(
 	--  In that case, delete its changes too.
 	CONSTRAINT changes_fk FOREIGN KEY(commitID) 
 		REFERENCES commits(id) ON DELETE NO ACTION 
-);
+); 

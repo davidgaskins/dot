@@ -74,7 +74,8 @@ public class CommitsMenu
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM commits INNER JOIN projects ON projectID = " + projectID + "ORDER BY commitDate DESC");
+            rs = statement.executeQuery("SELECT * FROM commits INNER JOIN goals ON commits.goalID = goalID"
+                    + " Where goals.projectID = " + projectID + " ORDER BY commitDate DESC");
         }
         catch (SQLException sqe)
         {
@@ -90,10 +91,10 @@ public class CommitsMenu
             while (rs.next())
             {
                 int id = rs.getInt("id");
-                String contributorID = rs.getString("contributorID");
-                String goalID = rs.getString("goalID");
-                String commitDate = rs.getDate("commitDate").toString();
-                String description = rs.getDate("description").toString();
+                int contributorID = rs.getInt("contributorID");
+                int goalID = rs.getInt("goalID");
+                String commitDate = rs.getString("commitDate").toString();
+                String description = rs.getString("description");
                 String goalRow = String.format("%4d\t"
                         + "%4d\t"
                         + "%4d\t"
@@ -138,11 +139,11 @@ public class CommitsMenu
         {
             Statement statement = connection.createStatement();
             if(commitIDToStopAt.trim().equals("")) {
-                rs = statement.executeQuery("SELECT bodyOfDiff "
+                rs = statement.executeQuery("SELECT bodyOfDiff, fileAdjusted "
                     + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID "
                     + "ORDER BY commits.commitDate DESC ");
             } else {
-                rs = statement.executeQuery("SELECT bodyOfDiff "
+                rs = statement.executeQuery("SELECT bodyOfDiff, fileAdjusted "
                     + "FROM commits INNER JOIN changes ON commits.ID = changes.commitID "
                     + "ORDER BY commits.commitDate DESC "
                     + "WHERE commits.commitID <= " + commitIDToStopAt);

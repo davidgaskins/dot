@@ -63,7 +63,7 @@ public class Dot {
 		"dot-sql-create-all-tables.sql", "dot-sql-insert-all-tables.sql"};
             for (String fileName : fileNames)
             {
-                String[] statements = FileUtil.readFile(fileName).split(";");
+                String[] statements = FileUtil.readFile(fileName).split("; ");
                 for (String statementString : statements) 
                 {
                     try
