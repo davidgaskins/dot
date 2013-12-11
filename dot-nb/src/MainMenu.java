@@ -123,7 +123,7 @@ public class MainMenu
         {
             System.out.println("This is the quit menu.");
             System.out.println("1. Commit Changes.");
-            System.out.println("2. Abort Changes.");
+            System.out.println("2. Rollback Changes.");
             String input = userInput.nextLine();
             //check input
             InputChecker in = new InputChecker(input);

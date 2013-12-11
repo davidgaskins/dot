@@ -146,8 +146,8 @@ public class Dot {
                 
                 connection = DriverManager.getConnection(url, username, password);
                 connection.setAutoCommit(false);
-            } catch (SQLException sqe2)
-            {
+                } catch (SQLException sqe2)
+                {
                 // this is for LOGGING purposes
                 LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
                 sqe.printStackTrace();
@@ -156,7 +156,7 @@ public class Dot {
                 // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
                 System.out.println("Unable to connect to database. Exiting.");
                 System.exit(1);
-            }          
+                }          
             }
         }
 }

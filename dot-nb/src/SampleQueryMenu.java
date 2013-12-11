@@ -29,7 +29,7 @@ public class SampleQueryMenu
                 + "INNER JOIN goals ON workAssignments.goalID = goals.ID\n" 
                 + "INNER JOIN projects on goals.projectID = projects.ID\n" 
             + "GROUP BY contributors.email\n" 
-            + "HAVING COUNT(DISTINCT projects.ID) > 1";
+            + "HAVING COUNT(projects.ID) > 1";
     private static final String query3 = 
             "SELECT contributors.fName, contributors.lName, contributors.email, "
             + "COUNT(*) AS numAssignments\n" 
@@ -267,7 +267,7 @@ public class SampleQueryMenu
             System.out.println("1. List titles of all projects, and the number of commits they have done on them.");
             System.out.println("2. List emails of all Contributors who are working on more than one project.");
             System.out.println("3. List all contributors assigned to work on bugs, and number of bugs assigned to them.");
-            System.out.println("4. Find the most recent Post(s) of all Projects.");
+            System.out.println("4. Find the most recent Post(s) of all the Projects.");
             System.out.println("5. Find the name and phone numbers of all Managers of ongoing Projects.");
             System.out.println("6. List the emails of all Contributors to projects that do not have managers.");
             System.out.println("7. Return to main menu");
