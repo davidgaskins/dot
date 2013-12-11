@@ -121,7 +121,8 @@ public class MainMenu
         boolean wantToQuit = false;
         while (!wantToQuit)
         {
-            System.out.println("This is the quit menu.");
+            System.out.println("This is the quit menu. If you have not made changes to the database,");
+            System.out.println("both options will do nothing except quit the program.");
             System.out.println("1. Commit Changes.");
             System.out.println("2. Rollback Changes.");
             String input = userInput.nextLine();

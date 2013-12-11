@@ -95,7 +95,7 @@ public class ContributorsMenu
                 String phoneType = rs.getString("phoneType");
                 System.out.println("phone type: " +phoneType +"\tphone number: " +phoneNum);
             }
-        } catch (SQLException sqe) // @TODO
+        } catch (SQLException sqe)
         {
             LOGGER.log(Level.SEVERE, "Error getting getting contact info. Error: {0}", sqe.getMessage());
             sqe.printStackTrace();
@@ -118,7 +118,7 @@ public class ContributorsMenu
         input = input.trim();
         String statementString = "DELETE FROM contributors "+
                             "WHERE id = " + input;
-        try // @TODO: make hierarchy of try catches for easier debugging
+        try
         {
             Statement statement = connection.createStatement();
             statement.executeUpdate(statementString);
@@ -133,7 +133,7 @@ public class ContributorsMenu
     }
     private void contributorsMenuView(){
         String statementString = "SELECT * FROM contributors";
-        try // @TODO: make hierarchy of try catches for easier debugging
+        try
         {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);

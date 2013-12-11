@@ -104,7 +104,7 @@ public class PostsMenu
     private void postMenuView() 
     {
         String statementString = "SELECT * FROM posts";
-        try // @TODO: make hierarchy of try catches for easier debugging
+        try
         {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);

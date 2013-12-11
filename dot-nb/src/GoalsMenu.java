@@ -99,7 +99,6 @@ public class GoalsMenu
         System.out.println("Enter the DESCRIPTION of the goal.");
         String description = userInput.nextLine();
 
-        // @TODO: error checking on enums
         System.out.println("Enter the PRIORITY of the goal: CRITICAL, MEDIUM, LOW.");
         String priority = userInput.nextLine();
 
