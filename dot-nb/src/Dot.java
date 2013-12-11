@@ -33,7 +33,7 @@ public class Dot {
             while (!wantToQuit)
             {
                 System.out.println("This is the administration tool for the DOT issue tracker");
-                System.out.println("nd source control program. Before beginning, choose:");
+                System.out.println("and source control program. Before beginning, choose:");
                 System.out.println("1. Reinitialize the database with sample data");
                 System.out.println("2. Continue with the old database");
                 String input =dot.userInput.nextLine();

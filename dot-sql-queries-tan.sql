@@ -13,7 +13,10 @@
 	-- See: (d), (e), (f)
 -- 5. At least one of the queries must use set difference in a non-trivial way. Recall that MySQL does not directly support the set difference operator, so you must do this via a subquery combined with the NOT IN operator or with the use of outer joins.
 	-- See: (e), (f)
-
+-- In Java program, editing a Post is child updating to Contributors
+-- Inserting a Goal is child insertion to Projects
+-- Deleting a Contributor is parent deletion (Contributor is parent to Posts, Commits, WorkAssignments, ManagementAssignments). 
+-- Since ON DELETE NO UPDATE, Dot program will forbid a delete if Contributor is parent to anything, but allow it otherwise.
 
 -- a) Get the titles of all projects and the number of commits ever done to each, including projects
 -- with no commits
