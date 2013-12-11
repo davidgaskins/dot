@@ -54,7 +54,7 @@ public class MainMenu
 
             // since there isn't an array of statements to execute,
             // all this menu code doesn't need to be in the same place.
-            // let's just call static methods for each of the submenus
+            // so just call static methods for each of the submenus
             // so the main method isn't cluttered with all of them.
             switch (input)
             {
@@ -121,7 +121,8 @@ public class MainMenu
         boolean wantToQuit = false;
         while (!wantToQuit)
         {
-            System.out.println("This is the quit menu.");
+            System.out.println("This is the quit menu. If you have not made changes to the database,");
+            System.out.println("both options will do nothing except quit the program.");
             System.out.println("1. Commit Changes.");
             System.out.println("2. Rollback Changes.");
             String input = userInput.nextLine();

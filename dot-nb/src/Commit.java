@@ -17,7 +17,6 @@ import java.util.TreeMap;
 
 public class Commit {
     
-    private String author, email, message;
     private List<Change> fileList;
     private String directory;
     
@@ -36,27 +35,11 @@ public class Commit {
         Map<String,File> childList = new TreeMap<String,File>();
         listFiles(directory, repository, childList);
         Iterator it;
-        /*
-        it = childList.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry<String,File> pairs = (Map.Entry<String,File>) it.next();
-            System.out.println(pairs.getValue());
-        }
-                */
-        
-        //System.out.println("Printing previous commit files");
         
         Map<String,File> parentList = new TreeMap<String,File>();
         String parentDir = directory + "/.dot/previous_commit";
         File parentRepo = new File(parentDir);
         listFiles(parentDir, parentRepo, parentList);
-        /*
-        it = parentList.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry<String,File> pairs = (Map.Entry<String,File>) it.next();
-            System.out.println(pairs.getValue());
-        }
-        */
         
         fileList = new LinkedList<Change>();
         
@@ -87,9 +70,7 @@ public class Commit {
             if(fileList[i].isFile()) {
                 //add all files to list
                 String path = fileList[i].getPath();
-                //System.out.println("Absolute: " + path);
                 path = path.substring(repoDir.length());
-                //System.out.println("Relative: " + path);
                 
                 returnFileList.put(path,fileList[i]);
             } else if(fileList[i].isDirectory() && !fileList[i].isHidden()){

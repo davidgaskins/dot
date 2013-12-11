@@ -93,18 +93,16 @@ public class PostsMenu
         }
         catch (SQLException sqe)
         {
-            LOGGER.log(Level.SEVERE, "Error retrieving a post w/ that id. Error: {0}", sqe.getMessage());
-            System.out.println("There was an error in retrieving the post.");
+            LOGGER.log(Level.SEVERE, "Error editing the post. Error: {0}", sqe.getMessage());
+            System.out.println("There was an error in editing the post.");
             return;
         }
-        
-        // retrieved the post. now list attributes to edit
     }
     
     private void postMenuView() 
     {
         String statementString = "SELECT * FROM posts";
-        try // @TODO: make hierarchy of try catches for easier debugging
+        try
         {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);
@@ -126,6 +124,7 @@ public class PostsMenu
         }
         catch (SQLException sqe)
         {
+            
             System.out.println("There was an error in retrieving the posts.");
         }
     }

@@ -95,7 +95,7 @@ public class ContributorsMenu
                 String phoneType = rs.getString("phoneType");
                 System.out.println("phone type: " +phoneType +"\tphone number: " +phoneNum);
             }
-        } catch (SQLException sqe) // @TODO
+        } catch (SQLException sqe)
         {
             LOGGER.log(Level.SEVERE, "Error getting getting contact info. Error: {0}", sqe.getMessage());
             sqe.printStackTrace();
@@ -118,7 +118,7 @@ public class ContributorsMenu
         input = input.trim();
         String statementString = "DELETE FROM contributors "+
                             "WHERE id = " + input;
-        try // @TODO: make hierarchy of try catches for easier debugging
+        try
         {
             Statement statement = connection.createStatement();
             statement.executeUpdate(statementString);
@@ -126,14 +126,12 @@ public class ContributorsMenu
         }
         catch (SQLException sqe)
         {
-            System.out.println("This contributor can't be deleted, its a parent to a commit [on delete NO ACTION]");
-            //LOGGER.log(Level.SEVERE, "Error getting retrieving contributors. Error: {0}", sqe.getMessage());
-            //sqe.printStackTrace();
+            System.out.println("This contributor can't be deleted because it is a parent to a commit [on delete NO ACTION]");
         }
     }
     private void contributorsMenuView(){
         String statementString = "SELECT * FROM contributors";
-        try // @TODO: make hierarchy of try catches for easier debugging
+        try
         {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(statementString);

@@ -15,7 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Dot {
-        private final static String databaseURL = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16"; // @TODO: where do we finally connect to when submitting?
+        private final static String databaseURL = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
         private final static Logger LOGGER = Logger.getLogger(Dot.class.getName());
         private final static String DB_DRIVER = "com.mysql.jdbc.Driver";
         
@@ -26,17 +26,17 @@ public class Dot {
     	{
             LOGGER.setLevel(Level.INFO);
             Dot dot = new Dot();
-            dot.connectToMartelDB();
+            dot.connectToDB();
             MainMenu mainMenu = new MainMenu(LOGGER, dot.connection);
             
             boolean wantToQuit = false;
             while (!wantToQuit)
             {
                 System.out.println("This is the administration tool for the DOT issue tracker");
-                System.out.println("nd source control program. Before beginning, choose:");
+                System.out.println("and source control program. Before beginning, choose:");
                 System.out.println("1. Reinitialize the database with sample data");
                 System.out.println("2. Continue with the old database");
-                String input =dot.userInput.nextLine();
+                String input = dot.userInput.nextLine();
                     //check input
                 InputChecker in = new InputChecker(input);
                 if(in.hasAlpha())
@@ -49,7 +49,7 @@ public class Dot {
                 switch (input)
                 {
                     case "1": // COMMITS
-                        dot.initializeMartelDB();
+                        dot.initializeDB();
                         mainMenu.commitToDatabaseMenu();
                         //dont need a break; here
                     case "2":
@@ -76,11 +76,9 @@ public class Dot {
                 LOGGER.log(Level.SEVERE, "Unable to load JDBC driver, due to error: {0}", cnfe);
                 System.exit(1);
             }
-            
-            System.out.println("DB_DRIVER init successful.");
         }
 
-        private void initializeMartelDB() throws IOException
+        private void initializeDB() throws IOException
         {
             String[] fileNames = new String[] {"dot-sql-drop-all-tables.sql", "dot-sql-create-and-insert-enum.sql", 
 		"dot-sql-create-all-tables.sql", "dot-sql-insert-all-tables.sql"};
@@ -106,12 +104,13 @@ public class Dot {
         
 	private void connectToDB()
 	{
+            System.out.println("Connecting to the database.");
 		try 
 		{
-			System.out.println("Enter the username.");
-			String username = userInput.nextLine();
-			System.out.println("Enter the password.");
-			String password = userInput.nextLine();
+			System.out.println("Enter the username. For testing purposes, username is: cecs323m16");
+			String username = userInput.nextLine().trim();
+			System.out.println("Enter the password. Password is aigoiY.");
+			String password = userInput.nextLine().trim();
 			connection = DriverManager.getConnection(databaseURL, username, password);
 			connection.setAutoCommit(false);
 		} 
@@ -127,36 +126,4 @@ public class Dot {
                     System.exit(1);
                 }
 	}
-
-        private void connectToMartelDB()
-        {
-            try {
-                String url = "jdbc:mysql://infoserver.cecs.csulb.edu:3306/cecs323m16";
-                String username = "cecs323m16";
-                String password = "aigoiY";
-
-                connection = DriverManager.getConnection(url, username, password);
-                connection.setAutoCommit(false);
-            } catch (SQLException sqe){
-                try{
-                System.out.println("Connecting to local server (or ssh forwarded server)");
-                String url = "jdbc:mysql://localhost:3306/cecs323m16";
-                String username = "cecs323m16";
-                String password = "aigoiY";
-                
-                connection = DriverManager.getConnection(url, username, password);
-                connection.setAutoCommit(false);
-                } catch (SQLException sqe2)
-                {
-                // this is for LOGGING purposes
-                LOGGER.log(Level.SEVERE, "Unable to establish a connection to the database due to error {0}", sqe.getMessage());
-                sqe.printStackTrace();
-                connection = null;
-                
-                // this is for the PROGRAM's purpose. i.e., exit because we can't do anything
-                System.out.println("Unable to connect to database. Exiting.");
-                System.exit(1);
-                }          
-            }
-        }
 }

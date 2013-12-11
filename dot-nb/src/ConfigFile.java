@@ -82,11 +82,8 @@ public class ConfigFile {
         FileWriter writer = null;
         try {
             writer = new FileWriter(fileName);
-            Iterator it = map.entrySet().iterator();
-            while(it.hasNext()) {
-                Map.Entry<String,String> pairs = (Map.Entry<String,String>) it.next();
+            for (Map.Entry<String,String> pairs : map.entrySet()) {
                 writer.write(pairs.getKey() + ": " + pairs.getValue() + "\n");
-                //it.remove();
             }
         } catch (IOException ex) {
             Logger.getLogger(ConfigFile.class.getName()).log(Level.SEVERE, null, ex);
@@ -100,11 +97,8 @@ public class ConfigFile {
     }
     
     public void print() {
-        Iterator it = map.entrySet().iterator();
-        while(it.hasNext()) {
-            Map.Entry<String,String> pairs = (Map.Entry<String,String>) it.next();
+        for (Map.Entry<String,String> pairs : map.entrySet()) {
             System.out.println(pairs.getKey() + " : " + pairs.getValue());
-            //it.remove();
         }
     }
 
