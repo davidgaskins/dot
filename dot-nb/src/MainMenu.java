@@ -25,7 +25,6 @@ public class MainMenu
         this.LOGGER = LOGGER;
         this.connection = connection;
     }
-    
     public void mainMenu()
     {
         GoalsMenu goalsMenu = new GoalsMenu(LOGGER, connection);
@@ -47,7 +46,6 @@ public class MainMenu
             System.out.println("6. ROLLBACK changes since the last commit.");
             System.out.println("7. Run SAMPLE QUERIES.");
             System.out.println("8. Exit.");
-            option = userInput.nextInt();
             String input = userInput.nextLine();
             //check input
             InputChecker in = new InputChecker(input);
@@ -81,8 +79,10 @@ public class MainMenu
                 case "6":
                     rollbackMenu();
                     break;
+                case "7":
                     sampleQueryMenu.sampleQueryMenu();
-                case 8:
+                    break;
+                case "8":
                     quitMenu();
                     wantToQuit = true;
                     break;
@@ -102,8 +102,8 @@ public class MainMenu
         }
         System.out.println("The changes since the last commit have been rolled back.");
     }
-
-    private void commitMenu()
+    //needs to be public for access from main
+    public void commitMenu()
     {
         try
         {

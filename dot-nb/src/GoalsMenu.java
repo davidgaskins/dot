@@ -169,7 +169,6 @@ public class GoalsMenu
     public void goalsMenuEdit()
     {
         ResultSet rs;
-        userInput.nextLine();
 
         // 1. supposed to prompt for project here. but assuming default project right now.            
 
@@ -192,7 +191,7 @@ public class GoalsMenu
         try
         {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("SELECT * FROM GOALS WHERE id = " + id);
+            rs = statement.executeQuery("SELECT * FROM goals WHERE id = " + id);
         }
         catch (SQLException sqe)
         {

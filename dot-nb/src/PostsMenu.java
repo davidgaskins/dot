@@ -42,7 +42,6 @@ public class PostsMenu
             System.out.println("1. EDIT (moderate) a post.");
             System.out.println("2. VIEW ALL posts on all projects.");
             System.out.println("3. BACK to main menu.");
-            String line = userInput.nextLine();
             String input = userInput.nextLine();
             //check input
             InputChecker in = new InputChecker(input);
@@ -86,7 +85,7 @@ public class PostsMenu
         System.out.println("Enter the new body of the post (all on one line).");
         String newBody = userInput.nextLine();
         String statementString = "UPDATE posts " + 
-                                    "SET body = " + newBody 
+                                    "SET body = \'" + newBody+"\' " 
                                         + "WHERE id = "+ id;
         
         try
