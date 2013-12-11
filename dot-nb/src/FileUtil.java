@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -127,6 +128,48 @@ public class FileUtil {
             Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
+    }
+    
+    public static void buildWithPrintWriter(List<String> patches, String path) {
+        System.out.println("Building file " + path);
+        try {
+            //create new file
+            File f = new File(path);
+            f.createNewFile();
+            
+            Runtime r = Runtime.getRuntime();
+            //apply patches
+            
+            for(String patch: patches) {
+                System.out.println("About to apply: \n" + patch);
+                //create patch file (because piping didn't work)
+                File patchy = new File(path + ".patch");
+                patchy.createNewFile();
+                PrintWriter writer = new PrintWriter(patchy);
+                writer.print(patch);
+                /*
+                String lines[] = patch.split("\n");
+                for(int i=0; i<lines.length; i++) {
+                    patchWriter.write(lines[i] + "\n");
+                    //System.out.println(lines[i]);
+                }
+                        */
+                writer.flush();
+                writer.close();
+                
+                Process p = r.exec("patch " + path + " " + path + ".patch");
+                p.waitFor();
+               // if(!path.contains("build"))
+                    //patchy.delete();
+            
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public static void build(List<String> patches, String path) {
