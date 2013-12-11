@@ -54,31 +54,31 @@ INSERT INTO commits (contributorID, goalID, commitDate, description) VALUES
 	(1, 1, '2013-12-4 12:23:55', 'finished all the rest of the syntax insertion'); 
 INSERT INTO changes VALUES
 -- these are actual diffs
-	('readme.txt', CONCAT('0a1,2',  CHAR(13),  '> This is a test java program.' 
-       ,  CHAR(13),  '> It demonstrates the print function.'), 'ae03lje9v0', 1),
+	('readme.txt', CONCAT('0a1,2\n> This is a test java program.\n',
+		'> It demonstrates the print function.'), 'ae03lje9v0', 1),
 
 	('readme.txt', '', 'ae03lje9v0', 2),
-	('readme2.txt', CONCAT('0a1,2',  CHAR(13),  '> This text is reserved for future purposes.'
-       ,  CHAR(13),  '> Have you mooed today?'),'ae03lje9v0', 2),
+	('readme2.txt', CONCAT('0a1,2\n> This text is reserved for future purposes.'
+       , '\n> Have you mooed today?'),'ae03lje9v0', 2),
 
 	('readme.txt', '', 'ae03lje9v2', 3),
-	('readme2.txt', CONCAT('0a1,2',  CHAR(13),  '> Author: Cow Cow'
-       ,  CHAR(13),  '> '), 'ae03lje9v2', 3),
+	('readme2.txt', CONCAT('0a1,2\n> Author: Cow Cow'
+       ,  '\n> '), 'ae03lje9v2', 3),
 
-	('readme.txt', CONCAT('0a1,2',  CHAR(13),  '> Author:David, David, Tan'
-       ,  CHAR(13),  '> '),  'ae03lje9v2', 4),
+	('readme.txt', CONCAT('0a1,2\n> Author:David, David, Tan'
+       ,  '\n> '),  'ae03lje9v2', 4),
 	('readme2.txt', '', 'ae03lje9v2', 4),
-	('hello.cpp', CONCAT('0a1,6',  CHAR(13),  '> #include <iostream>'
-       ,  CHAR(13),  '> ',  CHAR(13),  '> int main() {'
-       ,  CHAR(13),  '> std::cout << "The cow says Hello World" << std::endl;'
-       ,  CHAR(13),  '> return 0;',  CHAR(13),  '> }'),
+	('hello.cpp', CONCAT('0a1,6\n> #include <iostream>'
+       ,  '\n> \n> int main() {'
+       ,  '\n> std::cout << "The cow says Hello World" << std::endl;'
+       ,  '\n> return 0;\n> }'),
          'ae03lje9v3', 4),
 
-	('readme.txt', CONCAT('4a5,7',  CHAR(13),  '> '
-       ,  CHAR(13),  '> To compile, just run '
-       ,  CHAR(13),  '> sh build.sh'), 'ae03lje9v2', 5),
+	('readme.txt', CONCAT('4a5,7\n> '
+       ,  '\n> To compile, just run '
+       ,  '\n> sh build.sh'), 'ae03lje9v2', 5),
 	('readme2.txt', '', 'ae03lje9v2', 5),
 	('hello.cpp', '', 'ae03lje9v3', 5),
-	('build', CONCAT('0a1,3',  CHAR(13),  '> #!/bin/sh'
-       ,  CHAR(13),  '> '
-       ,  CHAR(13),  '> gcc -o hello hello.cpp'), 'ae03lje9v4', 5); 
+	('build', CONCAT('0a1,3\n> #!/bin/sh'
+       , '\n> '
+       , '\n> gcc -o hello hello.cpp'), 'ae03lje9v4', 5); 
