@@ -50,7 +50,7 @@ public class SampleQueryMenu
                 "SELECT posts.dateAndTime\n" +
                     "FROM posts)";
     private static final String query5 = 
-            "SELECT contributors.fName, contributors.lName\n
+            "SELECT contributors.fName, contributors.lName\n"
             + "phoneNumbers.phoneType, phoneNumbers.phoneNumber\n"
             + "FROM projects\n"
             + "INNER JOIN managementAssignments\n"
@@ -110,15 +110,6 @@ public class SampleQueryMenu
             Logger.getLogger(SampleQueryMenu.class.getName()).log(Level.SEVERE, "Error executing query", ex);
             System.out.println("There was an error executing the query.");
         }
-    }
-    public void query4(){
-        
-    }
-    public void query5(){
-        
-    }
-    public void query6(){
-        
     }
     public void query3()
     {
